@@ -5,7 +5,8 @@ import { api } from "../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../convex/_generated/dataModel";
 
 const PreviewImage = () => {
-  const { outfitId } = useGeneratorSetting();
+  const { outfitId, apiError } = useGeneratorSetting();
+
   const outfit = useQuery(api.aiSystem.getOutfitById, {
     outfitId: outfitId || "",
   });
@@ -13,8 +14,16 @@ const PreviewImage = () => {
   const imageUrl = useQuery(api.storage.getImageUrl, {
     storageId: outfit?.preview_images?.[0] as Id<"_storage">,
   });
+
   return (
-    <div className="flex min-h-full flex-col items-center justify-center bg-base-300 rounded">
+    <div className="relative flex min-h-full flex-col items-center justify-center bg-base-300 rounded">
+      {apiError && (
+        <div className="absolute top-0 right-0 left-0 bg-error bg-opacity-50 text-white text-xs px-2 py-1 rounded opacity-80">
+          <p className="text-error-content text-[0.6rem]">
+            Something went wrong: {apiError}
+          </p>
+        </div>
+      )}
       {outfitId ? (
         <div className="relative">
           <img

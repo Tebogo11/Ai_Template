@@ -17,9 +17,14 @@
     font-family: "Outfit", sans-serif;
     font-weight: 600;
   }
+
   p {
     font-family: "Outfit", sans-serif;
     font-weight: 400;
+  }
+  label {
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
   }
 }
 
@@ -33,6 +38,10 @@
 
 @utility form-slider-option {
   @apply mb-1 text-xs font-medium text-base-content;
+}
+
+@utility season-label {
+  @apply text-[12px] bg-base-100 px-1.5 rounded-xs;
 }
 
 @custom-variant dark (&:where([data-theme="outfit-dark"], [data-theme="outfit-dark"] * , .dark, .dark * ));

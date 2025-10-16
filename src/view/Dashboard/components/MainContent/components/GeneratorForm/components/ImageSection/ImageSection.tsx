@@ -20,7 +20,7 @@ const ImageSecrion = () => {
         />
       </div>
       <div className="w-[30%] ">
-        <h2 className="form-label">Accesories</h2>
+        <h2 className="form-label">Accessories</h2>
         <AccessoriesImageListUpload />
       </div>
     </div>

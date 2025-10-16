@@ -20,10 +20,10 @@ export default defineSchema({
     is_new_outfit: v.optional(v.boolean()),
     season: v.optional(
       v.union(
-        v.literal("Spring"),
-        v.literal("Summer"),
-        v.literal("Autumn"),
-        v.literal("Winter"),
+        v.literal("spring"),
+        v.literal("summer"),
+        v.literal("autumn"),
+        v.literal("winter"),
       ),
     ),
   }),

@@ -30,6 +30,9 @@ const useSubmitForm = () => {
     setPreviewOutfit,
     setIsGenerating,
     setOutfitId,
+    season,
+    is_new_outfit,
+    setApiError,
   } = useGeneratorSetting();
 
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
@@ -196,6 +199,7 @@ const useSubmitForm = () => {
   };
 
   const onSubmit = async () => {
+    setApiError(null);
     if (!modal) throw new Error("Modal is required");
 
     setIsGenerating(true);
@@ -209,13 +213,15 @@ const useSubmitForm = () => {
         style_intensity: Number(styleIntensity),
         formality: Number(formality),
         initial_prompt: prompt,
-        season: "Summer",
-        is_new_outfit: true,
+        season,
+        is_new_outfit,
       } as GenerateDataType;
       const { outfitId } = await generatorOutfit(generateData);
       console.log("Outfit ID:", outfitId);
       if (!outfitId) throw new Error("Failed to generate outfit");
       setOutfitId(outfitId);
+    } catch (err) {
+      setApiError((err as Error).message);
     } finally {
       setIsGenerating(false);
     }

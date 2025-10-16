@@ -27,10 +27,10 @@ const generateDataType = {
   initial_prompt: v.string(),
   season: v.optional(
     v.union(
-      v.literal("Spring"),
-      v.literal("Summer"),
-      v.literal("Autumn"),
-      v.literal("Winter"),
+      v.literal("spring"),
+      v.literal("summer"),
+      v.literal("autumn"),
+      v.literal("winter"),
     ),
   ),
   is_new_outfit: v.optional(v.boolean()),

@@ -77,7 +77,7 @@ const AccessoriesImageListUpload = () => {
       </div>
       <label
         htmlFor="image-upload-accessories"
-        className="flex justify-center items-center w-full h-[6vh] border-1 border-solid   cursor-pointer hover:bg-base-200 "
+        className="flex justify-center items-center rounded-xs w-full h-[6vh] border-1 border-solid   cursor-pointer hover:bg-base-200 "
       >
         <PlusCircleIcon className="w-5 h-5" />
         <input

@@ -4,6 +4,14 @@ export type AccessoriesType = {
   id: string;
   url: string;
 };
+
+export enum Season {
+  SPRING = "spring",
+  SUMMER = "summer",
+  AUTUMN = "autumn",
+  WINTER = "winter",
+}
+
 type GeneratorSetting = {
   outfitId: string | null;
   modal: string | null;
@@ -13,6 +21,10 @@ type GeneratorSetting = {
   prompt: string;
   previewOutfit?: string;
   isGenerating: boolean;
+  season: Season;
+  is_new_outfit: boolean;
+  apiError: string | null;
+  setAccessories: (data: AccessoriesType[]) => void;
   setModal: (modalData: string | null) => void;
   appendAccessories: (data: AccessoriesType) => void;
   removeAccessories: (id: string) => void;
@@ -22,6 +34,9 @@ type GeneratorSetting = {
   setPreviewOutfit: (data: string) => void;
   setIsGenerating: (data: boolean) => void;
   setOutfitId: (data: string | null) => void;
+  setSeason: (data: Season) => void;
+  setIsNewOutfit: (data: boolean) => void;
+  setApiError: (data: string | null) => void;
 };
 
 export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
@@ -30,6 +45,9 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
     set({ modal: modalData });
   },
   accessories: [],
+  setAccessories: (accessories: AccessoriesType[]) => {
+    set({ accessories });
+  },
   appendAccessories: (newAccessories: AccessoriesType) => {
     set((state) => {
       return {
@@ -72,5 +90,17 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   outfitId: null,
   setOutfitId: (data: string | null) => {
     set({ outfitId: data });
+  },
+  season: Season.SPRING,
+  setSeason: (data: Season) => {
+    set({ season: data });
+  },
+  is_new_outfit: true,
+  setIsNewOutfit: (data: boolean) => {
+    set({ is_new_outfit: data });
+  },
+  apiError: null,
+  setApiError: (data: string | null) => {
+    set({ apiError: data });
   },
 }));

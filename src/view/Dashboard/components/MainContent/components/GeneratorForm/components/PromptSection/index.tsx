@@ -5,7 +5,8 @@ import useSubmitForm from "../../hooks/useSubmitForm";
 import Loading from "@/components/Core/Loading";
 
 const PromptSection = () => {
-  const { setPrompt, prompt, modal, isGenerating } = useGeneratorSetting();
+  const { setPrompt, prompt, modal, isGenerating, apiError, previewOutfit } =
+    useGeneratorSetting();
   const { onSubmit } = useSubmitForm();
 
   const handleSend = (e: React.FormEvent) => {
@@ -55,7 +56,7 @@ const PromptSection = () => {
             className="cursor-pointer absolute bottom-0.5 right-5 py-2 text-white font-semibold rounded-xl hover:scale-105 transition-all z-10"
             style={{ zIndex: 10 }}
           >
-            {isGenerating ? (
+            {isGenerating && (apiError || previewOutfit) ? (
               <Loading size="xs" />
             ) : (
               <PaperAirplaneIcon
