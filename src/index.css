@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@theme {
+}
+
+@layer base {
+  body {
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  h1 {
+    font-family: "Outfit", sans-serif;
+    font-weight: 900;
+  }
+  h2 {
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+  }
+  p {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+  }
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility form-label {
+  @apply mb-1 text-sm font-medium text-base-content;
+}
+
+@utility form-slider-option {
+  @apply mb-1 text-xs font-medium text-base-content;
+}
+
+@custom-variant dark (&:where([data-theme="outfit-dark"], [data-theme="outfit-dark"] * , .dark, .dark * ));
+
+/* ───────────────────────── LIGHT THEME ───────────────────────── */
+@plugin "daisyui" {
+  themes:
+    outfit --default,
+    outfit-dark --preferdark;
+}
+
+/* ─────────────── LIGHT THEME ─────────────── */
+@plugin "daisyui/theme" {
+  name: "outfit";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+
+  /* Paper-white base + near-black text */
+  --color-base-100: hsl(308, 26%, 98%); /* page */
+  --color-base-200: hsl(308, 12%, 92%); /* section */
+  --color-base-300: hsl(308, 9%, 86%); /* card/input */
+  --color-base-content: hsl(219, 44%, 4%); /* body text */
+
+  /* Brand hues – same families as dark Coffee, tuned for light backgrounds */
+  --color-primary: hsl(35, 90%, 35%); /* rich amber/gold (CTAs) */
+  --color-primary-content: hsl(27, 29%, 96%);
+
+  --color-secondary: hsl(182, 100%, 20%); /* steel teal (chips/filters) */
+  --color-secondary-content: hsl(182, 22%, 96%);
+
+  --color-accent: hsl(196, 100%, 27%); /* refined blue (links/hover) */
+  --color-accent-content: hsl(198, 28%, 96%);
+
+  /* Neutrals for outlines/subtle buttons */
+  --color-neutral: hsl(217, 15%, 15%); /* dark gray */
+  --color-neutral-content: hsl(217, 17%, 95%);
+
+  /* Feedback (accessible on light) */
+  --color-info: hsl(174, 100%, 27%);
+  --color-info-content: hsl(169, 30%, 94%);
+
+  --color-success: hsl(87, 59%, 31%);
+  --color-success-content: hsl(94, 23%, 94%);
+
+  --color-warning: hsl(43, 100%, 40%);
+  --color-warning-content: hsl(37, 71%, 3%);
+
+  --color-error: hsl(0, 100%, 55%);
+  --color-error-content: hsl(11, 45%, 95%);
+
+  /* Radii / sizing (as you set) */
+  --radius-selector: 0.25rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+}
+
+/* ─────────────── DARK THEME ─────────────── */
+
+@plugin "daisyui/theme" {
+  name: "outfit-dark";
+  default: false;
+  prefersdark: false;
+  color-scheme: "dark";
+  --color-base-100: hsl(306, 16%, 13%);
+  --color-base-200: hsl(306, 18%, 10%);
+  --color-base-300: hsl(306, 27%, 6%);
+  --color-base-content: hsl(37, 46%, 58%);
+
+  --color-primary: hsl(30, 66%, 58%);
+  --color-primary-content: hsl(23, 78%, 4%);
+
+  --color-secondary: hsl(182, 65%, 25%);
+  --color-secondary-content: hsl(182, 5%, 83%);
+
+  --color-accent: hsl(194, 73%, 25%);
+  --color-accent-content: hsl(198, 21%, 85%);
+
+  --color-neutral: hsl(300, 19%, 6%);
+  --color-neutral-content: hsl(301, 2%, 79%);
+
+  --color-info: hsl(171, 36%, 67%);
+  --color-info-content: hsl(171, 33%, 4%);
+
+  --color-success: hsl(93, 25%, 62%);
+  --color-success-content: hsl(95, 31%, 4%);
+
+  --color-warning: hsl(43, 100%, 69%);
+  --color-warning-content: hsl(41, 75%, 5%);
+
+  --color-error: hsl(10, 95%, 75%);
+  --color-error-content: hsl(8, 57%, 5%);
+  --radius-selector: 0.25rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+
+  /* Custom properties for light/dark mode toggles */
+  --color-login-outfit: #fff;
+}
+
+[data-theme="outfit"] {
+  .login-outfit {
+    color: var(--color-login-outfit);
+  }
+}
+[data-theme="outfit-dark"] {
+  .login-outfit {
+    color: var(--color-login-outfit);
+  }
+}
+/* ─────────────── Optional fallbacks ─────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    color: var(--color-base-content);
+    background: var(--color-base-100);
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+  }
+  body {
+    color: var(--color-base-content);
+    background: var(--color-base-100);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: var(--color-light);
+    background: var(--color-dark);
+    font-family: "Poppins", sans-serif;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    color: var(--color-dark);
+    background: var(--color-light);
+    font-family: "Poppins", sans-serif;
+  }
+}
