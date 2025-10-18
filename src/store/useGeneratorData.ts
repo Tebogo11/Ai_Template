@@ -1,4 +1,6 @@
+import { useQuery } from "convex/react";
 import { create } from "zustand";
+import { api } from "../../convex/_generated/api";
 
 export type AccessoriesType = {
   id: string;
@@ -12,6 +14,14 @@ export enum Season {
   WINTER = "winter",
 }
 
+export type OutfitData = {
+  modal: string;
+  accessories: AccessoriesType[];
+  style_intensity: number;
+  formality: number;
+  initial_prompt: string;
+};
+
 type GeneratorSetting = {
   outfitId: string | null;
   modal: string | null;
@@ -19,7 +29,7 @@ type GeneratorSetting = {
   styleIntensity: string;
   formality: string;
   prompt: string;
-  previewOutfit?: string;
+  previewOutfit?: null | string;
   isGenerating: boolean;
   season: Season;
   is_new_outfit: boolean;
@@ -37,6 +47,7 @@ type GeneratorSetting = {
   setSeason: (data: Season) => void;
   setIsNewOutfit: (data: boolean) => void;
   setApiError: (data: string | null) => void;
+  setSelectedOutfit: (data: OutfitData | null) => void;
 };
 
 export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
@@ -79,7 +90,7 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   setPrompt: (data: string) => {
     set({ prompt: data });
   },
-  previewOutfit: undefined,
+  previewOutfit: "",
   setPreviewOutfit: (data: string) => {
     set({ previewOutfit: data });
   },
@@ -102,5 +113,16 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   apiError: null,
   setApiError: (data: string | null) => {
     set({ apiError: data });
+  },
+  setSelectedOutfit: (data: OutfitData | null) => {
+    if (data) {
+      set({
+        modal: data.modal,
+        accessories: data.accessories,
+        styleIntensity: String(data.style_intensity),
+        formality: String(data.formality),
+        prompt: data.initial_prompt,
+      });
+    }
   },
 }));

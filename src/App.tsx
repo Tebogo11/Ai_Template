@@ -37,7 +37,10 @@ export default function App() {
         <UserButton />
       </header> */}
 
-      <main data-theme={theme} className="flex-1 bg-base-100 overflow-y-auto">
+      <main
+        data-theme={theme}
+        className=" flex-1 bg-base-100 overflow-auto min-w-[375px]"
+      >
         <Authenticated>
           <Dashboard />
         </Authenticated>

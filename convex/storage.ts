@@ -12,6 +12,7 @@ export const getImageUrl = query({
   args: { storageId: v.optional(v.string()) },
   handler: async (ctx, args) => {
     if (!args.storageId) return null;
+    console.log("Fetching URL for storage ID:", args.storageId);
     return await ctx.storage.getUrl(args.storageId as Id<"_storage">);
   },
 });

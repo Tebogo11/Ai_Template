@@ -45,7 +45,7 @@ export const handleGeneratedContent = (response: GenerateContentResponse) => {
       hasInlineData = true;
     }
     summary = response.candidates[0].content.parts
-      .filter((part) => part.text)
+      .filter((part) => part.text && part.text.includes("|"))
       .map((part) => part.text)
       .join(" ");
   }

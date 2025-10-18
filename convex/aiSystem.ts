@@ -6,6 +6,7 @@ import {
   ContentListUnion,
   HarmCategory,
   HarmBlockThreshold,
+  Type,
 } from "@google/genai";
 import { Id } from "./_generated/dataModel";
 import { imgGenPromp } from "./const";
@@ -15,91 +16,7 @@ import {
   handleGeneratedContent,
   retry,
 } from "./utils";
-
-// 4. kick in a action to talk to gpt and return an image
-// 5. return that image to client and save it to preview in state
-
-const generateDataType = {
-  modal: v.string(),
-  accessories: v.array(v.string()),
-  style_intensity: v.number(),
-  formality: v.number(),
-  initial_prompt: v.string(),
-  season: v.optional(
-    v.union(
-      v.literal("spring"),
-      v.literal("summer"),
-      v.literal("autumn"),
-      v.literal("winter"),
-    ),
-  ),
-  is_new_outfit: v.optional(v.boolean()),
-};
-
-export const generatorOutfit = mutation({
-  // Validators for arguments.
-  args: generateDataType,
-
-  // Action implementation.
-  handler: async (ctx, args) => {
-    const user = await ctx.auth?.getUserIdentity();
-    if (!user) throw new Error("Authentication required");
-    const outfitId = await ctx.db.insert("outfit", {
-      modal: args.modal,
-      accessories: args.accessories,
-      style_intensity: args.style_intensity,
-      formality: args.formality,
-      initial_prompt: args.initial_prompt,
-      preview_images: [],
-    });
-
-    await ctx.scheduler.runAfter(0, internal.aiSystem.generatePreviewWithAI, {
-      ...args,
-      outfitId,
-    });
-
-    //   const { imageURLFinal, summary } = await ctx.scheduler.waitForCompletion(scheduledId);
-    //   const previewStorageId = imageURLFinal;
-
-    // console.log("Generated outfit:", outfitId, previewStorageId);
-    // return { currentOutfit: previewStorageId };
-    return { outfitId };
-  },
-});
-
-export const updateOutfitPreview = mutation({
-  args: {
-    outfitId: v.string(),
-    previewImageId: v.string(),
-    summary: v.string(),
-  },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(args.outfitId as Id<"outfit">, {
-      preview_images: [args.previewImageId],
-      summary: args.summary,
-    });
-  },
-});
-
-// Get data URL from image URL
-export const getOutfitById = query({
-  // Validators for arguments.
-  args: {
-    outfitId: v.string(),
-  },
-
-  // Function implementation.
-  handler: async (ctx, args) => {
-    // Read the database as many times as you need here.
-    // See https://docs.convex.dev/database/reading-data.
-    const outfit = await ctx.db
-      .query("outfit")
-      .filter((q) => q.eq(q.field("_id"), args.outfitId))
-      .collect();
-
-    return outfit[0] || null;
-  },
-});
+import { generateDataType } from "./outfit";
 
 // You can fetch data from and send data to third-party APIs via an action:
 export const generatePreviewWithAI = internalAction({
@@ -110,7 +27,7 @@ export const generatePreviewWithAI = internalAction({
   handler: async (ctx, args) => {
     const { accessories, style_intensity, formality, initial_prompt, modal } =
       args;
-    const modalUrl = await ctx.storage.getUrl(args.modal as Id<"_storage">);
+    const modalUrl = await ctx.storage.getUrl(modal as Id<"_storage">);
 
     if (!modalUrl) {
       throw new Error("No modal URL found");
@@ -156,7 +73,7 @@ export const generatePreviewWithAI = internalAction({
         })),
     ];
 
-    const response = await ai.models.generateContent({
+    let response = await ai.models.generateContent({
       model: "gemini-2.5-flash-image",
       contents: fullPrompt,
       config: {
@@ -166,13 +83,58 @@ export const generatePreviewWithAI = internalAction({
             threshold: HarmBlockThreshold.OFF,
           },
         ],
+
+        responseModalities: ["TEXT", "TEXT", "IMAGE"],
       },
     });
 
-    const { hasInlineData, imageURL, summary } =
-      handleGeneratedContent(response);
+    console.log("AI response:", response);
 
+    let hasInlineData = false;
+    let imageURL = "";
+    let summary = "";
+
+    try {
+      const handled = handleGeneratedContent(response);
+      hasInlineData = handled.hasInlineData;
+      imageURL = handled.imageURL;
+      summary = handled.summary;
+    } catch (err) {
+      console.warn("handleGeneratedContent failed, attempting one retry", err);
+
+      // single retry with the same prompt but request only IMAGE modality (reduce noise)
+      const retryResponse = await ai.models.generateContent({
+        model: "gemini-2.5-flash-image",
+        contents: fullPrompt,
+        config: {
+          safetySettings: [
+            {
+              category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+              threshold: HarmBlockThreshold.OFF,
+            },
+          ],
+          responseModalities: ["IMAGE"],
+        },
+      });
+
+      console.log("Retry AI response:", retryResponse);
+
+      try {
+        const handled2 = handleGeneratedContent(retryResponse);
+        hasInlineData = handled2.hasInlineData;
+        imageURL = handled2.imageURL;
+        summary = handled2.summary;
+        // use retryResponse for downstream logic
+        // @ts-ignore
+        response = retryResponse;
+      } catch (err2) {
+        console.error("handleGeneratedContent retry failed", err2);
+        // throw the array exactly as requested
+        throw ["no content found, after retry"];
+      }
+    }
     let imageURLFinal = imageURL;
+
     if (!hasInlineData && response?.candidates?.[0]?.content?.parts) {
       // If no image generated, retry with only the first image and a summary of the previous attempt
 
@@ -209,7 +171,7 @@ export const generatePreviewWithAI = internalAction({
     const data = await result.json();
     // console.log("Upload complete, storage ID:", previewStorageId);
     console.log("Generated outfit:", args.outfitId, data);
-    await ctx.scheduler.runAfter(0, api.aiSystem.updateOutfitPreview, {
+    await ctx.scheduler.runAfter(0, api.outfit.updateOutfitPreview, {
       outfitId: args.outfitId,
       previewImageId: data.storageId,
       summary,

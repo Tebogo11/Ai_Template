@@ -36,7 +36,7 @@ export const AuthPage = () => {
               />
             </div>
             <div className="text-lg font-semibold tracking-[0.3em] mt-2">
-              <h1 className="login-outfit tracking-[-0.0em] text-[36px] font-light">
+              <h1 className="login-outfit tracking-[-0.0em] text-[36px] ">
                 Outfit
               </h1>
             </div>

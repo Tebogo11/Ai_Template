@@ -154,11 +154,13 @@
 [data-theme="outfit"] {
   .login-outfit {
     color: var(--color-login-outfit);
+    font-weight: 800;
   }
 }
 [data-theme="outfit-dark"] {
   .login-outfit {
     color: var(--color-login-outfit);
+    font-weight: 800;
   }
 }
 /* ─────────────── Optional fallbacks ─────────────── */

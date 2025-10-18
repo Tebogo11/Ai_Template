@@ -36,7 +36,7 @@ const Dashboard = () => {
                   alt="menu"
                   className="h-10 w-8 object-contain hover:scale-110"
                 />
-                <h1 className="login-outfit text-base-content text-[20px] font-light ml-2 ">
+                <h1 className="login-outfit text-base-content text-[20px]  ml-2 ">
                   Outfit
                 </h1>
               </Flex>

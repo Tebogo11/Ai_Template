@@ -1,6 +1,9 @@
 import Header from "./components/Header";
 import PreviewImage from "./components/PreviewImage";
 import GeneratorForm from "./components/GeneratorForm";
+import { useQuery } from "convex/react";
+import { api } from "../../../../../convex/_generated/api";
+import { useGeneratorSetting } from "@/store/useGeneratorData";
 
 const MainContent = () => {
   return (
@@ -13,7 +16,6 @@ const MainContent = () => {
           <GeneratorForm />
         </div>
         <div className="h-[80vh] max-w-1/2 min-w-1/2 min-h-[calc(100svh-100px)] px-5 hidden md:block">
-          <h2 className="form-label h-5">Preivew</h2>
           <PreviewImage />
         </div>
       </div>

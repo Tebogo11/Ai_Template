@@ -3,10 +3,16 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import React, { useMemo } from "react";
 import useSubmitForm from "../../hooks/useSubmitForm";
 import Loading from "@/components/Core/Loading";
+import { useQuery } from "convex/react";
+import { api } from "../../../../../../../../../convex/_generated/api";
 
 const PromptSection = () => {
-  const { setPrompt, prompt, modal, isGenerating, apiError, previewOutfit } =
+  const { setPrompt, prompt, modal, isGenerating, outfitId } =
     useGeneratorSetting();
+
+  const outfit = useQuery(api.outfit.getOutfitById, {
+    outfitId: outfitId || "",
+  });
   const { onSubmit } = useSubmitForm();
 
   const handleSend = (e: React.FormEvent) => {
@@ -29,7 +35,7 @@ const PromptSection = () => {
       <form onSubmit={handleSend} className="flex flex-col justify-end w-full">
         <div className="relative w-full">
           <textarea
-            className="input w-full resize-none min-h-[40px] max-h-[120px] px-4 pr-16 py-2 border-1 dark:border-primary border-secondary rounded-sm shadow focus:outline-none focus:ring-2 focus:ring-blue-400  placeholder-gray-400 transition-all break-words whitespace-pre-wrap overflow-y-auto"
+            className="input w-full resize-none min-h-[40px] max-h-[120px] px-4 pr-16 py-2 border-1 dark:border-primary border-secondary rounded-sm shadow focus:outline-none focus:ring-2 focus:ring-primarytransition-all break-words whitespace-pre-wrap overflow-y-auto bg-base-200"
             placeholder="Type your prompt here..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -56,7 +62,7 @@ const PromptSection = () => {
             className="cursor-pointer absolute bottom-0.5 right-5 py-2 text-white font-semibold rounded-xl hover:scale-105 transition-all z-10"
             style={{ zIndex: 10 }}
           >
-            {isGenerating && (apiError || previewOutfit) ? (
+            {isGenerating || outfit?.status === "generating" ? (
               <Loading size="xs" />
             ) : (
               <PaperAirplaneIcon

@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { title } from "process";
 
 // The schema is entirely optional.
 // You can delete this file (schema.ts) and the
@@ -9,15 +10,23 @@ export default defineSchema({
   numbers: defineTable({
     value: v.number(),
   }),
+  wardrobe: defineTable({
+    title: v.string(),
+    user_id: v.string(),
+  }),
   outfit: defineTable({
     modal: v.string(),
     accessories: v.array(v.string()),
     style_intensity: v.number(),
     formality: v.number(),
     initial_prompt: v.string(),
-    preview_images: v.optional(v.array(v.string())),
+    preview_images: v.optional(v.string()),
+    title: v.optional(v.string()),
     summary: v.optional(v.string()),
     is_new_outfit: v.optional(v.boolean()),
+    status: v.optional(
+      v.union(v.literal("error"), v.literal("generating"), v.literal("done")),
+    ),
     season: v.optional(
       v.union(
         v.literal("spring"),
@@ -26,5 +35,6 @@ export default defineSchema({
         v.literal("winter"),
       ),
     ),
+    wardrobeId: v.id("wardrobe"),
   }),
 });

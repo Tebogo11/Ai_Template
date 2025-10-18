@@ -3,7 +3,7 @@ import SeasonInput from "./SeasonInput";
 
 const ToggleSections = () => {
   return (
-    <div className="flex w-full">
+    <div className="flex  mt-4">
       <SeasonInput />
       <IsNewOutput />
     </div>

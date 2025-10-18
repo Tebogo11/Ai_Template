@@ -4,4 +4,5 @@ export type GenerateDataType = {
   style_intensity: number;
   formality: number;
   initial_prompt: string;
+  title: string;
 };
