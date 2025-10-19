@@ -19,6 +19,7 @@ import type * as outfit from "../outfit.js";
 import type * as storage from "../storage.js";
 import type * as utils from "../utils.js";
 import type * as wardrobe from "../wardrobe.js";
+import type * as wardrobes from "../wardrobes.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   utils: typeof utils;
   wardrobe: typeof wardrobe;
+  wardrobes: typeof wardrobes;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

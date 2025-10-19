@@ -110,13 +110,30 @@ export const getOutfitById = query({
 
 export const getOutfitsByWardrobeId = query({
   args: {
-    wardrobeId: v.string(),
+    wardrobeId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    if (!args.wardrobeId) return [];
     const outfits = await ctx.db
       .query("outfit")
       .filter((q) => q.eq(q.field("wardrobeId"), args.wardrobeId))
       .collect();
     return outfits || [];
+  },
+});
+
+export const getRecentOutfitByWardrobeId = query({
+  args: {
+    wardrobeId: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    if (!args.wardrobeId) return null;
+    const outfits = await ctx.db
+      .query("outfit")
+      .filter((q) => q.eq(q.field("wardrobeId"), args.wardrobeId))
+      .order("desc")
+      .take(1);
+
+    return outfits[0] || null;
   },
 });

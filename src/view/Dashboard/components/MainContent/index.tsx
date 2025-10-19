@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import PreviewImage from "./components/PreviewImage";
+import PreviewImage from "./components/PreviewImage/PreviewImage";
 import GeneratorForm from "./components/GeneratorForm";
 import { useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";

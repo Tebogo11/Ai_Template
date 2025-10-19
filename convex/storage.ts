@@ -16,3 +16,23 @@ export const getImageUrl = query({
     return await ctx.storage.getUrl(args.storageId as Id<"_storage">);
   },
 });
+
+export const getImageUrlFunc = mutation({
+  args: { storageId: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    if (!args.storageId) return null;
+    console.log("Fetching URL for storage ID:", args.storageId);
+    return await ctx.storage.getUrl(args.storageId as Id<"_storage">);
+  },
+});
+
+export const getListImageUrl = mutation({
+  args: { storageIdsList: v.optional(v.array(v.string())) },
+  handler: async (ctx, args) => {
+    if (!args.storageIdsList) return null;
+    console.log("Fetching URL for storage IDs:", args.storageIdsList);
+    return await Promise.all(
+      args.storageIdsList.map((id) => ctx.storage.getUrl(id as Id<"_storage">)),
+    );
+  },
+});

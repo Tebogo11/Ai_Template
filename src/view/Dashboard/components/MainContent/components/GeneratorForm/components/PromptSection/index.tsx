@@ -1,5 +1,6 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { PaperAirplaneIcon as PaparAirplaneIconSolid } from "@heroicons/react/24/solid";
 import React, { useMemo } from "react";
 import useSubmitForm from "../../hooks/useSubmitForm";
 import Loading from "@/components/Core/Loading";
@@ -61,9 +62,18 @@ const PromptSection = () => {
             type="submit"
             className="cursor-pointer absolute bottom-0.5 right-5 py-2 text-white font-semibold rounded-xl hover:scale-105 transition-all z-10"
             style={{ zIndex: 10 }}
+            disabled={
+              isSubmitDisabled ||
+              isGenerating ||
+              outfit?.status === "generating"
+            }
           >
             {isGenerating || outfit?.status === "generating" ? (
               <Loading size="xs" />
+            ) : !isSubmitDisabled ? (
+              <PaparAirplaneIconSolid
+                className={`w-5 h-5 text-primary opacity-50`}
+              />
             ) : (
               <PaperAirplaneIcon
                 className={`w-5 h-5 text-primary ${isSubmitDisabled ? "opacity-50" : "opacity-100"}`}
