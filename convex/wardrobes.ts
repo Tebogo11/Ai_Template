@@ -9,7 +9,7 @@ export const getAllWardrobesByUserId = query({
     const wardrobes = await ctx.db
       .query("wardrobe")
       .filter((q) => q.eq(q.field("user_id"), user.subject || "anonymous"))
-      .order("asc")
+      .order("desc")
       .paginate(args.paginationOpts);
     return wardrobes;
   },

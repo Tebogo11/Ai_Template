@@ -62,17 +62,13 @@ const PromptSection = () => {
             type="submit"
             className="cursor-pointer absolute bottom-0.5 right-5 py-2 text-white font-semibold rounded-xl hover:scale-105 transition-all z-10"
             style={{ zIndex: 10 }}
-            disabled={
-              isSubmitDisabled ||
-              isGenerating ||
-              outfit?.status === "generating"
-            }
+            disabled={isSubmitDisabled}
           >
             {isGenerating || outfit?.status === "generating" ? (
               <Loading size="xs" />
             ) : !isSubmitDisabled ? (
               <PaparAirplaneIconSolid
-                className={`w-5 h-5 text-primary opacity-50`}
+                className={`w-5 h-5 text-primary opacity-100`}
               />
             ) : (
               <PaperAirplaneIcon

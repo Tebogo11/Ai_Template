@@ -4,9 +4,9 @@ import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent } from "react";
 
 const AccessoriesImageListUpload = () => {
-  const { accessories, appendAccessories, removeAccessories } =
-    useGeneratorSetting();
-
+  const accessories = useGeneratorSetting((state) => state.accessories);
+  const { appendAccessories, removeAccessories } = useGeneratorSetting();
+  // console.log("AccessoriesImageListUpload accessories", accessories);
   const onChange = (fileUrl: string | null, index: string) => {
     if (!fileUrl) {
       removeAccessories(index);

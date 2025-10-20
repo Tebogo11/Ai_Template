@@ -28,7 +28,7 @@ const Header = () => {
           Outfit
         </h2>
 
-        <label className="input input-ghost ml-2 font-bold cursor-pointer flex items-center">
+        <label className="input input-ghost ml-2 font-bold cursor-pointer flex items-center w-fit">
           <PencilIcon className="h-4 w-4 text-primary " />
           <input
             type="search"

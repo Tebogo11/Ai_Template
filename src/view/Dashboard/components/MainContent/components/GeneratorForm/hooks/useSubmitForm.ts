@@ -1,4 +1,4 @@
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { api } from "../../../../../../../../convex/_generated/api";
 import { saveImagesToStorage } from "./utils";
@@ -19,7 +19,11 @@ const useSubmitForm = () => {
     setApiError,
   } = useGeneratorSetting();
   const { title, setTitle, setWardrobeId, wardrobeId } = useWardrobeStore();
+  const outfitID = useGeneratorSetting((s) => s.outfitId);
 
+  const oldOutfit = useQuery(api.outfit.getOutfitById, {
+    outfitId: outfitID || "",
+  });
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
   const generatorOutfit = useMutation(api.outfit.generatorOutfit);
 
@@ -31,7 +35,12 @@ const useSubmitForm = () => {
 
     try {
       const { modalStorageId, accessoriesStorageIds } =
-        await saveImagesToStorage(generateUploadUrl, modal, accessories);
+        await saveImagesToStorage(
+          generateUploadUrl,
+          modal,
+          accessories,
+          oldOutfit || null,
+        );
 
       const generateData = {
         modal: modalStorageId,

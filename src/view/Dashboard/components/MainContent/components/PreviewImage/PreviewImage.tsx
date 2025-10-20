@@ -2,15 +2,13 @@ import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../convex/_generated/dataModel";
-import SpinnerUrl from "/public/assets/icons/infinite-spinner.svg";
-import Header from "./components/Header";
 import InitialPage from "./components/InitialPage";
 import Preview from "./components/Preview";
 import Loading from "./components/Loading";
+import HeaderRight from "./components/Header/HeaderRight";
 
 const PreviewImage = () => {
-  const apiError = useGeneratorSetting((state) => state.apiError);
-  const outfitId = useGeneratorSetting((state) => state.outfitId);
+  const { outfitId, apiError } = useGeneratorSetting();
 
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || "",
@@ -31,13 +29,13 @@ const PreviewImage = () => {
           <h2 className="form-label h-5">Preview</h2>
         </div>
         {outfits && outfits?.length !== 0 && (
-          <Header outfit={outfit} outfits={outfits} />
+          <HeaderRight outfit={outfit} outfits={outfits} />
         )}
       </div>
       {outfit?.status === "generating" ? (
         <Loading />
       ) : (
-        <div className="relative h-full bg-base-200 rounded-xs">
+        <div className="relative h-[calc(100svh-100px)] bg-base-200 rounded-xs">
           {apiError && (
             <div className="absolute top-0 right-0 left-0 bg-error bg-opacity-50 text-white text-xs px-2 py-1 rounded opacity-80">
               <p className="text-error-content text-[0.6rem]">
@@ -45,7 +43,7 @@ const PreviewImage = () => {
               </p>
             </div>
           )}
-          {outfitId && imageUrl ? (
+          {outfitId ? (
             <Preview
               imageUrl={imageUrl}
               outfit={{

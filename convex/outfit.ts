@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { internal } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { title } from "process";
@@ -38,6 +38,14 @@ export const generatorOutfit = mutation({
         title: args.title,
       });
     }
+
+    await ctx.runMutation(internal.files.upsertFile, { storageId: args.modal });
+    await Promise.all(
+      args.accessories.map((accessoryId) =>
+        ctx.runMutation(internal.files.upsertFile, { storageId: accessoryId }),
+      ),
+    );
+
     const outfitId = await ctx.db.insert("outfit", {
       modal: args.modal,
       accessories: args.accessories,
@@ -135,5 +143,16 @@ export const getRecentOutfitByWardrobeId = query({
       .take(1);
 
     return outfits[0] || null;
+  },
+});
+
+export const deleteOutfitById = mutation({
+  args: {
+    outfitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    if (!args.outfitId) return null;
+    console.log("Deleting outfit for ID:", args.outfitId);
+    return await ctx.db.delete(args.outfitId as Id<"outfit">);
   },
 });

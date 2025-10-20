@@ -1,5 +1,4 @@
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import React from "react";
 
 const InitialPage = () => {
   return (

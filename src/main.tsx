@@ -14,12 +14,12 @@ const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ErrorBoundary>
-      <CustomClerkProvider>
-        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-          <App />
-        </ConvexProviderWithClerk>
-      </CustomClerkProvider>
-    </ErrorBoundary>
+    {/* <ErrorBoundary> */}
+    <CustomClerkProvider>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        <App />
+      </ConvexProviderWithClerk>
+    </CustomClerkProvider>
+    {/* </ErrorBoundary> */}
   </StrictMode>,
 );

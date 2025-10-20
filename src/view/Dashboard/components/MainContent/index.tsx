@@ -15,7 +15,7 @@ const MainContent = () => {
         <div className="h-[80vh] max-w-full min-w-full md:min-w-1/2 md:max-w-1/2">
           <GeneratorForm />
         </div>
-        <div className="h-[80vh] max-w-1/2 min-w-1/2 min-h-[calc(100svh-100px)] px-5 hidden md:block">
+        <div className="max-w-1/2 min-w-1/2 min-h-[calc(100svh-80px)] px-5 hidden md:block">
           <PreviewImage />
         </div>
       </div>

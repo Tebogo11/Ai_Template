@@ -8,7 +8,7 @@ import {
   OutfitData,
   useGeneratorSetting,
 } from "@/store/useGeneratorData";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 
 const GeneratorForm = () => {
@@ -19,20 +19,11 @@ const GeneratorForm = () => {
     outfitId: outfitID || "",
   });
 
-  const getImageUrlList = useMutation(api.storage.getListImageUrl);
-  const getImageUrl = useMutation(api.storage.getImageUrlFunc);
-
   useEffect(() => {
     const getOutfitData = async () => {
-      const modalUrl = await getImageUrl({
-        storageId: recentOutfit?.modal || "",
-      });
-      const accessories = await getImageUrlList({
-        storageIdsList: recentOutfit?.accessories || [],
-      });
       setSelectedOutfit({
         accessories:
-          accessories?.map((url, index) => {
+          recentOutfit?.accessories?.map((url, index) => {
             return {
               id: `${index}`,
               url: url,
@@ -40,15 +31,25 @@ const GeneratorForm = () => {
           }) || [],
         formality: recentOutfit?.formality || "",
         initial_prompt: recentOutfit?.initial_prompt || "",
-        modal: modalUrl || "",
+        modal: recentOutfit?.modal || "",
         season: recentOutfit?.season || "",
         style_intensity: recentOutfit?.style_intensity || "",
       } as OutfitData);
     };
     if (outfitID && recentOutfit) {
       getOutfitData();
+    } else {
+      setSelectedOutfit({
+        accessories: [] as AccessoriesType[],
+        formality: 50,
+        initial_prompt: "",
+        modal: "",
+        season: "",
+        style_intensity: 50,
+      } as OutfitData);
     }
   }, [outfitID, recentOutfit, setSelectedOutfit]);
+
   return (
     <div className="flex flex-col justify-between h-[calc(100vh-80px)]">
       <div className="w-full ">

@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+import { api, internal } from "./_generated/api";
 
 export const generateUploadUrl = mutation({
   handler: async (ctx) => {
@@ -34,5 +35,18 @@ export const getListImageUrl = mutation({
     return await Promise.all(
       args.storageIdsList.map((id) => ctx.storage.getUrl(id as Id<"_storage">)),
     );
+  },
+});
+
+export const deleteImage = mutation({
+  args: { storageId: v.string() },
+  handler: async (ctx, args) => {
+    if (!args.storageId) return null;
+    console.log("Deleting image for storage ID:", args.storageId);
+
+    await ctx.runMutation(internal.files.decrementFileRefCount, {
+      storageId: args.storageId,
+    });
+    return await ctx.storage.delete(args.storageId as Id<"_storage">);
   },
 });

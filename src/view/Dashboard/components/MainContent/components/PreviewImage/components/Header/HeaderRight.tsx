@@ -7,12 +7,12 @@ interface Outfit {
   // Add other outfit properties as needed
 }
 
-interface HeaderProps {
+interface HeaderRightProps {
   outfit?: Outfit | undefined;
   outfits: Outfit[];
 }
 
-const Header: React.FC<HeaderProps> = ({ outfit, outfits }) => {
+const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
   const setOutfitId = useGeneratorSetting((state) => state.setOutfitId);
   const { idx, prevDisabled, nextDisabled } = useMemo(() => {
     const i = outfit ? outfits.findIndex((o) => o._id === outfit._id) : -1;
@@ -86,4 +86,4 @@ const Header: React.FC<HeaderProps> = ({ outfit, outfits }) => {
   );
 };
 
-export default Header;
+export default HeaderRight;

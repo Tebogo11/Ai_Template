@@ -12,7 +12,7 @@ type OutfitItemsProps = {
 };
 
 const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
-  const { setWardrobeId, setTitle } = useWardrobeStore();
+  const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
   const { setOutfitId } = useGeneratorSetting();
 
   const recentOutfit = useQuery(api.outfit.getRecentOutfitByWardrobeId, {
@@ -32,7 +32,7 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   return (
     <div
       onClick={onPickWardrobe}
-      className="p-4 border-b border-base-200 flex hover:bg-base-200 cursor-pointer"
+      className={`p-4 border-b border-base-200 flex ${wardrobeId === _id ? "bg-base-200" : ""} hover:bg-base-200 cursor-pointer`}
     >
       <img
         src={imageUrl || "/assets/placeholder.png"}
