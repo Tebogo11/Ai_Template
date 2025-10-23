@@ -15,7 +15,6 @@ import type {
 } from "convex/server";
 import type * as aiSystem from "../aiSystem.js";
 import type * as const_ from "../const.js";
-import type * as files from "../files.js";
 import type * as outfit from "../outfit.js";
 import type * as storage from "../storage.js";
 import type * as utils from "../utils.js";
@@ -33,7 +32,6 @@ import type * as wardrobes from "../wardrobes.js";
 declare const fullApi: ApiFromModules<{
   aiSystem: typeof aiSystem;
   const: typeof const_;
-  files: typeof files;
   outfit: typeof outfit;
   storage: typeof storage;
   utils: typeof utils;

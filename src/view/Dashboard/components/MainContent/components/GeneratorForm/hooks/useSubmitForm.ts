@@ -19,13 +19,10 @@ const useSubmitForm = () => {
     setApiError,
   } = useGeneratorSetting();
   const { title, setTitle, setWardrobeId, wardrobeId } = useWardrobeStore();
-  const outfitID = useGeneratorSetting((s) => s.outfitId);
 
-  const oldOutfit = useQuery(api.outfit.getOutfitById, {
-    outfitId: outfitID || "",
-  });
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
   const generatorOutfit = useMutation(api.outfit.generatorOutfit);
+  const getImageUrl = useMutation(api.storage.getImageUrlFunc);
 
   const onSubmit = async () => {
     setApiError(null);
@@ -36,10 +33,10 @@ const useSubmitForm = () => {
     try {
       const { modalStorageId, accessoriesStorageIds } =
         await saveImagesToStorage(
+          getImageUrl,
           generateUploadUrl,
           modal,
           accessories,
-          oldOutfit || null,
         );
 
       const generateData = {

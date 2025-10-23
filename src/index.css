@@ -3,6 +3,10 @@
 @theme {
 }
 
+* {
+  box-sizing: border-box;
+}
+
 @layer base {
   body {
     transition:
@@ -42,6 +46,14 @@
 
 @utility season-label {
   @apply text-[12px] bg-base-100 px-1.5 rounded-xs;
+}
+
+@utility h-screen {
+  height: 100dvh;
+}
+
+@utility w-screen {
+  width: 100dvw;
 }
 
 @custom-variant dark (&:where([data-theme="outfit-dark"], [data-theme="outfit-dark"] * , .dark, .dark * ));

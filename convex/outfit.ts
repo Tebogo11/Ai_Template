@@ -6,7 +6,7 @@ import { title } from "process";
 
 export const generateDataType = {
   modal: v.string(),
-  accessories: v.array(v.string()),
+  accessories: v.array(v.object({ storageId: v.string() })),
   style_intensity: v.number(),
   formality: v.number(),
   initial_prompt: v.string(),
@@ -38,13 +38,6 @@ export const generatorOutfit = mutation({
         title: args.title,
       });
     }
-
-    await ctx.runMutation(internal.files.upsertFile, { storageId: args.modal });
-    await Promise.all(
-      args.accessories.map((accessoryId) =>
-        ctx.runMutation(internal.files.upsertFile, { storageId: accessoryId }),
-      ),
-    );
 
     const outfitId = await ctx.db.insert("outfit", {
       modal: args.modal,
@@ -152,7 +145,37 @@ export const deleteOutfitById = mutation({
   },
   handler: async (ctx, args) => {
     if (!args.outfitId) return null;
-    console.log("Deleting outfit for ID:", args.outfitId);
+    const outfit = await ctx.db
+      .query("outfit")
+      .filter((q) => q.eq(q.field("_id"), args.outfitId))
+      .take(1);
+    const currentOutfit = outfit[0];
+    if (!currentOutfit) return null;
+
+    if (currentOutfit?.preview_images) {
+      await ctx.runMutation(api.storage.deleteImage, {
+        storageId: currentOutfit.preview_images,
+        outfitId: args.outfitId,
+        outfitColumnKey: "preview_images",
+      });
+    }
+    if (currentOutfit?.modal) {
+      await ctx.runMutation(api.storage.deleteImage, {
+        storageId: currentOutfit.modal,
+        outfitId: args.outfitId,
+        outfitColumnKey: "modal",
+      });
+    }
+    if (currentOutfit?.accessories && currentOutfit.accessories.length > 0) {
+      for (const accessory of currentOutfit.accessories) {
+        await ctx.runMutation(api.storage.deleteImage, {
+          storageId: accessory.storageId,
+          outfitId: args.outfitId,
+          outfitColumnKey: "accessories",
+        });
+      }
+    }
+
     return await ctx.db.delete(args.outfitId as Id<"outfit">);
   },
 });

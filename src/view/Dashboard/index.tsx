@@ -9,7 +9,7 @@ const Dashboard = () => {
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Page content here */}
-        <div className="min-h-screen max-h-[80vh] overflow-hidden bg-background dark:bg-darkBackground flex ">
+        <div className="h-screen w-screen overflow-hidden bg-background dark:bg-darkBackground ">
           <MainContent />
         </div>
       </div>

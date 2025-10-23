@@ -39,14 +39,38 @@ export const getListImageUrl = mutation({
 });
 
 export const deleteImage = mutation({
-  args: { storageId: v.string() },
+  args: {
+    storageId: v.string(),
+    outfitId: v.string(),
+    outfitColumnKey: v.string(),
+  },
   handler: async (ctx, args) => {
-    if (!args.storageId) return null;
-    console.log("Deleting image for storage ID:", args.storageId);
+    try {
+      if (!args.storageId) return null;
+      const currentOutfit = await ctx.db.get(args.outfitId as Id<"outfit">);
+      if (!currentOutfit) return null;
 
-    await ctx.runMutation(internal.files.decrementFileRefCount, {
-      storageId: args.storageId,
-    });
-    return await ctx.storage.delete(args.storageId as Id<"_storage">);
+      if (args.outfitColumnKey !== "accessories") {
+        await ctx.db.patch(args.outfitId as Id<"outfit">, {
+          [args.outfitColumnKey]: undefined,
+        });
+      } else {
+        await ctx.db.patch(args.outfitId as Id<"outfit">, {
+          accessories: currentOutfit.accessories.filter(
+            (acc) => acc.storageId !== args.storageId,
+          ),
+        });
+      }
+
+      try {
+        await ctx.storage.delete(args.storageId as Id<"_storage">);
+      } catch (storageError) {
+        console.error("Error deleting storage:", storageError);
+      }
+      return true;
+    } catch (error) {
+      console.error("Error updating outfit:", error);
+      return false;
+    }
   },
 });

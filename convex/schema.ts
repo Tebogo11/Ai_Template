@@ -7,16 +7,13 @@ import { title } from "process";
 // app will continue to work.
 // The schema provides more precise TypeScript types.
 export default defineSchema({
-  numbers: defineTable({
-    value: v.number(),
-  }),
   wardrobe: defineTable({
     title: v.string(),
     user_id: v.string(),
   }),
   outfit: defineTable({
     modal: v.optional(v.string()),
-    accessories: v.array(v.string()),
+    accessories: v.array(v.object({ storageId: v.string() })),
     style_intensity: v.number(),
     formality: v.number(),
     initial_prompt: v.string(),
@@ -36,10 +33,5 @@ export default defineSchema({
       ),
     ),
     wardrobeId: v.id("wardrobe"),
-  }),
-  files: defineTable({
-    storageId: v.string(), // same ID as used in variations
-    refCount: v.number(),
-    softDeleted: v.optional(v.union(v.null(), v.number())),
   }),
 });

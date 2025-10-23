@@ -8,7 +8,7 @@ import {
   OutfitData,
   useGeneratorSetting,
 } from "@/store/useGeneratorData";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 
 const GeneratorForm = () => {
@@ -18,15 +18,22 @@ const GeneratorForm = () => {
   const recentOutfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitID || "",
   });
-
+  // const getImageUrlList = useMutation(api.storage.getListImageUrl);
+  // const getImageUrl = useMutation(api.storage.getImageUrlFunc);
   useEffect(() => {
     const getOutfitData = async () => {
+      // const modalUrl = await getImageUrl({
+      //   storageId: recentOutfit?.modal || "",
+      // });
+      // const accessories = await getImageUrlList({
+      //   storageIdsList: recentOutfit?.accessories.map((a) => a.storageId) || [],
+      // });
       setSelectedOutfit({
         accessories:
           recentOutfit?.accessories?.map((url, index) => {
             return {
               id: `${index}`,
-              url: url,
+              url: url.storageId,
             } as AccessoriesType;
           }) || [],
         formality: recentOutfit?.formality || "",
@@ -51,15 +58,15 @@ const GeneratorForm = () => {
   }, [outfitID, recentOutfit, setSelectedOutfit]);
 
   return (
-    <div className="flex flex-col justify-between h-[calc(100vh-80px)]">
-      <div className="w-full ">
+    <div className="grid grid-rows-[400px 2fr] w-1/2 min-h-[90dvh] pb-5">
+      <div className="w-full">
         <ImageSection />
-        <div className="w-full my-4 mt-5 gap-2.5">
+        <div className="w-full mt-5 gap-3">
           <Slider />
           <ToggleSections />
         </div>
       </div>
-      <div className="flex flex-1">
+      <div className="flex flex-grow-1">
         <PromptSection />
       </div>
     </div>

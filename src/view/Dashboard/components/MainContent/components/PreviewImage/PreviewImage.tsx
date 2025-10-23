@@ -3,9 +3,10 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../convex/_generated/dataModel";
 import InitialPage from "./components/InitialPage";
-import Preview from "./components/Preview";
+import Preview from "./components/Preview/Preview";
 import Loading from "./components/Loading";
 import HeaderRight from "./components/Header/HeaderRight";
+import { cleanAiText } from "@/utils/string/cleanuptext";
 
 const PreviewImage = () => {
   const { outfitId, apiError } = useGeneratorSetting();
@@ -23,8 +24,8 @@ const PreviewImage = () => {
   });
 
   return (
-    <div className="flex flex-col h-full min-w-full ">
-      <div className="flex flex-1 justify-between w-full">
+    <div className="flex flex-col w-1/2 min-h-full pb-5">
+      <div className="flex justify-between w-full">
         <div>
           <h2 className="form-label h-5">Preview</h2>
         </div>
@@ -33,9 +34,9 @@ const PreviewImage = () => {
         )}
       </div>
       {outfit?.status === "generating" ? (
-        <Loading />
+        <Loading text="Please give us a moment, we're generating your outfit" />
       ) : (
-        <div className="relative h-[calc(100svh-100px)] bg-base-200 rounded-xs">
+        <div className="flex-grow-1 bg-base-200 rounded-xs">
           {apiError && (
             <div className="absolute top-0 right-0 left-0 bg-error bg-opacity-50 text-white text-xs px-2 py-1 rounded opacity-80">
               <p className="text-error-content text-[0.6rem]">
@@ -47,9 +48,10 @@ const PreviewImage = () => {
             <Preview
               imageUrl={imageUrl}
               outfit={{
-                title: outfit?.title || "",
-                summary: outfit?.summary || "",
+                title: cleanAiText(outfit?.title || ""),
+                summary: cleanAiText(outfit?.summary || ""),
               }}
+              outfits={outfits || []}
             />
           ) : (
             <InitialPage />

@@ -32,7 +32,7 @@ const SideBar = () => {
       <ul className="menu relative text-base-content min-h-screen w-80 bg-base-100">
         {/* Sidebar content here */}
         <Flex
-          className="mb-4 items-center justify-between w-80 fixed top-0 left-0 p-4 bg-base-100 z-50 "
+          className="items-center justify-between w-80 fixed top-0 left-0 p-4 pb-0 bg-base-100 z-50 "
           direction="row"
           justify="between"
         >
@@ -42,7 +42,7 @@ const SideBar = () => {
               alt="menu"
               className="h-10 w-8 object-contain hover:scale-110"
             />
-            <h1 className="login-outfit text-base-content text-[20px] ml-2">
+            <h1 className="login-outfit text-base-content text-[20px] ml-2 mt-1">
               Outfit
             </h1>
           </Flex>
@@ -57,7 +57,12 @@ const SideBar = () => {
             </label>
           </div>
         </Flex>
-        <div className="max-h-[calc(100vh-100px)] mt-20 overflow-y-auto">
+        <div className="mt-13.5">
+          <p className=" text-right text-base-content text-xs mb-2 opacity-40">
+            Wardrobe List
+          </p>
+        </div>
+        <div className="max-h-[calc(100vh-100px)] overflow-y-auto">
           {results.map((wardrobe) => (
             <label
               htmlFor="my-drawer"

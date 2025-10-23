@@ -1,5 +1,8 @@
 import { AccessoriesType, OutfitData } from "@/store/useGeneratorData";
 import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
+import { getImageUrl } from "../../../../../../../../convex/storage";
+import { ReactMutation } from "convex/react";
+import { FunctionReference } from "convex/server";
 
 // Helper to fetch a file from a URL and convert to File object
 const urlToFile = async (url: string, filename: string): Promise<File> => {
@@ -11,47 +14,78 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
   });
 };
 
+const convertUrlToStorageId = async (
+  generateUploadUrl: () => Promise<string>,
+  modalUrl: string,
+) => {
+  // Implementation depends on specific requirements
+  // This is a placeholder function
+  const modalFile = await urlToFile(modalUrl, "modal");
+  const postUrl = await generateUploadUrl();
+  const result = await fetch(postUrl, {
+    method: "POST",
+    headers: { "Content-Type": modalFile.type },
+    body: modalFile,
+  });
+  const { storageId } = await result.json();
+  return storageId;
+};
+
 export const saveImagesToStorage = async (
+  getImageUrl: ReactMutation<
+    FunctionReference<
+      "mutation",
+      "public",
+      {
+        storageId?: string | undefined;
+      },
+      string | null,
+      string | undefined
+    >
+  >,
   generateUploadUrl: () => Promise<string>,
   modal: string,
   accessories: AccessoriesType[],
-  oldOutfit: {
-    modal?: string | undefined;
-    accessories: string[];
-  } | null,
 ) => {
   // Upload modal file
   let modalStorageId: string | null = null;
   if (!isConvexStorageId(modal)) {
-    const modalFile = await urlToFile(modal, "modal");
-    const postUrl = await generateUploadUrl();
-    const result = await fetch(postUrl, {
-      method: "POST",
-      headers: { "Content-Type": modalFile.type },
-      body: modalFile,
-    });
-    const { storageId } = await result.json();
+    const storageId = await convertUrlToStorageId(generateUploadUrl, modal);
 
     modalStorageId = storageId;
   } else {
-    modalStorageId = modal;
+    const newImageUrl = await getImageUrl({ storageId: modal });
+    if (!newImageUrl) {
+      throw new Error("Failed to fetch modal image URL from Convex");
+    }
+    const storageId = await convertUrlToStorageId(
+      generateUploadUrl,
+      newImageUrl,
+    );
+
+    modalStorageId = storageId;
   }
   // Upload accessories files
-  const accessoriesStorageIds: string[] = [];
+  const accessoriesStorageIds: { storageId: string }[] = [];
   for (let i = 0; i < accessories.length; i++) {
     if (!isConvexStorageId(accessories[i].url)) {
       const accessoryUrl = accessories[i];
-      const accessoryFile = await urlToFile(accessoryUrl.url, `accessory_${i}`);
-      const postUrl = await generateUploadUrl();
-      const result = await fetch(postUrl, {
-        method: "POST",
-        headers: { "Content-Type": accessoryFile.type },
-        body: accessoryFile,
-      });
-      const { storageId } = await result.json();
-      accessoriesStorageIds.push(storageId);
+      const storageId = await convertUrlToStorageId(
+        generateUploadUrl,
+        accessoryUrl.url,
+      );
+
+      accessoriesStorageIds.push({ storageId });
     } else {
-      accessoriesStorageIds.push(accessories[i].url);
+      const newImageUrl = await getImageUrl({ storageId: accessories[i].url });
+      if (!newImageUrl) {
+        throw new Error("Failed to fetch accessory image URL from Convex");
+      }
+      const storageId = await convertUrlToStorageId(
+        generateUploadUrl,
+        newImageUrl,
+      );
+      accessoriesStorageIds.push({ storageId });
     }
   }
 

@@ -1,18 +1,15 @@
 import FileInputBox from "@/components/Forms/FileInputBox";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import AccessoriesImageListUpload from "./AccessoriesImageListUpload";
-import { useQuery } from "convex/react";
-import { api } from "../../../../../../../../../convex/_generated/api";
-import { Id } from "../../../../../../../../../convex/_generated/dataModel";
 
-const ImageSecrion = () => {
-  const { setModal, modal, outfitId } = useGeneratorSetting();
+const ImageSection = () => {
+  const { setModal, modal } = useGeneratorSetting();
 
   const onChangeModal = (newModal: string | null) => {
     setModal(newModal);
   };
   return (
-    <div className="flex items-start justify-start ">
+    <div className="flex items-start justify-start max-h-[50dvh]">
       <div className="w-[70%] mr-5 ">
         <h2 className="form-label">
           Upload your modal{" "}
@@ -33,4 +30,4 @@ const ImageSecrion = () => {
   );
 };
 
-export default ImageSecrion;
+export default ImageSection;
