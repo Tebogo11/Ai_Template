@@ -49,25 +49,25 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex bg-background dark:bg-darkBackground items-start justify-between md:justify-end py-4 px-0 w-full">
-        <div className="flex items-center w-full">
+      <div className="flex bg-background dark:bg-darkBackground items-start justify-between py-4 px-0 w-full">
+        <div className="flex items-center ">
           <label
             htmlFor="my-drawer"
             className="drawer-button cursor-pointer ml-[-5px]"
           >
             <Bars3BottomLeftIcon className="h-8 w-8 text-primary" />
           </label>
-          <h2 className="login-outfit text-base-content text-[20px]  ml-3.5 mt-[2px]">
+          <h2 className="login-outfit text-base-content text-[20px]  ml-3.5 mt-[2px] hidden md:block">
             Outfit
           </h2>
 
-          <label className="input input-ghost focus:border-0 border-2 ml-2 font-bold cursor-pointer flex items-center w-fit bg-base-200">
+          <label className="input input-ghost focus:border-0 border-2 ml-2 font-bold cursor-pointer flex items-center w-fit bg-base-200 ">
             <PencilIcon className="h-4 w-4 text-primary " />
             <input
               type="search"
               placeholder="Untitled wardrobe"
               value={title}
-              className="w-fit"
+              className="max-w-33"
               onBlur={onChangeTitle}
               onChange={(e) => setTitle(e.target.value || "Untitled wardrobe")}
             />
@@ -83,7 +83,7 @@ const Header = () => {
             />
           )}
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 mt-1">
           <div className="flex items-center space-x-2">
             <DarkModeSwitch />
           </div>

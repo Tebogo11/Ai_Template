@@ -7,10 +7,12 @@ import Preview from "./components/Preview/Preview";
 import Loading from "./components/Loading";
 import HeaderRight from "./components/Header/HeaderRight";
 import { cleanAiText } from "@/utils/string/cleanuptext";
+import { useAppSetting } from "@/store/useAppSetting";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const PreviewImage = () => {
   const { outfitId, apiError } = useGeneratorSetting();
-
+  const { isPreviewPage } = useAppSetting();
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || "",
   });
@@ -24,10 +26,22 @@ const PreviewImage = () => {
   });
 
   return (
-    <div className="flex flex-col w-1/2 min-h-full pb-5">
+    <div
+      className={` ${!isPreviewPage ? "hidden" : "flex "} md:flex flex-col  md:w-1/2 min-h-[90dvh] pb-5`}
+    >
       <div className="flex justify-between w-full">
-        <div>
+        <div className="hidden md:block">
           <h2 className="form-label h-5">Preview</h2>
+        </div>
+        <div className="block md:hidden">
+          <button
+            className="btn btn-ghost btn-sm  rounded-sm active:scale-105 transition-transform px-0 pr-4"
+            onClick={() => {
+              useAppSetting.getState().setIsPreviewPage(false);
+            }}
+          >
+            <ArrowLeftIcon className="h-4 w-4" /> Back to Edit
+          </button>
         </div>
         {outfits && outfits?.length !== 0 && (
           <HeaderRight outfit={outfit} outfits={outfits} />

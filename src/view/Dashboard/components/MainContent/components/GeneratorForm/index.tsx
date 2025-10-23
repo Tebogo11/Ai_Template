@@ -10,10 +10,12 @@ import {
 } from "@/store/useGeneratorData";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
+import { useAppSetting } from "@/store/useAppSetting";
 
 const GeneratorForm = () => {
   const setSelectedOutfit = useGeneratorSetting((s) => s.setSelectedOutfit);
   const outfitID = useGeneratorSetting((s) => s.outfitId);
+  const { isPreviewPage } = useAppSetting();
 
   const recentOutfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitID || "",
@@ -58,10 +60,12 @@ const GeneratorForm = () => {
   }, [outfitID, recentOutfit, setSelectedOutfit]);
 
   return (
-    <div className="grid grid-rows-[400px 2fr] w-1/2 min-h-[90dvh] pb-5">
+    <div
+      className={`${isPreviewPage ? "hidden" : "grid"} md:grid grid-rows-[400px 2fr] w-1/1 md:w-1/2 min-h-[90dvh] pb-5`}
+    >
       <div className="w-full">
         <ImageSection />
-        <div className="w-full mt-5 gap-3">
+        <div className="w-full mt-4 gap-2">
           <Slider />
           <ToggleSections />
         </div>

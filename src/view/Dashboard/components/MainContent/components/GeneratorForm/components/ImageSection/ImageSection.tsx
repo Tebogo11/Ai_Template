@@ -16,7 +16,7 @@ const ImageSection = () => {
           <span className="font-light text-xs">(Required)</span>
         </h2>
         <FileInputBox
-          size="min-w-full min-h-[44svh]"
+          size="w-full h-[44dvh] p-2"
           value={modal}
           onChange={onChangeModal}
           idPrefix="modal"

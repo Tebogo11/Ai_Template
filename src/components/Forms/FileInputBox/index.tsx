@@ -45,7 +45,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
 
   const handleRemove = async () => {
     // setPreview(null);
-
+    console.log("Removing image with storageId:", storageId);
     if (storageId) {
       await deleteImage({
         storageId: storageId,
@@ -82,7 +82,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center ${className} min-h-full w-full`}
+      className={`flex flex-col items-center justify-center min-h-full w-full  ${className} `}
     >
       {/* URL input always visible when no value */}
 
@@ -117,7 +117,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
             <img
               src={urlInput}
               alt="Preview"
-              className="absolute top-0 left-0 w-full h-full object-contain object-center shadow"
+              className="w-full h-full object-contain object-center shadow"
             />
             <div className="flex flex-col max-h-6 absolute top-0 right-1 w-6 h-full ">
               {/* <button

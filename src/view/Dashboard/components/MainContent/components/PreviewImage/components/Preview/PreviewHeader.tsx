@@ -13,6 +13,7 @@ import { cleanAiText } from "@/utils/string/cleanuptext";
 import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
 import Loading from "../Loading";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
+import { useAppSetting } from "@/store/useAppSetting";
 
 interface Outfit {
   _id: string;
@@ -23,16 +24,18 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const { setIsPreviewPage } = useAppSetting();
   const { wardrobeId, setWardrobeId, setTitle } = useWardrobeStore();
   const outfitId = useGeneratorSetting((state) => state.outfitId);
   const setOutfitId = useGeneratorSetting((state) => state.setOutfitId);
   const setModalImageUrl = useGeneratorSetting((state) => state.setModal);
+
   const deleteOutfit = useMutation(api.outfit.deleteOutfitById);
   const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || "",
   });
-
   const imageUrl = useQuery(api.storage.getImageUrl, {
     storageId: outfit?.preview_images as Id<"_storage">,
   });
@@ -69,6 +72,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
   const onUseAsModal = async () => {
     // Implement the logic to set this image as the modal
     setModalImageUrl(imageUrl || "");
+    setIsPreviewPage(false);
   };
 
   const onCreateNewWardrobe = () => {
@@ -117,7 +121,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
 
   return (
     <>
-      <div className="absolute top-0 right-0 left-0 w-full bg-[#11090989]  flex justify-between items-center p-2 rounded-t-xs">
+      <div className="absolute top-0 right-0 left-0 w-full bg-[#110909b0]  flex justify-between items-center p-2 rounded-t-xs">
         <button className="btn btn-sm btn-soft" onClick={onUseAsModal}>
           Use as modal
         </button>
@@ -126,12 +130,12 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
             <ArrowPathIcon className="h-5 w-5 animate-spin text-neutral-content" />
           ) : (
             <ArrowDownTrayIcon
-              className="h-5 w-5 cursor-pointer text-neutral-content"
+              className="h-5 w-5 cursor-pointer text-[#fff]"
               onClick={downloadImage}
             />
           )}
           <EyeIcon
-            className="h-5 w-5 cursor-pointer text-neutral-content"
+            className="h-5 w-5 cursor-pointer text-[#fff]"
             onClick={() => setShowModal(true)}
           />
           <TrashIcon
