@@ -23,6 +23,9 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
     };
   }, [outfit?._id, outfits]);
 
+  if (outfits.length < 2) {
+    return null;
+  }
   return (
     <div className="flex items-center gap-4">
       {/* Prev icon + label */}

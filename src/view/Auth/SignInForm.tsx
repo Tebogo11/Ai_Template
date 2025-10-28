@@ -1,18 +1,19 @@
 import Flex from "@/components/Core/Flex";
-import { SignIn } from "@clerk/clerk-react";
+import { SignIn, useAuth } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import { useAppSetting } from "@/store/useAppSetting";
 // if using Next.js
 
 export const AuthPage = () => {
   const { theme } = useAppSetting();
+  const {} = useAuth(); // Ensure the auth context is initialized
   return (
     <div>
       <Header />
 
       <div
         className="flex w-full overflow-y-hidden"
-        style={{ maxHeight: "100svh", height: "100svh" }}
+        style={{ maxHeight: "100dvh", height: "100dvh" }}
       >
         {/* Left side (hidden on mobile) */}
         <div className="hidden md:flex w-3/5 h-full overflow-clip border-r-4 border-primary ">
@@ -43,7 +44,7 @@ export const AuthPage = () => {
           </div>
 
           {/* Clerk SignIn */}
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm mr-5 md:mr-0">
             <SignIn
               appearance={{
                 elements: {

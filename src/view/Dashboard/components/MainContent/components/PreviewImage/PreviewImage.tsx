@@ -49,6 +49,13 @@ const PreviewImage = () => {
       </div>
       {outfit?.status === "generating" ? (
         <Loading text="Please give us a moment, we're generating your outfit" />
+      ) : outfit?.status === "error" ? (
+        <div className="flex flex-col flex-grow-1 bg-base-200 rounded-xs flex items-center justify-center p-5">
+          <p className="text-error text-center">
+            Something went wrong while generating your outfit.
+          </p>
+          <p className="text-error text-center">Please try again</p>
+        </div>
       ) : (
         <div className="flex-grow-1 bg-base-200 rounded-xs">
           {apiError && (

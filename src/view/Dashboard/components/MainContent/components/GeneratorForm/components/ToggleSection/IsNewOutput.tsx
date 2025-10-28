@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const IsNewOutput = () => {
   const { setIsNewOutfit, is_new_outfit } = useGeneratorSetting();
   return (
-    <div className="flex-1 ml-2">
+    <div className="flex-1 ml-2 min-w-[50%]">
       <h2 className="form-label">
         New outfit? <span className="font-light text-xs">(Edit outfit)</span>
       </h2>

@@ -25,8 +25,7 @@ export const generatePreviewWithAI = internalAction({
 
   // Action implementation.
   handler: async (ctx, args) => {
-    const { accessories, style_intensity, formality, initial_prompt, modal } =
-      args;
+    const { accessories, style_theme, fit, initial_prompt, modal } = args;
     const modalUrl = await ctx.storage.getUrl(modal as Id<"_storage">);
 
     if (!modalUrl) {
@@ -50,9 +49,8 @@ export const generatePreviewWithAI = internalAction({
         text: `
         Modal: [First image]
         Accessories: [Every other image]
-        Style Intensity: ${style_intensity}
-        Formality: ${formality}
-        Season: ${args.season || "Winter"}
+        Style Theme: ${style_theme?.join(", ")}
+        Fit: ${fit}
         User Prompt: ${initial_prompt}
         Is New Outfit: ${args.is_new_outfit || true}
         `,
@@ -113,6 +111,9 @@ export const generatePreviewWithAI = internalAction({
               threshold: HarmBlockThreshold.OFF,
             },
           ],
+          imageConfig: {
+            aspectRatio: "4:3",
+          },
           responseModalities: ["IMAGE"],
         },
       });
@@ -149,8 +150,12 @@ export const generatePreviewWithAI = internalAction({
       imageURLFinal = await retry(ai, base64Image, textContent);
     }
 
-    if (!imageURLFinal) throw new Error("No image URL returned from DALL·E");
-
+    if (!imageURLFinal) {
+      await ctx.scheduler.runAfter(0, api.outfit.generationWentWrong, {
+        outfitId: args.outfitId,
+      });
+      throw new Error("No image URL returned from DALL·E");
+    }
     // console.log("Generating upload URL");
     const postUrl = await ctx.storage.generateUploadUrl();
     // console.log("Generated upload URL:", postUrl);

@@ -9,12 +9,11 @@ const useSubmitForm = () => {
   const {
     modal,
     accessories,
-    styleIntensity,
-    formality,
+    fit,
+    themes,
     prompt,
     setIsGenerating,
     setOutfitId,
-    season,
     is_new_outfit,
     setApiError,
   } = useGeneratorSetting();
@@ -23,6 +22,7 @@ const useSubmitForm = () => {
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
   const generatorOutfit = useMutation(api.outfit.generatorOutfit);
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
+  const invokeToken = useMutation(api.user.tokens.invokingToken);
 
   const onSubmit = async () => {
     setApiError(null);
@@ -42,10 +42,9 @@ const useSubmitForm = () => {
       const generateData = {
         modal: modalStorageId,
         accessories: accessoriesStorageIds,
-        style_intensity: Number(styleIntensity),
-        formality: Number(formality),
+        fit,
+        style_theme: themes,
         initial_prompt: prompt,
-        season,
         is_new_outfit,
         title,
         wardrobeId,
@@ -61,6 +60,7 @@ const useSubmitForm = () => {
       setOutfitId(outfitId);
       setTitle(generatedTitle || "untitled wardrobe");
       setWardrobeId(tempWardrobeId);
+      await invokeToken();
     } catch (err) {
       setApiError((err as Error).message);
     } finally {

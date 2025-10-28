@@ -41,7 +41,7 @@
 }
 
 @utility form-slider-option {
-  @apply mb-1 text-xs font-medium text-base-content;
+  @apply mb-1 text-xs font-light text-base-content text-[1.2dvw];
 }
 
 @utility season-label {

@@ -1,19 +1,20 @@
 import { useEffect } from "react";
 import ImageSection from "./components/ImageSection/ImageSection";
 import PromptSection from "./components/PromptSection";
-import Slider from "./components/Slider/Slider";
-import ToggleSections from "./components/ToggleSection";
 import {
   AccessoriesType,
   OutfitData,
   useGeneratorSetting,
 } from "@/store/useGeneratorData";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 import { useAppSetting } from "@/store/useAppSetting";
+import IsNewOutput from "./components/ToggleSection/IsNewOutput";
+import Fit from "./components/Select/Fit";
+import Tags from "./components/TagInput/Tags";
 
 const GeneratorForm = () => {
-  const setSelectedOutfit = useGeneratorSetting((s) => s.setSelectedOutfit);
+  const { setSelectedOutfit } = useGeneratorSetting();
   const outfitID = useGeneratorSetting((s) => s.outfitId);
   const { isPreviewPage } = useAppSetting();
 
@@ -30,6 +31,7 @@ const GeneratorForm = () => {
       // const accessories = await getImageUrlList({
       //   storageIdsList: recentOutfit?.accessories.map((a) => a.storageId) || [],
       // });
+      console.log("recentOutfit", recentOutfit);
       setSelectedOutfit({
         accessories:
           recentOutfit?.accessories?.map((url, index) => {
@@ -38,11 +40,10 @@ const GeneratorForm = () => {
               url: url.storageId,
             } as AccessoriesType;
           }) || [],
-        formality: recentOutfit?.formality || "",
         initial_prompt: recentOutfit?.initial_prompt || "",
         modal: recentOutfit?.modal || "",
-        season: recentOutfit?.season || "",
-        style_intensity: recentOutfit?.style_intensity || "",
+        fit: recentOutfit?.fit || "standardFit",
+        themes: recentOutfit?.style_theme || [],
       } as OutfitData);
     };
     if (outfitID && recentOutfit) {
@@ -53,8 +54,8 @@ const GeneratorForm = () => {
         formality: 50,
         initial_prompt: "",
         modal: "",
-        season: "",
-        style_intensity: 50,
+        fit: "standard",
+        themes: [],
       } as OutfitData);
     }
   }, [outfitID, recentOutfit, setSelectedOutfit]);
@@ -66,8 +67,11 @@ const GeneratorForm = () => {
       <div className="w-full">
         <ImageSection />
         <div className="w-full mt-4 gap-2">
-          <Slider />
-          <ToggleSections />
+          <div className="flex">
+            <Fit />
+            <IsNewOutput />
+          </div>
+          <Tags />
         </div>
       </div>
       <div className="flex flex-grow-1">

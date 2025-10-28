@@ -33,10 +33,12 @@ const AccessoriesImageListUpload = () => {
     }
   };
 
+  const disableAddMore = accessories.length >= 5;
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full ">
       {/* Scrollable image area */}
-      <div className="flex-1 overflow-y-auto space-y-2 pb-1 max-h-[36.5dvh]">
+      <div className="flex-1 overflow-y-auto space-y-2 pb-1 max-h-[37.5dvh]">
         <FileInputBox
           idPrefix="Accessories1"
           size="w-full h-[18dvh]"
@@ -70,16 +72,18 @@ const AccessoriesImageListUpload = () => {
 
       {/* Smaller Add More button */}
       <label
-        htmlFor="image-upload-accessories"
-        className="btn btn-secondary flex justify-center items-center rounded-xs w-full h-[5dvh] border cursor-pointer hover:bg-base-200 shadow-md mt-3"
+        htmlFor={`image-upload-accessories`}
+        className={`btn btn-secondary flex justify-center items-center rounded-xs w-full h-[5dvh] border cursor-pointer hover:bg-base-100 shadow-md mt-3 hover:text-secondary ${disableAddMore ? "opacity-40" : ""}`}
       >
-        <h2 className="text-sm">Add More</h2>
+        <h2 className="text-sm ">
+          Add More <span className="text-xs">(max {accessories.length}/5)</span>
+        </h2>
         <input
           id="image-upload-accessories"
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={addMoreAccessories}
+          onChange={() => !disableAddMore && addMoreAccessories}
         />
       </label>
     </div>

@@ -2,7 +2,7 @@ import DarkModeSwitch from "@/confg/darkMode/DarkModeSwitch";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { UserButton } from "@clerk/clerk-react";
 
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../../convex/_generated/api";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { useState } from "react";
@@ -11,11 +11,15 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { useAppSetting } from "@/store/useAppSetting";
 
 const Header = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const { title, setTitle, wardrobeId, setWardrobeId } = useWardrobeStore();
+  const { setShowSubscriptionModal } = useAppSetting();
   const { setOutfitId } = useGeneratorSetting();
+
+  const user = useQuery(api.user.getters.getUser);
   const changeTitle = useMutation(api.wardrobe.changeTitle);
   const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
 
@@ -83,8 +87,31 @@ const Header = () => {
             />
           )}
         </div>
-        <div className="flex items-center space-x-4 mt-1">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4 mt-1 cursor-pointer box-border">
+          <div
+            className="tooltip tooltip-bottom mt-[-10px] md:mt-0 ml-5 md:flex gap-2"
+            data-tip={
+              user?.plan === "free"
+                ? "Upgrade to premium for more credits"
+                : `Your credits will reset on ${user?.nextCreditCheck}`
+            }
+            onClick={() => setShowSubscriptionModal(true)}
+          >
+            <div className="flex items-center gap-1 =">
+              <h2 className="text-base-content text-[10px] md:text-xs font-normal ">
+                {user?.credits} Credits Left
+              </h2>
+            </div>
+            <div className=" hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)] p-0.5 text-primary-content hover:text-secondary">
+              <div className=" bg-primary px-5 py-1 hover:bg-base-100 ">
+                <p className="text-sm  font-semibold">
+                  {user?.plan === "free" ? "Upgrade" : "Manage"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className=" items-center space-x-2 hidden md:flex">
             <DarkModeSwitch />
           </div>
 

@@ -7,7 +7,7 @@ const Header = () => {
   const { theme } = useAppSetting();
   return (
     <div className="navbar bg-transparent shadow-none absolute top-0 left-0 right-0 z-10 ">
-      <Flex className="items-start justify-start flex-col flex-1">
+      <Flex className="flex items-start justify-start  flex-1">
         <img
           src={`/assets/logo/Logo-white.png`}
           alt="menu"
@@ -19,7 +19,7 @@ const Header = () => {
           className={`h-8 w-auto object-contain hover:scale-110 block ${theme === "light" ? "md:hidden" : "hidden"} `}
         />
         <h1
-          className={`${theme === "light" ? "md:text-white" : "text-white"} text-[20px] font-light ml-2 mt-[2px]`}
+          className={`${theme === "light" ? "md:text-white" : "text-white"} text-[20px] font-extrabold ml-2 mt-[2px]`}
         >
           Outfit
         </h1>

@@ -3,6 +3,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
+import dayjs from "dayjs";
 
 type OutfitItemsProps = {
   _id: Id<"wardrobe">;
@@ -32,7 +33,7 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   return (
     <div
       onClick={onPickWardrobe}
-      className={`p-4 border-b border-base-200 flex ${wardrobeId === _id ? "bg-base-200" : ""} hover:bg-base-200 cursor-pointer`}
+      className={`p-4 border-t border-base-200 flex ${wardrobeId === _id ? "bg-base-200" : ""} hover:bg-base-200 cursor-pointer`}
     >
       <img
         src={imageUrl || "/assets/placeholder.png"}
@@ -43,7 +44,10 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
         <h2 className="text-sm font-semibold">
           {title || "Untitled Wardrobe"}
         </h2>
-        <p className="text-xs">{recentOutfit?.title || "Untitled Outfit"}</p>
+        <p className="text-xs">
+          {dayjs(recentOutfit?._creationTime).format("MMM D, YYYY") ||
+            "Untitled Outfit"}
+        </p>
       </div>
     </div>
   );

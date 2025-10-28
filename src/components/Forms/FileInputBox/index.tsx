@@ -6,6 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import InitialPage from "@/view/Dashboard/components/MainContent/components/PreviewImage/components/InitialPage";
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
@@ -89,18 +90,24 @@ const FileInputBox: FC<ImageUploadProps> = ({
       {!urlInput ? (
         <label
           htmlFor={"image-upload" + idPrefix}
-          className={`flex flex-col items-center justify-center ${size} rounded cursor-pointer hover:border-blue-400 transition bg-base-200 border-2 border-dashed border-base-100 p-4`}
+          className={`flex flex-col items-center justify-center ${size} rounded cursor-pointer hover:border-secondary transition bg-base-300 border-4 border-dashed border-base-100 p-4`}
         >
+          <div
+            className={` ${isModal ? "block" : "hidden"} mb-2 block md:hidden`}
+          >
+            <InitialPage />
+          </div>
           <PhotoIcon
-            className={
-              isSmall ? `w-5 h-5 text-primary` : `w-10 h-10 text-primary`
-            }
+            className={`
+              ${isSmall ? `w-5 h-5 text-primary` : `w-10 h-10 text-primary`}
+            hidden md:block`}
           />
           <p
             className={`text-primary text-center ${isSmall ? "text-xs" : "text-sm"}`}
           >
-            Click to upload image
+            {isModal ? "Click to upload modal" : "Click to upload item"}
           </p>
+
           <input
             id={"image-upload" + idPrefix}
             type="file"

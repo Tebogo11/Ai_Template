@@ -20,10 +20,11 @@ const ImageSection = () => {
           value={modal}
           onChange={onChangeModal}
           idPrefix="modal"
+          isModal
         />
       </div>
       <div className="w-[30%] ">
-        <h2 className="form-label">Accessories</h2>
+        <h2 className="form-label">Clothing Items</h2>
         <AccessoriesImageListUpload />
       </div>
     </div>

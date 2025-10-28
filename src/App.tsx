@@ -32,7 +32,7 @@ export default function App() {
       </main>
 
       {/* 🔲 Transparent Grid Overlay */}
-      {showGrid && (
+      {/* {showGrid && (
         <div
           className="fixed inset-0 z-50 grid grid-cols-12 pointer-events-none opacity-20"
           style={{
@@ -41,15 +41,15 @@ export default function App() {
             backgroundSize: "calc(100% / 12) 100%, 100% calc(100% / 12)",
           }}
         ></div>
-      )}
+      )} */}
 
       {/* 🟢 Toggle Button */}
-      <button
+      {/* <button
         onClick={() => setShowGrid(!showGrid)}
         className="fixed bottom-4 right-4 z-50 px-4 py-2 rounded-md bg-primary text-white text-sm shadow-lg hover:bg-primary/80 transition"
       >
         {showGrid ? "Hide Grid" : "Show Grid"}
-      </button>
+      </button> */}
     </div>
   );
 }

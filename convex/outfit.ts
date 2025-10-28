@@ -7,17 +7,18 @@ import { title } from "process";
 export const generateDataType = {
   modal: v.string(),
   accessories: v.array(v.object({ storageId: v.string() })),
-  style_intensity: v.number(),
-  formality: v.number(),
-  initial_prompt: v.string(),
-  season: v.optional(
+  fit: v.optional(
     v.union(
-      v.literal("spring"),
-      v.literal("summer"),
-      v.literal("autumn"),
-      v.literal("winter"),
+      v.literal("bodyCon"),
+      v.literal("tailored"),
+      v.literal("standardFit"),
+      v.literal("relaxed"),
+      v.literal("oversized"),
     ),
   ),
+  style_theme: v.optional(v.array(v.string())),
+  initial_prompt: v.string(),
+
   is_new_outfit: v.optional(v.boolean()),
 };
 
@@ -42,8 +43,8 @@ export const generatorOutfit = mutation({
     const outfitId = await ctx.db.insert("outfit", {
       modal: args.modal,
       accessories: args.accessories,
-      style_intensity: args.style_intensity,
-      formality: args.formality,
+      fit: args.fit,
+      style_theme: args.style_theme,
       initial_prompt: args.initial_prompt,
       status: "generating",
       wardrobeId: finalWardrobeId,
@@ -57,6 +58,18 @@ export const generatorOutfit = mutation({
   },
 });
 
+export const generationWentWrong = mutation({
+  args: {
+    outfitId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.outfitId as Id<"outfit">, {
+      status: "error",
+      error: "Generation failed",
+    });
+  },
+});
+
 export const updateOutfitPreview = mutation({
   args: {
     outfitId: v.string(),
@@ -64,16 +77,16 @@ export const updateOutfitPreview = mutation({
     summary: v.string(),
   },
   handler: async (ctx, args) => {
-    let title = "";
-    let summary = "";
-    console.log(
-      "[Function]: Updating outfit preview Args:",
-      args.outfitId,
-      args.previewImageId,
-      args.summary,
-    );
-
     try {
+      let title = "";
+      let summary = "";
+      console.log(
+        "[Function]: Updating outfit preview Args:",
+        args.outfitId,
+        args.previewImageId,
+        args.summary,
+      );
+
       if (args.summary) {
         const [tempTitle, tempTitleDescription] = args.summary
           .split("|")
@@ -82,16 +95,22 @@ export const updateOutfitPreview = mutation({
         title = tempTitle || "Untitled Outfit";
         summary = tempTitleDescription || args.summary;
       }
-    } catch (e) {
-      title = "Untitled Outfit";
-      summary = args.summary;
+
+      await ctx.db.patch(args.outfitId as Id<"outfit">, {
+        preview_images: args.previewImageId,
+        title,
+        summary,
+        status: "done",
+      });
+    } catch (error) {
+      console.error("[Error]: Failed to update outfit preview:", error);
+      await ctx.db.patch(args.outfitId as Id<"outfit">, {
+        status: "error",
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      });
+      throw error;
     }
-    await ctx.db.patch(args.outfitId as Id<"outfit">, {
-      preview_images: args.previewImageId,
-      title,
-      summary,
-      status: "done",
-    });
   },
 });
 

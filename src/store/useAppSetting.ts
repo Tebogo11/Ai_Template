@@ -5,6 +5,10 @@ type AppSetting = {
   setTheme: (newTheme: "light" | "dark") => void;
   isPreviewPage: boolean;
   setIsPreviewPage: (data: boolean) => void;
+  showSubscriptionModal: boolean;
+  setShowSubscriptionModal: (data: boolean) => void;
+  hasNoCredits?: boolean;
+  setHasNoCredits?: (data: boolean) => void;
 };
 
 export const useAppSetting = create<AppSetting>((set) => ({
@@ -17,4 +21,8 @@ export const useAppSetting = create<AppSetting>((set) => ({
   setIsPreviewPage: (isPreview) => {
     set({ isPreviewPage: isPreview });
   },
+  showSubscriptionModal: false,
+  setShowSubscriptionModal: (show) => set({ showSubscriptionModal: show }),
+  hasNoCredits: false,
+  setHasNoCredits: (hasNoCredits) => set({ hasNoCredits }),
 }));

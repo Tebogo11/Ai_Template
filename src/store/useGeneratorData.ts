@@ -17,8 +17,8 @@ export enum Season {
 export type OutfitData = {
   modal: string;
   accessories: AccessoriesType[];
-  style_intensity: number;
-  formality: number;
+  fit: string;
+  themes: string[];
   initial_prompt: string;
 };
 
@@ -26,25 +26,23 @@ type GeneratorSetting = {
   outfitId: string | null;
   modal: string | null;
   accessories: AccessoriesType[];
-  styleIntensity: string;
-  formality: string;
+  fit: string;
+  themes: string[];
   prompt: string;
   previewOutfit?: null | string;
   isGenerating: boolean;
-  season: Season;
   is_new_outfit: boolean;
   apiError: string | null;
   setAccessories: (data: AccessoriesType[]) => void;
   setModal: (modalData: string | null) => void;
   appendAccessories: (data: AccessoriesType) => void;
   removeAccessories: (id: string) => void;
-  setStyleIntensity: (data: string) => void;
-  setFormality: (data: string) => void;
+  setStyleTheme: (data: string[]) => void;
+  setFit: (data: string) => void;
   setPrompt: (data: string) => void;
   setPreviewOutfit: (data: string) => void;
   setIsGenerating: (data: boolean) => void;
   setOutfitId: (data: string | null) => void;
-  setSeason: (data: Season) => void;
   setIsNewOutfit: (data: boolean) => void;
   setApiError: (data: string | null) => void;
   setSelectedOutfit: (data: OutfitData | null) => void;
@@ -78,14 +76,6 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
       };
     });
   },
-  styleIntensity: "50",
-  setStyleIntensity: (data: string) => {
-    set({ styleIntensity: data });
-  },
-  formality: "50",
-  setFormality: (data: string) => {
-    set({ formality: data });
-  },
   prompt: "",
   setPrompt: (data: string) => {
     set({ prompt: data });
@@ -102,10 +92,6 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   setOutfitId: (data: string | null) => {
     set({ outfitId: data });
   },
-  season: Season.SPRING,
-  setSeason: (data: Season) => {
-    set({ season: data });
-  },
   is_new_outfit: true,
   setIsNewOutfit: (data: boolean) => {
     set({ is_new_outfit: data });
@@ -119,10 +105,18 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
       set({
         modal: data.modal,
         accessories: data.accessories,
-        styleIntensity: String(data.style_intensity),
-        formality: String(data.formality),
+        fit: data.fit,
+        themes: data.themes,
         prompt: data.initial_prompt,
       });
     }
+  },
+  fit: "standardFit",
+  setFit: (data: string) => {
+    set({ fit: data });
+  },
+  themes: [],
+  setStyleTheme: (data: string[]) => {
+    set({ themes: data });
   },
 }));
