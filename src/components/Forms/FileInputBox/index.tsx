@@ -7,6 +7,7 @@ import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import InitialPage from "@/view/Dashboard/components/MainContent/components/PreviewImage/components/InitialPage";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
@@ -121,7 +122,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
           <div
             className={`relative ${size} overflow-hidden bg-base-200 flex justify-center items-center `}
           >
-            <img
+            <LazyLoadImage
               src={urlInput}
               alt="Preview"
               className="w-full h-full object-contain object-center shadow"
@@ -147,7 +148,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
             {showModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
                 <div className="relative bg-base-100 rounded-lg shadow-lg p-4">
-                  <img
+                  <LazyLoadImage
                     src={urlInput}
                     alt="Full Preview"
                     className="w-[90vw] h-[80vh] rounded object-contain object-center"

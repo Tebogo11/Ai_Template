@@ -1,5 +1,6 @@
 import React from "react";
 import PreviewHeader from "./PreviewHeader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 interface Outfit {
   _id: string;
@@ -17,11 +18,11 @@ type PreviewProps = {
 
 const Preview: React.FC<PreviewProps> = ({ imageUrl, outfit, outfits }) => {
   return (
-    <div className=" flex flex-col justify-between h-full relative rounded-xs">
+    <div className=" flex flex-col justify-between h-full relative rounded-xs max-h-[80dvh]">
       {/* Image area — takes 80% of the container */}
 
       {imageUrl ? (
-        <img
+        <LazyLoadImage
           src={imageUrl}
           alt="Generated outfit"
           className="h-full w-full object-contain rounded animate-fade animate-once animate-duration-1000 animate-ease-out animate-fill-both"

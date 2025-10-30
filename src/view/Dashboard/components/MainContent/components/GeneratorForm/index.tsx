@@ -54,7 +54,7 @@ const GeneratorForm = () => {
         formality: 50,
         initial_prompt: "",
         modal: "",
-        fit: "standard",
+        fit: "standardFit",
         themes: [],
       } as OutfitData);
     }

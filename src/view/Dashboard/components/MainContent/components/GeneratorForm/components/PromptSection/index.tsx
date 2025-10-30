@@ -11,6 +11,7 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../../../convex/_generated/dataModel";
 import { useAppSetting } from "@/store/useAppSetting";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const PromptSection = () => {
   const { setPrompt, prompt, modal, isGenerating, outfitId } =
@@ -119,7 +120,7 @@ const PromptSection = () => {
           className="btn btn-ghost px-0 rounded-sm block md:hidden h-full pt-2 w-[30%] active:scale-105 transition-transform"
           onClick={() => setIsPreviewPage(true)}
         >
-          <img
+          <LazyLoadImage
             src={imageUrl}
             alt="Preview"
             className="w-full h-full object-cover object-center shadow rounded-sm"

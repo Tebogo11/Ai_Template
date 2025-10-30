@@ -8,6 +8,7 @@ import OutfitItems from "./OutfitItems";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { title } from "process";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const SideBar = () => {
   const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
@@ -37,7 +38,7 @@ const SideBar = () => {
           justify="between"
         >
           <Flex className="flex items-center justify-center">
-            <img
+            <LazyLoadImage
               src={`/assets/logo/${theme === "light" ? "Logo" : "Logo-white"}.png`}
               alt="menu"
               className="h-10 w-8 object-contain hover:scale-110"

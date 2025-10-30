@@ -1,10 +1,11 @@
 import { Authenticated, Unauthenticated } from "convex/react";
 import { UserButton } from "@clerk/clerk-react";
-import { AuthPage } from "./view/Auth/SignInForm";
+import { AuthPage } from "./view/LandingPage/view/Auth/SignInForm";
 import Dashboard from "./view/Dashboard";
 import { useEffect, useState } from "react";
 import { useAppSetting } from "./store/useAppSetting";
 import { themeChange } from "theme-change";
+import LandingPage from "./view/LandingPage";
 
 export default function App() {
   const { theme } = useAppSetting();
@@ -27,7 +28,7 @@ export default function App() {
           <Dashboard />
         </Authenticated>
         <Unauthenticated>
-          <AuthPage />
+          <LandingPage />
         </Unauthenticated>
       </main>
 

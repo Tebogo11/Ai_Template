@@ -14,6 +14,7 @@ import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
 import Loading from "../Loading";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { useAppSetting } from "@/store/useAppSetting";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 interface Outfit {
   _id: string;
@@ -151,7 +152,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="relative bg-base-100 rounded-lg shadow-lg p-4">
-            <img
+            <LazyLoadImage
               src={imageUrl || ""}
               alt="Full Preview"
               className="w-[90vw] h-[80vh] rounded object-contain object-center"
