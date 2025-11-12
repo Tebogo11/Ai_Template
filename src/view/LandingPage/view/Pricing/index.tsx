@@ -1,60 +1,57 @@
-import { PricingTable } from "@clerk/clerk-react";
-
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Pricing = () => {
   const plans = [
     {
-      name: "Starter",
-      price: "Free",
-      description: "Perfect for trying out Outfit AI",
+      name: "Outfit AI Free Plan",
+      price: "$0",
+      period: "Month",
+      description: "For trying Outfit AI without commitment.",
+      billingNote: "Only billed when you upgrade",
+      creditSummary: "Free — 200 credits total",
       features: [
-        "5 outfit generations per month",
-        "Basic style options",
-        "Standard quality images",
-        "Email support",
+        "Generate up to 10 outfit images (no watermarks)",
+        "Core controls - season, formality, accessories",
+        "Save to your Wardrobe",
+        "Email support within 48 hours",
       ],
-      cta: "Get Started",
-      popular: false,
     },
     {
-      name: "Style Pro",
-      price: "$19",
-      period: "/month",
-      description: "For fashion enthusiasts",
+      name: "Outfit AI Basic Plan",
+      price: "$6.99",
+      period: "Month",
+      description:
+        "For weekly outfit planners and casual creators. Try before you buy, instantly.",
+      billingNote: "Only billed monthly",
+      creditSummary: "Basic — 2000 credits / month",
       features: [
-        "100 outfit generations per month",
-        "Advanced style customization",
-        "High-quality images",
-        "Priority email support",
-        "Save favorite outfits",
-        "Style history tracking",
+        "100 instant outfit images each month (no watermarks)",
+        "Core controls - season, formality, accessories, style intensity",
+        "Save to your Wardrobe and re-generate variations",
+        "Email support",
       ],
-      cta: "Start Free Trial",
       popular: true,
     },
     {
-      name: "Fashion Elite",
-      price: "$49",
-      period: "/month",
-      description: "For professionals and influencers",
+      name: "Outfit AI Pro Plan",
+      price: "$12.99",
+      period: "Month",
+      description:
+        "For power shoppers, creators, and style explorers. Plan a whole season in hours.",
+      billingNote: "Only billed monthly",
+      creditSummary: "Pro — 5000 credits / month",
       features: [
-        "Unlimited outfit generations",
-        "Premium AI models",
-        "4K quality images",
-        "24/7 priority support",
-        "Advanced analytics",
-        "API access",
-        "Commercial usage rights",
-        "White-label options",
+        "250 instant outfit images each month (no watermarks)",
+        "All Basic features",
+        "Faster path to the right look with a high monthly allowance",
+        "Priority email support",
+        "Early access to new styles and tweaks as we ship them",
       ],
-      cta: "Contact Sales",
-      popular: false,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="min-h-screen bg-base-100 overflow-auto">
       {/* Header */}
       <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto max-w-4xl text-center">
@@ -70,7 +67,54 @@ const Pricing = () => {
 
       {/* Pricing Cards */}
       <section className="py-16 px-10 md:px-20">
-        <PricingTable />
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {plans.map((plan) => (
+            <div
+              key={plan.name}
+              className="flex flex-col gap-6 rounded-3xl border border-base-200 bg-base-100 p-8 shadow-lg shadow-base-200/40"
+            >
+              {plan.popular && (
+                <span className="badge badge-primary badge-outline w-max">
+                  Most popular
+                </span>
+              )}
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold text-base-content">
+                  {plan.name}
+                </h3>
+                <p className="text-base-content/70">{plan.description}</p>
+              </div>
+              <div className="flex items-end gap-2 text-base-content">
+                <span className="text-5xl font-black">{plan.price}</span>
+                <span className="pb-2 text-lg font-semibold">
+                  {plan.period}
+                </span>
+              </div>
+              {plan.billingNote && (
+                <p className="text-sm font-medium uppercase tracking-wide text-primary">
+                  {plan.billingNote}
+                </p>
+              )}
+              <p className="text-base font-semibold text-base-content/80">
+                {plan.creditSummary}
+              </p>
+              <ul className="space-y-3 text-base-content/80">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2">
+                    <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary"></span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/login"
+                className="btn btn-primary btn-lg mt-auto w-full"
+              >
+                Start with 200 free credits
+              </Link>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* FAQ Section */}
@@ -147,7 +191,7 @@ const Pricing = () => {
           <p className="text-xl text-base-content/70 mb-8">
             Our team is here to help you choose the perfect plan
           </p>
-          <Link to="/about" className="btn btn-primary btn-lg">
+          <Link to="/contact" className="btn btn-primary btn-lg">
             Contact Us
           </Link>
         </div>

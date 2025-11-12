@@ -1,13 +1,12 @@
 import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
-
 import { useMutation } from "convex/react";
-import React, { useState, ChangeEvent, FC, useMemo, useEffect } from "react";
+import { useState, ChangeEvent, FC, useEffect } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import InitialPage from "@/view/Dashboard/components/MainContent/components/PreviewImage/components/InitialPage";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { PlusIcon } from "lucide-react";
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
@@ -122,12 +121,14 @@ const FileInputBox: FC<ImageUploadProps> = ({
           <div
             className={`relative ${size} overflow-hidden bg-base-200 flex justify-center items-center `}
           >
-            <LazyLoadImage
+            <img
               src={urlInput}
               alt="Preview"
+              loading="eager" // load immediately
+              decoding="async" // doesn’t block rendering
               className="w-full h-full object-contain object-center shadow"
             />
-            <div className="flex flex-col max-h-6 absolute top-0 right-1 w-6 h-full ">
+            <div className="flex max-h-6 absolute top-0 right-0  h-full bg-base-100 ">
               {/* <button
                 type="button"
                 onClick={() => setShowModal(true)}
@@ -136,20 +137,24 @@ const FileInputBox: FC<ImageUploadProps> = ({
               >
                 <EyeIcon className="h-5.5 w-5.5 text-base-content" />
               </button> */}
+            
               <button
                 type="button"
                 onClick={handleRemove}
-                className="  bg-base-100 text-white text-xs px-1 pb-1  w-25  cursor-pointer rounded-bl-xl "
+                className="  text-white text-xs   cursor-pointer "
               >
                 <XMarkIcon className="h-5.5 w-5.5 text-base-content hover:animate-jump animate-once" />
                 {/* <TrashIcon className="h-4 w-4 text-error" /> */}
               </button>
             </div>
+       
             {showModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
                 <div className="relative bg-base-100 rounded-lg shadow-lg p-4">
-                  <LazyLoadImage
+                  <img
                     src={urlInput}
+                    loading="eager" // load immediately
+                    decoding="async" // doesn’t block rendering
                     alt="Full Preview"
                     className="w-[90vw] h-[80vh] rounded object-contain object-center"
                   />

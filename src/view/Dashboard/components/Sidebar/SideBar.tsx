@@ -2,13 +2,10 @@ import Flex from "@/components/Core/Flex";
 import { useAppSetting } from "@/store/useAppSetting";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { usePaginatedQuery } from "convex/react";
-import React from "react";
 import { api } from "../../../../../convex/_generated/api";
 import OutfitItems from "./OutfitItems";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
-import { title } from "process";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const SideBar = () => {
   const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
@@ -38,9 +35,11 @@ const SideBar = () => {
           justify="between"
         >
           <Flex className="flex items-center justify-center">
-            <LazyLoadImage
+            <img
               src={`/assets/logo/${theme === "light" ? "Logo" : "Logo-white"}.png`}
               alt="menu"
+              loading="eager" // load immediately
+              decoding="async" // doesn’t block rendering
               className="h-10 w-8 object-contain hover:scale-110"
             />
             <h1 className="login-outfit text-base-content text-[20px] ml-2 mt-1">

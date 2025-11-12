@@ -1,9 +1,26 @@
 import { useAppSetting } from "@/store/useAppSetting";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link } from "react-router";
+import { useMutation } from "convex/react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { api } from "../../../../../convex/_generated/api";
 
 const Footer = () => {
   const { theme } = useAppSetting();
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const subscribeToNewsletter = useMutation(
+    api.landingPageApi.newsLetterSubscriber.subscribeToNewsletter,
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    await subscribeToNewsletter({ email });
+    setIsLoading(false);
+    setHasSubmitted(true);
+  };
+
   return (
     <footer className="border-t border-base-300 bg-base-100 text-base-content">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12 md:flex-row md:items-start md:justify-between">
@@ -12,10 +29,12 @@ const Footer = () => {
             to="/"
             className="flex items-center gap-2 text-xl font-extrabold"
           >
-            <LazyLoadImage
+            <img
               src={`/assets/logo/${theme === "light" ? "Logo" : "Logo-white"}.png`}
               alt="Outfit AI"
               className={`h-9 w-auto object-contain transition-transform duration-300 hover:scale-110 `}
+              loading="eager"
+              decoding="async"
             />
             <span>Outfit AI</span>
           </Link>
@@ -50,15 +69,31 @@ const Footer = () => {
               Subscribe to updates for new drop previews, digital fitting tips,
               and platform insights.
             </p>
-            <form className="flex w-full max-w-xs flex-col gap-3 md:flex-row">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="input input-bordered input-sm flex-1"
-              />
-              <button type="submit" className="btn btn-sm btn-primary">
-                Notify me
-              </button>
+            <form
+              onSubmit={handleSubmit}
+              className="flex w-full max-w-xs flex-col gap-3 md:flex-row"
+            >
+              {!hasSubmitted ? (
+                <>
+                  <input
+                    type="email"
+                    placeholder="Your email"
+                    className="input input-bordered input-sm flex-1 min-h-8"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="submit"
+                    className="btn btn-sm btn-primary"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Submitting..." : "Notify me"}
+                  </button>
+                </>
+              ) : (
+                <p className="text-success">Thanks for subscribing!</p>
+              )}
             </form>
           </div>
         </div>

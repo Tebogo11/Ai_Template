@@ -1,8 +1,10 @@
 import Header from "./components/Header";
 import PreviewImage from "./components/PreviewImage/PreviewImage";
 import GeneratorForm from "./components/GeneratorForm";
+import useGetValues from "./hooks/useGetValues";
 
 const MainContent = () => {
+  useGetValues();
   return (
     <>
       <div className="px-5 pb-10">

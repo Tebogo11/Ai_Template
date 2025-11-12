@@ -33,6 +33,8 @@ type GeneratorSetting = {
   isGenerating: boolean;
   is_new_outfit: boolean;
   apiError: string | null;
+  isGettingValues: boolean;
+  setIsGettingValues: (isGettingValues: boolean) => void;
   setAccessories: (data: AccessoriesType[]) => void;
   setModal: (modalData: string | null) => void;
   appendAccessories: (data: AccessoriesType) => void;
@@ -118,5 +120,9 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   themes: [],
   setStyleTheme: (data: string[]) => {
     set({ themes: data });
+  },
+  isGettingValues: false,
+  setIsGettingValues: (data: boolean) => {
+    set({ isGettingValues: data });
   },
 }));

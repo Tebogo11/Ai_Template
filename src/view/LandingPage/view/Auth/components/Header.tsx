@@ -3,8 +3,7 @@ import DarkModeSwitch from "@/confg/darkMode/DarkModeSwitch";
 import { useAppSetting } from "@/store/useAppSetting";
 import { SignUpButton } from "@clerk/clerk-react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router-dom";
 
 const Header = () => {
   const { theme } = useAppSetting();
@@ -12,16 +11,19 @@ const Header = () => {
     { label: "Home", to: "/" },
     { label: "About", to: "/about" },
     { label: "Pricing", to: "/pricing" },
+    { label: "Contact", to: "/contact" },
   ];
 
   return (
-    <div className=" sticky flex justify-between navbar  top-0 left-0 right-0 z-20  bg-base-300/40 backdrop-blur-md">
+    <div className=" fixed flex justify-between navbar  top-0 left-0 right-0 z-20  bg-base-300/40 backdrop-blur-md">
       <Flex className="flex items-center justify-start gap-4">
         <Link to="/" className="flex items-center gap-2">
-          <LazyLoadImage
+          <img
             src={`/assets/logo/${theme === "light" ? "Logo" : "Logo-white"}.png`}
             alt="Outfit AI"
             className={`h-9 w-auto object-contain transition-transform duration-300 hover:scale-110 `}
+            loading="eager" // load immediately
+            decoding="async" // doesn’t block rendering
           />
 
           <h1 className={`text-base-content text-lg font-extrabold md:text-xl`}>

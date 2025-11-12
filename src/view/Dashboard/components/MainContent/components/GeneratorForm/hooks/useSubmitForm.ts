@@ -16,6 +16,7 @@ const useSubmitForm = () => {
     setOutfitId,
     is_new_outfit,
     setApiError,
+    setPreviewOutfit,
   } = useGeneratorSetting();
   const { title, setTitle, setWardrobeId, wardrobeId } = useWardrobeStore();
 
@@ -27,7 +28,7 @@ const useSubmitForm = () => {
   const onSubmit = async () => {
     setApiError(null);
     if (!modal) throw new Error("Modal is required");
-
+    setPreviewOutfit("");
     setIsGenerating(true);
 
     try {

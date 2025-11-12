@@ -15,6 +15,8 @@ import type {
 } from "convex/server";
 import type * as aiSystem from "../aiSystem.js";
 import type * as const_ from "../const.js";
+import type * as landingPageApi_contactUs from "../landingPageApi/contactUs.js";
+import type * as landingPageApi_newsLetterSubscriber from "../landingPageApi/newsLetterSubscriber.js";
 import type * as outfit from "../outfit.js";
 import type * as storage from "../storage.js";
 import type * as user_consts from "../user/consts.js";
@@ -36,6 +38,8 @@ import type * as wardrobes from "../wardrobes.js";
 declare const fullApi: ApiFromModules<{
   aiSystem: typeof aiSystem;
   const: typeof const_;
+  "landingPageApi/contactUs": typeof landingPageApi_contactUs;
+  "landingPageApi/newsLetterSubscriber": typeof landingPageApi_newsLetterSubscriber;
   outfit: typeof outfit;
   storage: typeof storage;
   "user/consts": typeof user_consts;

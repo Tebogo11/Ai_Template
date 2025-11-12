@@ -8,6 +8,16 @@ import { title } from "process";
 // app will continue to work.
 // The schema provides more precise TypeScript types.
 export default defineSchema({
+  newsletterSubscriber: defineTable({
+    email: v.string(),
+    subscribedAt: v.string(),
+  }),
+  contactUsMessage: defineTable({
+    name: v.string(),
+    email: v.string(),
+    subject: v.string(),
+    message: v.string(),
+  }),
   user: defineTable({
     clerkId: v.string(),
     email: v.string(),

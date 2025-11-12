@@ -1,5 +1,5 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../convex/_generated/dataModel";
 import InitialPage from "./components/InitialPage";
@@ -9,16 +9,18 @@ import HeaderRight from "./components/Header/HeaderRight";
 import { cleanAiText } from "@/utils/string/cleanuptext";
 import { useAppSetting } from "@/store/useAppSetting";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 
 const PreviewImage = () => {
-  const { outfitId, apiError } = useGeneratorSetting();
+  const { outfitId, apiError, previewOutfit, isGettingValues } =
+    useGeneratorSetting();
   const { isPreviewPage } = useAppSetting();
-  const outfit = useQuery(api.outfit.getOutfitById, {
-    outfitId: outfitId || "",
-  });
 
   const imageUrl = useQuery(api.storage.getImageUrl, {
-    storageId: outfit?.preview_images as Id<"_storage">,
+    storageId: previewOutfit as Id<"_storage">,
+  });
+  const outfit = useQuery(api.outfit.getOutfitById, {
+    outfitId: outfitId || "",
   });
 
   const outfits = useQuery(api.outfit.getOutfitsByWardrobeId, {
@@ -31,7 +33,7 @@ const PreviewImage = () => {
     >
       <div className="flex justify-between w-full">
         <div className="hidden md:block">
-          <h2 className="form-label h-5">Preview</h2>
+          <h2 className="form-label h-5">OUTFIT</h2>
         </div>
         <div className="block md:hidden">
           <button
@@ -47,7 +49,7 @@ const PreviewImage = () => {
           <HeaderRight outfit={outfit} outfits={outfits} />
         )}
       </div>
-      {outfit?.status === "generating" ? (
+      {outfit?.status === "generating" || isGettingValues ? (
         <Loading text="Please give us a moment, we're generating your outfit" />
       ) : outfit?.status === "error" ? (
         <div className="flex flex-col flex-grow-1 bg-base-200 rounded-xs flex items-center justify-center p-5">

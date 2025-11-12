@@ -4,7 +4,6 @@ import { api } from "../../../../../convex/_generated/api";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import dayjs from "dayjs";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 type OutfitItemsProps = {
   _id: Id<"wardrobe">;
@@ -36,9 +35,11 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
       onClick={onPickWardrobe}
       className={`p-4 border-t border-base-200 flex ${wardrobeId === _id ? "bg-base-200" : ""} hover:bg-base-200 cursor-pointer`}
     >
-      <LazyLoadImage
+      <img
         src={imageUrl || "/assets/placeholder.png"}
         alt="Outfit Preview"
+        loading="eager" // load immediately
+        decoding="async" // doesn’t block rendering
         className="w-6 h-8 object-cover rounded-xs mr-4"
       />
       <div>

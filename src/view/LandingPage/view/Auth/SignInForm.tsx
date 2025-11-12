@@ -2,8 +2,6 @@ import Flex from "@/components/Core/Flex";
 import { SignIn, useAuth } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import { useAppSetting } from "@/store/useAppSetting";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-// if using Next.js
 
 export const AuthPage = () => {
   const { theme } = useAppSetting();
@@ -18,18 +16,20 @@ export const AuthPage = () => {
       >
         {/* Left side (hidden on mobile) */}
         <div className="hidden md:flex w-3/5 h-full overflow-clip border-r-4 border-primary ">
-          <LazyLoadImage
+          <img
             src="/assets/loginPageAsset.png"
             alt="Fashion"
+            loading="eager" // load immediately
+            decoding="async" // doesn’t block rendering
             className="object-cover h-full w-full object-top"
             style={{ minHeight: "100dvh" }}
           />
         </div>
 
         {/* Right side */}
-        <div className="flex-center flex-col w-full lg:w-2/5 px-6 bg-background dark:bg-darkBackground mt-[-70px]">
+        <div className="flex-center flex-col w-full lg:w-2/5 px-6 bg-background dark:bg-darkBackground max-h-[40dvh] mt-80  ">
           {/* Logo */}
-          <div className="flex flex-col items-start mb-6">
+          {/* <div className="flex flex-col items-start mb-6">
             <div className="text-pink-500 text-5xl font-bold">
               <LazyLoadImage
                 src={`/assets/logo/${theme === "light" ? "Logo" : "Logo-white"}.png`}
@@ -42,15 +42,15 @@ export const AuthPage = () => {
                 Outfit
               </h1>
             </div>
-          </div>
+          </div> */}
 
           {/* Clerk SignIn */}
-          <div className="w-full max-w-sm mr-5 md:mr-0">
+          <div className="w-full flex-center">
             <SignIn
               appearance={{
                 elements: {
                   card: "rounded-none p-6",
-                  cardBox: "   p-1",
+                  cardBox: "p-1",
                   formButtonPrimary:
                     "bg-black hover:bg-gray-900 text-white w-full rounded-md py-2 mt-2",
                   footerActionText: "text-lg text-gray-600",

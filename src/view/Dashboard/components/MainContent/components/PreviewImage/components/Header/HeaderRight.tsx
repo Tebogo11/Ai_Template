@@ -1,5 +1,6 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import { useMemo } from "react";
 
 interface Outfit {
@@ -46,7 +47,7 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
           prevDisabled ? "opacity-40 pointer-events-none" : "cursor-pointer"
         }`}
       >
-        <ArrowLeftIcon
+        <ArrowBigLeft
           className={`w-5 h-5 transition-transform duration-200 ease-in-out transform group-hover:-translate-x-1 ${
             prevDisabled ? "text-gray-300" : "text-base-content"
           }`}
@@ -55,10 +56,10 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
 
       {/* Index / total with subtle animation */}
       <div className="flex flex-col items-center cursor-default">
-        <div className="text-sm font-semibold leading-none transition-transform duration-200 transform hover:scale-105">
+        <p className="text-sm font-semibold leading-none transition-transform duration-200 transform hover:scale-105">
           {outfit ? idx + 1 : 0}{" "}
           <span className="text-xs text-muted">/ {outfits.length}</span>
-        </div>
+        </p>
       </div>
 
       {/* Next icon + label */}
@@ -79,7 +80,7 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
           nextDisabled ? "opacity-40 pointer-events-none" : "cursor-pointer"
         }`}
       >
-        <ArrowRightIcon
+        <ArrowBigRight
           className={`w-5 h-5 transition-transform duration-200 ease-out transform group-hover:translate-x-2 ${
             nextDisabled ? "text-gray-300" : "text-base-content"
           }`}

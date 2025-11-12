@@ -3,6 +3,7 @@ import {
   ArrowDownTrayIcon,
   ArrowPathIcon,
   EyeIcon,
+  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useMutation, useQuery } from "convex/react";
@@ -10,11 +11,9 @@ import React, { useMemo, useState } from "react";
 import { api } from "../../../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../../../convex/_generated/dataModel";
 import { cleanAiText } from "@/utils/string/cleanuptext";
-import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
-import Loading from "../Loading";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 import { useAppSetting } from "@/store/useAppSetting";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { FullscreenIcon } from "lucide-react";
 
 interface Outfit {
   _id: string;
@@ -122,39 +121,52 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
 
   return (
     <>
-      <div className="absolute top-0 right-0 left-0 w-full bg-[#110909b0]  flex justify-between items-center p-2 rounded-t-xs">
-        <button className="btn btn-sm btn-soft" onClick={onUseAsModal}>
-          Use as modal
-        </button>
+      <div className="absolute  right-0 z-20 w-36 bg-base-100 h-10  flex justify-center items-center p-2 rounded-t-xs">
         <div className="flex space-x-4">
           {isLoading ? (
             <ArrowPathIcon className="h-5 w-5 animate-spin text-neutral-content" />
           ) : (
-            <ArrowDownTrayIcon
-              className="h-5 w-5 cursor-pointer text-[#fff]"
-              onClick={downloadImage}
-            />
+            <div className="tooltip" data-tip="Download Outfit Image">
+              <ArrowDownTrayIcon
+                className="h-5 w-5 cursor-pointer text-[#fff]"
+                onClick={downloadImage}
+              />
+            </div>
           )}
-          <EyeIcon
-            className="h-5 w-5 cursor-pointer text-[#fff]"
-            onClick={() => setShowModal(true)}
-          />
-          <TrashIcon
-            className="h-5 w-5 cursor-pointer text-error hover:opacity-80 active:scale-110 transition-transform"
-            onClick={() =>
-              (
-                document.getElementById("delete-outfit") as HTMLDialogElement
-              ).showModal()
-            }
-          />
+          <div className="tooltip" data-tip="View Fullscreen">
+            <FullscreenIcon
+              className="h-5 w-5 cursor-pointer text-[#fff]"
+              onClick={() => setShowModal(true)}
+            />
+          </div>
+          <div className="tooltip" data-tip="Delete Outfit">
+            <TrashIcon
+              className="h-5 w-5 cursor-pointer text-error hover:opacity-80 active:scale-110 transition-transform"
+              onClick={() =>
+                (
+                  document.getElementById("delete-outfit") as HTMLDialogElement
+                ).showModal()
+              }
+            />
+          </div>
+        </div>
+        <div className="tooltip tooltip-left" data-tip="Use as Modal Image">
+          <button
+            className="btn btn-sm btn-base-300 w-8 p-1 ml-2  flex justify-center items-center hover:opacity-80 active:scale-110 transition-transform"
+            onClick={onUseAsModal}
+          >
+            <PlusIcon className="h-10 w-10 text-[#fff]" />
+          </button>
         </div>
       </div>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="relative bg-base-100 rounded-lg shadow-lg p-4">
-            <LazyLoadImage
+            <img
               src={imageUrl || ""}
               alt="Full Preview"
+              loading="eager" // load immediately
+              decoding="async" // doesn’t block rendering
               className="w-[90vw] h-[80vh] rounded object-contain object-center"
             />
             <button

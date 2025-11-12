@@ -1,10 +1,10 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { Sparkles, Zap, Shield, TrendingUp } from "lucide-react";
 import { useAppSetting } from "@/store/useAppSetting";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const HomePage = () => {
   const { theme } = useAppSetting();
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -19,9 +19,11 @@ const HomePage = () => {
               </h2>
               <p className="text-xl text-white/80 font-black">Before You Buy</p>
             </div>
-            <LazyLoadImage
-              src="/assets/landingPage/hero/hero2.jpg"
+            <img
+              src="/assets/landingPage/hero/hero2.webp"
               alt="men"
+              fetchPriority="high"
+              loading="eager"
               className="absolute inset-0 h-full w-full object-cover backdrop-brightness-55 "
             />
           </div>
@@ -37,9 +39,11 @@ const HomePage = () => {
                 Powered Styling
               </p>
             </div>
-            <LazyLoadImage
-              src="/assets/landingPage/hero/hero1.png"
-              alt="Woman"
+            <img
+              src="/assets/landingPage/hero/hero1.webp"
+              alt="Woman Hero Image"
+              fetchPriority="high"
+              loading="eager"
               className="absolute inset-0 h-full w-full object-cover backdrop-brightness-55"
             />
           </div>
@@ -157,15 +161,17 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="bg-base-100 rounded-xl mt-5  p-2">
-          <LazyLoadImage
-            src={`/assets/landingPage/demo/${theme === "dark" ? "largeScreenImage" : "largeScreenImage-light"}.png`}
+        <div className="bg-base-100 rounded-xl mt-5  p-2 mx-[2vw]">
+          <img
+            src={`/assets/landingPage/demo/${theme === "dark" ? "largeScreenImage" : "largeScreenImage-light"}.webp`}
             alt="How it works"
+            loading="eager"
             className=" mx-auto hidden md:block"
           />
-          <LazyLoadImage
-            src={`/assets/landingPage/demo/${theme === "dark" ? "mobilescreen" : "mobilescreen-light"}.png`}
+          <img
+            src={`/assets/landingPage/demo/${theme === "dark" ? "mobilescreen" : "mobilescreen-light"}.webp`}
             alt="How it works"
+            loading="eager"
             className=" mx-auto  block md:hidden"
           />
         </div>

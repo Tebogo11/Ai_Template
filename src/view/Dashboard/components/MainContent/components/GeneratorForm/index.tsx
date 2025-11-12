@@ -21,44 +21,6 @@ const GeneratorForm = () => {
   const recentOutfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitID || "",
   });
-  // const getImageUrlList = useMutation(api.storage.getListImageUrl);
-  // const getImageUrl = useMutation(api.storage.getImageUrlFunc);
-  useEffect(() => {
-    const getOutfitData = async () => {
-      // const modalUrl = await getImageUrl({
-      //   storageId: recentOutfit?.modal || "",
-      // });
-      // const accessories = await getImageUrlList({
-      //   storageIdsList: recentOutfit?.accessories.map((a) => a.storageId) || [],
-      // });
-      console.log("recentOutfit", recentOutfit);
-      setSelectedOutfit({
-        accessories:
-          recentOutfit?.accessories?.map((url, index) => {
-            return {
-              id: `${index}`,
-              url: url.storageId,
-            } as AccessoriesType;
-          }) || [],
-        initial_prompt: recentOutfit?.initial_prompt || "",
-        modal: recentOutfit?.modal || "",
-        fit: recentOutfit?.fit || "standardFit",
-        themes: recentOutfit?.style_theme || [],
-      } as OutfitData);
-    };
-    if (outfitID && recentOutfit) {
-      getOutfitData();
-    } else {
-      setSelectedOutfit({
-        accessories: [] as AccessoriesType[],
-        formality: 50,
-        initial_prompt: "",
-        modal: "",
-        fit: "standardFit",
-        themes: [],
-      } as OutfitData);
-    }
-  }, [outfitID, recentOutfit, setSelectedOutfit]);
 
   return (
     <div

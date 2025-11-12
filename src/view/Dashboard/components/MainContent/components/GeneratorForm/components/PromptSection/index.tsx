@@ -1,9 +1,6 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { EyeIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import {
-  PaperAirplaneIcon as PaparAirplaneIconSolid,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { PaperAirplaneIcon as PaparAirplaneIconSolid } from "@heroicons/react/24/solid";
 import React, { useMemo, useLayoutEffect } from "react";
 import useSubmitForm from "../../hooks/useSubmitForm";
 import Loading from "@/components/Core/Loading";
@@ -11,7 +8,6 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../../../convex/_generated/dataModel";
 import { useAppSetting } from "@/store/useAppSetting";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const PromptSection = () => {
   const { setPrompt, prompt, modal, isGenerating, outfitId } =
@@ -120,9 +116,11 @@ const PromptSection = () => {
           className="btn btn-ghost px-0 rounded-sm block md:hidden h-full pt-2 w-[30%] active:scale-105 transition-transform"
           onClick={() => setIsPreviewPage(true)}
         >
-          <LazyLoadImage
+          <img
             src={imageUrl}
             alt="Preview"
+            loading="eager" // load immediately
+            decoding="async" // doesn’t block rendering
             className="w-full h-full object-cover object-center shadow rounded-sm"
           />
           <div className="flex flex-col max-h-6 absolute top-0 right-1 w-6 h-full ">

@@ -21,6 +21,15 @@ export const clerkLight: Theme = {
     colorWarning: "hsl(43, 100%, 40%)",
     colorShimmer: "hsl(35, 90%, 35%)", // warm sheen
     colorNeutral: "hsl(217, 15%, 15%)",
+    borderRadius: "2px",
+    fontSize: "16px",
+    spacing: "20px",
+    fontWeight: {
+      normal: "font-normal",
+      medium: "font-medium",
+      bold: "font-bold",
+    },
+    fontFamily: `"Outfit", sans-serif;`,
   },
   elements: {
     // containers / cards
@@ -36,6 +45,7 @@ export const clerkLight: Theme = {
     // primary actions
     formButtonPrimary:
       "bg-[hsl(196,100%,27%)] hover:opacity-90 text-white  font-medium",
+    pricingTableCardFooterButton: "font-bold hover:opacity-20 ",
 
     // secondary actions / links
     formButtonReset:
@@ -75,26 +85,36 @@ export const clerkDark: Theme = {
     colorWarning: "hsl(43, 100%, 69%)",
     colorShimmer: "hsl(300, 19%, 40%)",
     colorNeutral: "hsl(300, 19%, 100%)",
+    borderRadius: "2px",
+    fontSize: "16px",
+    spacing: "20px",
+    fontWeight: {
+      normal: "font-normal",
+      medium: "font-medium",
+      bold: "font-bold",
+    },
+    fontFamily: `"Outfit", sans-serif;`,
   },
+
   elements: {
     card: "bg-[hsl(306,16%,13%)] text-[hsl(37,46%,58%)] shadow-2xl  border border-[hsla(300,19%,6%,0.40)]",
     headerTitle: "text-[hsl(37,46%,58%)]",
     headerSubtitle: "text-[hsla(37,46%,58%,0.70)]",
-
+    button: "bg-[#000] text-white hover:opacity-90 font-bold",
     formFieldLabel: "text-[hsl(37,46%,58%)]",
     formFieldInput:
       "bg-[hsl(306,18%,10%)] text-[hsl(37,46%,58%)] border border-[hsla(300,19%,6%,0.40)] focus:border-[hsl(194,73%,25%)] focus:ring-[hsl(194,73%,25%)] ",
+    pricingTableCardFooterButton: "font-bold hover:opacity-20 ",
 
-    formButtonPrimary:
-      "bg-[hsl(194,73%,25%)] hover:opacity-90 text-white font-medium",
+    formButtonPrimary: "hover:opacity-90 text-white font-medium",
     formButtonReset:
       "bg-[hsl(306,18%,10%)] hover:bg-[hsl(306,27%,6%)] text-[hsl(37,46%,58%)]",
-    userButtonPopoverActionButton: "text-q",
+    userButtonPopoverActionButton: "",
     footerAction__signIn:
       "text-[hsl(37,46%,58%)] [&>button]:text-[hsl(194,73%,25%)]",
     footerAction__signUp:
       "text-[hsl(37,46%,58%)] [&>button]:text-[hsl(194,73%,25%)]",
-
+    pricingTableCardTitle: "text-[hsl(37,46%,58%)] font-bold ",
     identityPreview: "bg-[hsl(306,18%,10%)]",
     socialButtonsIconButton:
       "border border-[hsla(300,19%,6%,0.40)] hover:border-[hsl(194,73%,25%)]",

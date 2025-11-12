@@ -11,7 +11,7 @@ const ImageSection = () => {
   return (
     <div className="flex items-start justify-start max-h-[50dvh]">
       <div className="w-[70%] mr-5 ">
-        <h2 className="form-label">
+        <h2 className="form-label ">
           Upload your modal{" "}
           <span className="font-light text-xs">(Required)</span>
         </h2>
