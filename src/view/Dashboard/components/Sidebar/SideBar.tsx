@@ -8,7 +8,7 @@ import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
 
 const SideBar = () => {
-  const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
+  const { setWardrobeId, setTitle } = useWardrobeStore();
   const { setOutfitId } = useGeneratorSetting();
   const { theme } = useAppSetting();
   const { results, status, loadMore } = usePaginatedQuery(

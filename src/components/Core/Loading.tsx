@@ -1,8 +1,8 @@
-import React from "react";
 
 type LoadingProps = {
   size?: "xs" | "sm" | "md" | "lg" | "xl";
 };
+
 const Loading = ({ size = "md" }: LoadingProps) => {
   return (
     <div>

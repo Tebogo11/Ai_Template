@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { api } from "../../../../../../../../convex/_generated/api";
 import { saveImagesToStorage } from "./utils";

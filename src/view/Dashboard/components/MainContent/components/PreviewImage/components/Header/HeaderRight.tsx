@@ -1,5 +1,4 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import { useMemo } from "react";
 

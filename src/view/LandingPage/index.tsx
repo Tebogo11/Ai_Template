@@ -5,7 +5,6 @@ import HomePage from "./view/Home";
 import PricingPage from "./view/Pricing";
 import AboutPage from "./view/About";
 import Contact from "./view/Contact";
-import { ScrollToTop } from "./ScrollToTop";
 
 const LandingPage = () => {
   return (

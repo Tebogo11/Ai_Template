@@ -1,13 +1,11 @@
 import { v } from "convex/values";
-import { mutation, internalAction, query } from "./_generated/server";
-import { api, internal } from "./_generated/api";
+import { internalAction } from "./_generated/server";
+import { api } from "./_generated/api";
 import {
   GoogleGenAI,
   ContentListUnion,
   HarmCategory,
   HarmBlockThreshold,
-  Type,
-  Content,
   Part,
 } from "@google/genai";
 import { Id } from "./_generated/dataModel";

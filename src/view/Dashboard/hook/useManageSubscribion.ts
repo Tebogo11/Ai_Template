@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "convex/react";
-import React, { useCallback, useEffect } from "react";
+import { useMutation } from "convex/react";
+import  { useCallback, useEffect } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useUserStore } from "@/store/useUserStore";
 import { useAuth } from "@clerk/clerk-react";

@@ -1,10 +1,9 @@
-import { ClerkProvider } from "@clerk/clerk-react";
 import type { Theme } from "@clerk/types";
 
 // Example theme switch helper (adjust to your app)
-const isDark =
-  typeof window !== "undefined" &&
-  document.documentElement.getAttribute("data-theme")?.includes("dark");
+// const isDark =
+//   typeof window !== "undefined" &&
+//   document.documentElement.getAttribute("data-theme")?.includes("dark");
 
 /* ─────────────── LIGHT (matches Daisy “outfit”) ─────────────── */
 export const clerkLight: Theme = {

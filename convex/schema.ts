@@ -1,7 +1,5 @@
-import { error } from "console";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { title } from "process";
 
 // The schema is entirely optional.
 // You can delete this file (schema.ts) and the

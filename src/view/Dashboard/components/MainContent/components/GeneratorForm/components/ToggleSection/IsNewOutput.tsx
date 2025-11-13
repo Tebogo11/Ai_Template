@@ -1,5 +1,4 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import React, { useState } from "react";
 
 const IsNewOutput = () => {
   const { setIsNewOutfit, is_new_outfit } = useGeneratorSetting();

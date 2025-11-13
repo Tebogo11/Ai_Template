@@ -6,7 +6,6 @@ import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import InitialPage from "@/view/Dashboard/components/MainContent/components/PreviewImage/components/InitialPage";
-import { PlusIcon } from "lucide-react";
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;

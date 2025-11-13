@@ -1,4 +1,3 @@
-import { useAppSetting } from "@/store/useAppSetting";
 import {
   useGeneratorSetting,
   AccessoriesType,

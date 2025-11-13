@@ -1,5 +1,5 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../../convex/_generated/dataModel";
 import InitialPage from "./components/InitialPage";
@@ -9,7 +9,6 @@ import HeaderRight from "./components/Header/HeaderRight";
 import { cleanAiText } from "@/utils/string/cleanuptext";
 import { useAppSetting } from "@/store/useAppSetting";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
 
 const PreviewImage = () => {
   const { outfitId, apiError, previewOutfit, isGettingValues } =

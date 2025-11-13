@@ -2,7 +2,6 @@ import { v } from "convex/values";
 import { api, internal } from "./_generated/api";
 import { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
-import { title } from "process";
 
 export const generateDataType = {
   modal: v.string(),

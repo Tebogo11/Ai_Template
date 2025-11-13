@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "../_generated/server";
+import { mutation } from "../_generated/server";
 import dayjs from "dayjs";
 import { Plans } from "./consts";
 // export const getUser = query({

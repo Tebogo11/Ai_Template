@@ -1,7 +1,5 @@
 import SideBar from "./components/Sidebar/SideBar";
 import MainContent from "./components/MainContent";
-import { PricingTable } from "@clerk/clerk-react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useAppSetting } from "@/store/useAppSetting";
 import useManageSubscription from "./hook/useManageSubscribion";
 import PriceTable from "./components/Subscription/PriceTable";

@@ -1,6 +1,5 @@
-import { AccessoriesType, OutfitData } from "@/store/useGeneratorData";
+import { AccessoriesType } from "@/store/useGeneratorData";
 import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
-import { getImageUrl } from "../../../../../../../../convex/storage";
 import { ReactMutation } from "convex/react";
 import { FunctionReference } from "convex/server";
 

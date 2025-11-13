@@ -13,8 +13,7 @@ const PromptSection = () => {
   const { setPrompt, prompt, modal, isGenerating, outfitId } =
     useGeneratorSetting();
   const { setIsPreviewPage } = useAppSetting();
-
-  const user = useQuery(api.user.getters.getUser);
+  
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || "",
   });

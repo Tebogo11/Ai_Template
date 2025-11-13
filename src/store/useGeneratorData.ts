@@ -1,6 +1,4 @@
-import { useQuery } from "convex/react";
 import { create } from "zustand";
-import { api } from "../../convex/_generated/api";
 
 export type AccessoriesType = {
   id: string;

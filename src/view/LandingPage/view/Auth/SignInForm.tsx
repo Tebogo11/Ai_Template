@@ -1,10 +1,7 @@
-import Flex from "@/components/Core/Flex";
 import { SignIn, useAuth } from "@clerk/clerk-react";
 import Header from "./components/Header";
-import { useAppSetting } from "@/store/useAppSetting";
 
 export const AuthPage = () => {
-  const { theme } = useAppSetting();
   const {} = useAuth(); // Ensure the auth context is initialized
   return (
     <div className="h-dvh overflow-hidden relative bg-base-100 text-base-content">

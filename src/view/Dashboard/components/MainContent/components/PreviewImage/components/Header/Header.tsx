@@ -1,4 +1,3 @@
-import React from "react";
 
 interface Outfit {
   _id: string;

@@ -2,7 +2,6 @@ import { useGeneratorSetting } from "@/store/useGeneratorData";
 import {
   ArrowDownTrayIcon,
   ArrowPathIcon,
-  EyeIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";

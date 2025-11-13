@@ -1,7 +1,6 @@
 import { useAppSetting } from "@/store/useAppSetting";
 import { PricingTable } from "@clerk/clerk-react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React from "react";
 
 const PriceTable = () => {
   const { setShowSubscriptionModal } = useAppSetting();

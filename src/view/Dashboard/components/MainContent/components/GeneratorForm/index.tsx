@@ -1,26 +1,19 @@
-import { useEffect } from "react";
+
 import ImageSection from "./components/ImageSection/ImageSection";
 import PromptSection from "./components/PromptSection";
-import {
-  AccessoriesType,
-  OutfitData,
-  useGeneratorSetting,
-} from "@/store/useGeneratorData";
-import { useQuery } from "convex/react";
-import { api } from "../../../../../../../convex/_generated/api";
 import { useAppSetting } from "@/store/useAppSetting";
 import IsNewOutput from "./components/ToggleSection/IsNewOutput";
 import Fit from "./components/Select/Fit";
 import Tags from "./components/TagInput/Tags";
 
 const GeneratorForm = () => {
-  const { setSelectedOutfit } = useGeneratorSetting();
-  const outfitID = useGeneratorSetting((s) => s.outfitId);
+
+
   const { isPreviewPage } = useAppSetting();
 
-  const recentOutfit = useQuery(api.outfit.getOutfitById, {
-    outfitId: outfitID || "",
-  });
+  // const recentOutfit = useQuery(api.outfit.getOutfitById, {
+  //   outfitId: outfitID || "",
+  // });
 
   return (
     <div
