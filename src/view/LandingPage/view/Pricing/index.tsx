@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 const Pricing = () => {
   const plans = [
@@ -52,6 +53,13 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-base-100 overflow-auto">
+      <Seo
+        title="Pricing — Outfit AI Plans"
+        description="Simple, transparent pricing for AI-powered outfit visualization. Start free, upgrade when ready."
+        keywords={["pricing", "plans", "AI fashion", "outfit generator"]}
+        url="/pricing"
+        siteBase="https://o-ai.co.uk"
+      />
       {/* Header */}
       <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto max-w-4xl text-center">

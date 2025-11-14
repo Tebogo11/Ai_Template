@@ -1,12 +1,46 @@
 import { Link } from "react-router-dom";
 import { Sparkles, Zap, Shield, TrendingUp } from "lucide-react";
 import { useAppSetting } from "@/store/useAppSetting";
+import Seo from "../components/Seo";
 
 const HomePage = () => {
   const { theme } = useAppSetting();
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Outfit AI — Try Outfits Before You Buy"
+        description="Upload your photo, add clothing and tags, and generate photorealistic outfits with AI. Try before you buy in seconds."
+        keywords={[
+          "AI fashion",
+          "virtual try-on",
+          "outfit generator",
+          "try before you buy",
+          "styling AI",
+        ]}
+        image="/assets/landingPage/hero/hero1.webp"
+        url="/"
+        siteBase="https://o-ai.co.uk"
+        type="website"
+        structuredData={[
+          {
+            "@type": "Organization",
+            name: "Outfit AI",
+            url: "/",
+            logo: "/assets/logo/Logo.png",
+          },
+          {
+            "@type": "WebSite",
+            name: "Outfit AI",
+            url: "/",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "/search?q={query}",
+              "query-input": "required name=query",
+            },
+          },
+        ]}
+      />
       {/* Hero Section */}
       <section className="relative h-screen w-screen overflow-hidden bg-base-200">
         <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2">

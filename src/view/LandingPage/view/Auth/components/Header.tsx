@@ -11,6 +11,7 @@ const Header = () => {
     { label: "Home", to: "/" },
     { label: "About", to: "/about" },
     { label: "Pricing", to: "/pricing" },
+    { label: "Blog", to: "/blog" },
     { label: "Contact", to: "/contact" },
   ];
 
@@ -26,7 +27,7 @@ const Header = () => {
             decoding="async" // doesn’t block rendering
           />
 
-          <h1 className={`text-base-content text-lg font-extrabold md:text-xl`}>
+          <h1 className={` text-lg font-extrabold md:text-xl`}>
             Outfit AI
           </h1>
         </Link>
@@ -54,10 +55,12 @@ const Header = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
           <Link to="/login" className="btn btn-secondary btn-sm  w-18">
-            Login
+            <span className="font-semibold">Login</span>
           </Link>
-          <SignUpButton mode="modal">
-            <button className="btn btn-outline btn-sm w-18">Sign up</button>
+          <SignUpButton mode="modal"  forceRedirectUrl={"/"}>
+            <button className="btn btn-outline btn-sm w-18">
+              <span className="font-semibold">Sign up</span>
+            </button>
           </SignUpButton>
           <div className="hidden md:block">
             <DarkModeSwitch />

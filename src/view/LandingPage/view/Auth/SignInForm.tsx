@@ -1,8 +1,9 @@
 import { SignIn, useAuth } from "@clerk/clerk-react";
 import Header from "./components/Header";
+import { useAppSetting } from "@/store/useAppSetting";
 
 export const AuthPage = () => {
-  const {} = useAuth(); // Ensure the auth context is initialized
+  const {theme} = useAppSetting(); // Ensure the auth context is initialized
   return (
     <div className="h-dvh overflow-hidden relative bg-base-100 text-base-content">
       <Header />
@@ -12,15 +13,29 @@ export const AuthPage = () => {
         style={{ height: "100dvh", overflow: "hidden" }}
       >
         {/* Left side (hidden on mobile) */}
-        <div className="hidden md:flex w-3/5 h-full overflow-clip border-r-4 border-primary ">
-          <img
-            src="/assets/loginPageAsset.png"
-            alt="Fashion"
-            loading="eager" // load immediately
-            decoding="async" // doesn’t block rendering
-            className="object-cover h-full w-full object-top"
-            style={{ minHeight: "100dvh" }}
-          />
+        <div className="hidden md:flex w-3/5 h-full overflow-clip  ">
+          <div className="relative w-full h-full  " style={{ overflow: "hidden", paddingBottom: "56.25%" }}>
+            <video
+              autoPlay
+              muted
+              loop
+              className="absolute top-0 left-0 p-3 pt-20 rounded-lg w-full h-full"
+              style={{ objectFit: "cover",objectPosition: "center"   }}
+            > 
+            {theme !== "light" ? 
+              <source src={"/assets/pages/auth/AuthVideoDark.mp4"} type="video/webm" />
+            :
+              <source src={"/assets/pages/auth/AuthVideoLight.mp4"} type="video/webm" />
+            }
+            <img
+              src={`/assets/pages/auth/AuthVideoFallback.jpg`}
+              alt="Auth Video Fallback"
+              className="w-full h-full object-cover"
+            />
+            </video>
+        
+      
+         </div>
         </div>
 
         {/* Right side */}
@@ -57,6 +72,7 @@ export const AuthPage = () => {
 
                 layout: { socialButtonsVariant: "iconButton" },
               }}
+              forceRedirectUrl={"/"}
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useMutation } from "convex/react";
 import { useState } from "react";
 import { api } from "../../../../../convex/_generated/api";
+import Seo from "../components/Seo";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -48,6 +49,13 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
+      <Seo
+        title="Contact — Outfit AI"
+        description="Get in touch with the Outfit AI team for questions about pricing, features, and support."
+        keywords={["contact", "support", "AI fashion"]}
+        url="/contact"
+        siteBase="https://o-ai.co.uk"
+      />
       {/* Header */}
       <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto max-w-4xl text-center">

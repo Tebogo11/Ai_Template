@@ -1,9 +1,17 @@
 import { ShoppingBag, Smartphone, Sparkles, TrendingUp } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import Seo from "../components/Seo";
 
 const About = () => {
   return (
     <div className="min-h-screen bg-base-100">
+      <Seo
+        title="About Outfit AI — Virtual Try-On Powered by AI"
+        description="Outfit AI brings 'try before you buy' to online shopping with photorealistic outfit generation tailored to your style."
+        keywords={["about", "AI fashion", "virtual try-on", "outfit generator"]}
+        url="/about"
+        siteBase="https://o-ai.co.uk"
+      />
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-primary/10 to-accent/10">
         <div className="container mx-auto max-w-4xl text-center">

@@ -24,7 +24,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { setIsPreviewPage } = useAppSetting();
+  const { setIsPreviewPage, theme } = useAppSetting();
   const { wardrobeId, setWardrobeId, setTitle } = useWardrobeStore();
   const outfitId = useGeneratorSetting((state) => state.outfitId);
   const setOutfitId = useGeneratorSetting((state) => state.setOutfitId);
@@ -127,14 +127,14 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
           ) : (
             <div className="tooltip" data-tip="Download Outfit Image">
               <ArrowDownTrayIcon
-                className="h-5 w-5 cursor-pointer text-[#fff]"
+                className="h-5 w-5 cursor-pointer text-base-content"
                 onClick={downloadImage}
               />
             </div>
           )}
           <div className="tooltip" data-tip="View Fullscreen">
             <FullscreenIcon
-              className="h-5 w-5 cursor-pointer text-[#fff]"
+              className="h-5 w-5 cursor-pointer text-base-content"
               onClick={() => setShowModal(true)}
             />
           </div>
@@ -154,7 +154,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
             className="btn btn-sm btn-base-300 w-8 p-1 ml-2  flex justify-center items-center hover:opacity-80 active:scale-110 transition-transform"
             onClick={onUseAsModal}
           >
-            <PlusIcon className="h-10 w-10 text-[#fff]" />
+            <PlusIcon className="h-10 w-10 text-base-content" />
           </button>
         </div>
       </div>

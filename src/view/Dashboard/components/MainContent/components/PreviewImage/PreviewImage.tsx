@@ -11,7 +11,7 @@ import { useAppSetting } from "@/store/useAppSetting";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const PreviewImage = () => {
-  const { outfitId, apiError, previewOutfit, isGettingValues } =
+  const { outfitId, apiError, previewOutfit, isGettingValues , isGenerating} =
     useGeneratorSetting();
   const { isPreviewPage } = useAppSetting();
 
@@ -48,7 +48,7 @@ const PreviewImage = () => {
           <HeaderRight outfit={outfit} outfits={outfits} />
         )}
       </div>
-      {outfit?.status === "generating" || isGettingValues ? (
+      { isGenerating || outfit?.status === "generating" || isGettingValues ? (
         <Loading text="Please give us a moment, we're generating your outfit" />
       ) : outfit?.status === "error" ? (
         <div className="flex flex-col flex-grow-1 bg-base-200 rounded-xs flex items-center justify-center p-5">
