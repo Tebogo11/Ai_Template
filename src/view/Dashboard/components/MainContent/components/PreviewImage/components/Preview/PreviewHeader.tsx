@@ -24,7 +24,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
   const [showModal, setShowModal] = React.useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { setIsPreviewPage, theme } = useAppSetting();
+  const { setIsPreviewPage } = useAppSetting();
   const { wardrobeId, setWardrobeId, setTitle } = useWardrobeStore();
   const outfitId = useGeneratorSetting((state) => state.outfitId);
   const setOutfitId = useGeneratorSetting((state) => state.setOutfitId);

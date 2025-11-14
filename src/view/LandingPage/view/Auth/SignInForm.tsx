@@ -1,4 +1,4 @@
-import { SignIn, useAuth } from "@clerk/clerk-react";
+import { SignIn } from "@clerk/clerk-react";
 import Header from "./components/Header";
 import { useAppSetting } from "@/store/useAppSetting";
 
