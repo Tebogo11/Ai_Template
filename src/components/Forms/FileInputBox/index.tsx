@@ -2,10 +2,8 @@ import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
 import { useMutation } from "convex/react";
 import { useState, ChangeEvent, FC, useEffect } from "react";
 import { api } from "../../../../convex/_generated/api";
-import { useGeneratorSetting } from "@/store/useGeneratorData";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import InitialPage from "@/view/Dashboard/components/MainContent/components/PreviewImage/components/InitialPage";
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
@@ -29,10 +27,8 @@ const FileInputBox: FC<ImageUploadProps> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [urlInput, setUrlInput] = useState<string | null>(null);
   const [storageId, setStorageId] = useState<string | null>(null);
-  const { outfitId } = useGeneratorSetting();
 
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
-  const deleteImage = useMutation(api.storage.deleteImage);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

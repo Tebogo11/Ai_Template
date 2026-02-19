@@ -1,11 +1,9 @@
 import ImageSection from "./components/ImageSection/ImageSection";
 import PromptSection from "./components/PromptSection";
 import { useAppSetting } from "@/store/useAppSetting";
-
 import Fit from "./components/Select/Fit";
 import Event from "./components/Select/Event";
 import Tags from "./components/TagInput/Tags";
-import IsNewOutput from "./components/ToggleSection/IsNewOutput";
 import AmountOfChange from "./components/ToggleSelect/amountOfChange";
 
 const GeneratorForm = () => {

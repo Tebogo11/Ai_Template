@@ -1,6 +1,5 @@
 import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { EyeIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { PaperAirplaneIcon as PaparAirplaneIconSolid } from "@heroicons/react/24/solid";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import React, { useMemo, useLayoutEffect } from "react";
 import useSubmitForm from "../../hooks/useSubmitForm";
 import Loading from "@/components/Core/Loading";
