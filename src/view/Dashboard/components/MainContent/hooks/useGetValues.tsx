@@ -3,6 +3,7 @@ import {
   AccessoriesType,
   OutfitData,
 } from "@/store/useGeneratorData";
+import { AmountOfChangeOption } from "../components/GeneratorForm/components/ToggleSelect/const";
 import { useQuery } from "convex/react";
 import { useEffect } from "react";
 import { api } from "../../../../../../convex/_generated/api";
@@ -37,8 +38,11 @@ const useGetValues = () => {
           }) || [],
         initial_prompt: recentOutfit?.initial_prompt || "",
         modal: recentOutfit?.modal || "",
-        fit: recentOutfit?.fit || "standardFit",
-        themes: recentOutfit?.style_theme || [],
+        fit: recentOutfit?.fit || "relaxed",
+        event: recentOutfit?.event || "casual",
+        amount_of_change:
+          recentOutfit?.amount_of_change || AmountOfChangeOption.None,
+        themes: recentOutfit?.themes || recentOutfit?.style_theme || [],
       } as OutfitData);
       console.log("recentOutfit preview images", recentOutfit?.preview_images);
       setPreviewOutfit(recentOutfit?.preview_images || "");
@@ -49,10 +53,11 @@ const useGetValues = () => {
     } else {
       setSelectedOutfit({
         accessories: [] as AccessoriesType[],
-        formality: 50,
         initial_prompt: "",
         modal: "",
-        fit: "standardFit",
+        fit: "relaxed",
+        event: "casual",
+        amount_of_change: AmountOfChangeOption.None,
         themes: [],
       } as OutfitData);
       setPreviewOutfit("");

@@ -18,6 +18,7 @@ export type OutfitData = {
   accessories: AccessoriesType[];
   fit: string;
   event: string;
+  amount_of_change: AmountOfChangeOption;
   themes: string[];
   initial_prompt: string;
 };
@@ -113,6 +114,8 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
         modal: data.modal,
         accessories: data.accessories,
         fit: data.fit,
+        event: data.event,
+        amount_of_change: data.amount_of_change,
         themes: data.themes,
         prompt: data.initial_prompt,
       });

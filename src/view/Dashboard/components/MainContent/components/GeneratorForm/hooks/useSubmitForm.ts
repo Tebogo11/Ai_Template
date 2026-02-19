@@ -4,12 +4,15 @@ import { api } from "../../../../../../../../convex/_generated/api";
 import { saveImagesToStorage } from "./utils";
 import { GenerateDataType } from "../types";
 import { useWardrobeStore } from "@/store/useWardrobeStore";
+import { AmountOfChangeOption } from "../components/ToggleSelect/const";
 
 const useSubmitForm = () => {
   const {
     modal,
     accessories,
     fit,
+    amount_of_change,
+    event,
     themes,
     prompt,
     setIsGenerating,
@@ -39,14 +42,28 @@ const useSubmitForm = () => {
           modal,
           accessories,
         );
+      const hasPrompt = prompt.trim().length > 0;
+      const hasThemes = themes.length > 0;
+      const hasAccessories = accessoriesStorageIds.length > 0;
+      const hasNonDefaultChange =
+        amount_of_change !== AmountOfChangeOption.None ||
+        fit !== "relaxed" ||
+        event !== "casual";
+      const generation_mode: GenerateDataType["generation_mode"] =
+        hasPrompt || hasThemes || hasAccessories || hasNonDefaultChange
+          ? "style_transfer"
+          : "improve_only";
 
       const generateData = {
         modal: modalStorageId,
         accessories: accessoriesStorageIds,
         fit,
-        style_theme: themes,
+        amount_of_change,
+        event,
+        themes,
         initial_prompt: prompt,
         is_new_outfit,
+        generation_mode,
         title,
         wardrobeId,
       } as GenerateDataType;

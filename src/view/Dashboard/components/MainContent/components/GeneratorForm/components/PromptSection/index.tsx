@@ -28,9 +28,7 @@ const PromptSection = () => {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (prompt.trim()) {
-      await onSubmit();
-    }
+    await onSubmit();
   };
 
   const isSubmitDisabled = useMemo(() => {

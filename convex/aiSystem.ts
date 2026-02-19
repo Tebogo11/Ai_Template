@@ -9,7 +9,11 @@ import {
   Part,
 } from "@google/genai";
 import { Id } from "./_generated/dataModel";
-import { imgGenPromp } from "./const";
+import {
+  DESCRIPTION_SYSTEM_PROMPT,
+  OUTFIT_GENERATION_PROMPT,
+  OUTFIT_IMPROVEMENT_PROMPT,
+} from "./const";
 import {
   dataURItoBlob,
   fetchImageAsBase64,
@@ -22,96 +26,115 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENAI_API_KEY || "",
 });
 
-const generateDescription = async (partialPrompt: ContentListUnion[]) => {
+const formatOptional = (label: string, value: string | null | undefined) => {
+  return `${label}: ${value && value.trim() ? value.trim() : "not provided"}`;
+};
+
+const generateDescription = async (
+  contextPrompt: string,
+  imageParts: Part[],
+  mode: "improve_only" | "style_transfer",
+) => {
   const fullPrompt: ContentListUnion = [
+    { text: DESCRIPTION_SYSTEM_PROMPT },
     {
-        text: `You are a fashion expert AI that generates detailed outfit descriptions based on the images and user prompts as well the prompt we will use to generate the outfit, try and capture the users intension since your return will be used in the prompt to generate the outfit.
-          
-          Your first task is to check if the modal image has a valid modal in it and if not then create a description that uses the giving elements to create a new outfit inspired by the image proided`,
-      },
-        {
-          text: "image genration prompt " + imgGenPromp,
-        },
-        ...partialPrompt as Part[],
-  
+      text:
+        mode === "improve_only"
+          ? "Mode: improve_only. Improve current outfit with subtle, tasteful changes."
+          : "Mode: style_transfer. Create a fresh styled look from all provided constraints.",
+    },
+    { text: contextPrompt },
+    ...imageParts,
   ];
-
-
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: fullPrompt,
- 
   });
 
- console.log("AI Description response:", response.candidates?.[0].content?.parts?.[0]?.text);
- return response.candidates?.[0].content?.parts?.[0]?.text
+  return response.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
 };
 
-// You can fetch data from and send data to third-party APIs via an action:
+const buildContextPrompt = (args: {
+  fit?: string;
+  amount_of_change?: string;
+  event?: string;
+  initial_prompt: string;
+  themes?: string[];
+  is_new_outfit?: boolean;
+}) => {
+  return [
+    formatOptional("Fit preference", args.fit),
+    formatOptional("Amount of change", args.amount_of_change),
+    formatOptional("Occasion", args.event),
+    `Themes: ${args.themes?.length ? args.themes.join(", ") : "not provided"}`,
+    formatOptional("Specific instructions", args.initial_prompt),
+    `Is new outfit: ${args.is_new_outfit ?? true}`,
+  ].join("\n");
+};
+
 export const generatePreviewWithAI = internalAction({
-  // Validators for arguments.
   args: { ...generateDataType, outfitId: v.string() },
-
-  // Action implementation.
   handler: async (ctx, args) => {
-    const { accessories, style_theme, fit, initial_prompt, modal } = args;
-    try {
-      const modalUrl = await ctx.storage.getUrl(modal as Id<"_storage">);
+    const mode = args.generation_mode ?? "style_transfer";
+    const themes = args.themes ?? args.style_theme ?? [];
 
+    try {
+      const modalUrl = await ctx.storage.getUrl(args.modal as Id<"_storage">);
       if (!modalUrl) {
-        throw new Error("No modal URL found");
+        throw new Error("No model URL found");
       }
 
-      const base64Image = await fetchImageAsBase64(modalUrl);
-      const accListBase64 = await Promise.all(
-        accessories.map(async (acc) => {
+      const base64ModelImage = await fetchImageAsBase64(modalUrl);
+      const accessoryBase64List = await Promise.all(
+        args.accessories.map(async (acc) => {
           const url = await ctx.storage.getUrl(acc.storageId as Id<"_storage">);
           return url ? await fetchImageAsBase64(url) : null;
         }),
       );
 
-      const partialPrompt: ContentListUnion = [
-        {
-          text: `
-        Modal: [First image]
-        Accessories: [Every other image]
-        Style Theme: ${style_theme?.join(", ")}
-        Fit: ${fit}
-        User Prompt: ${initial_prompt}
-        Is New Outfit: ${args.is_new_outfit || true}
-        `,
-        },
+      const imageParts: Part[] = [
         {
           inlineData: {
             mimeType: "image/png",
-            data: base64Image,
+            data: base64ModelImage,
           },
         },
-        ...accListBase64
-          .filter((base64): base64 is string => base64 !== null)
-          .map((base64) => ({
+        ...accessoryBase64List
+          .filter((img): img is string => Boolean(img))
+          .map((img) => ({
             inlineData: {
               mimeType: "image/png",
-              data: base64, // base64 string only
+              data: img,
             },
           })),
       ];
 
-      const description = await generateDescription(partialPrompt)
-      const fullPrompt: ContentListUnion = [
+      const contextPrompt = buildContextPrompt({
+        fit: args.fit,
+        amount_of_change: args.amount_of_change,
+        event: args.event,
+        themes,
+        initial_prompt: args.initial_prompt,
+        is_new_outfit: args.is_new_outfit,
+      });
+
+      const description = await generateDescription(contextPrompt, imageParts, mode);
+      const generationPrompt: ContentListUnion = [
         {
-          text: imgGenPromp,
+          text:
+            mode === "improve_only"
+              ? OUTFIT_IMPROVEMENT_PROMPT
+              : OUTFIT_GENERATION_PROMPT,
         },
-        {
-          text:"The ai description" + description || "", 
-        },
-        ...partialPrompt,
+        { text: `Context:\n${contextPrompt}` },
+        { text: `Direction summary: ${description || "No summary provided."}` },
+        ...imageParts,
       ];
 
       let response = await ai.models.generateContent({
         model: "gemini-2.5-flash-image",
-        contents: fullPrompt,
+        contents: generationPrompt,
         config: {
           safetySettings: [
             {
@@ -119,12 +142,9 @@ export const generatePreviewWithAI = internalAction({
               threshold: HarmBlockThreshold.OFF,
             },
           ],
-
-          responseModalities: ["TEXT", "TEXT", "IMAGE"],
+          responseModalities: ["TEXT", "IMAGE"],
         },
       });
-
-      console.log("AI response:", response);
 
       let hasInlineData = false;
       let imageURL = "";
@@ -134,17 +154,11 @@ export const generatePreviewWithAI = internalAction({
         const handled = handleGeneratedContent(response);
         hasInlineData = handled.hasInlineData;
         imageURL = handled.imageURL;
-        summary = handled.summary;
+        summary = handled.summary || description;
       } catch (err) {
-        console.warn(
-          "handleGeneratedContent failed, attempting one retry",
-          err,
-        );
-
-        // single retry with the same prompt but request only IMAGE modality (reduce noise)
         const retryResponse = await ai.models.generateContent({
           model: "gemini-2.5-flash-image",
-          contents: fullPrompt,
+          contents: generationPrompt,
           config: {
             safetySettings: [
               {
@@ -152,82 +166,60 @@ export const generatePreviewWithAI = internalAction({
                 threshold: HarmBlockThreshold.OFF,
               },
             ],
-            imageConfig: {
-              aspectRatio: "4:3",
-            },
+            imageConfig: { aspectRatio: "4:3" },
             responseModalities: ["IMAGE"],
           },
         });
 
-        console.log("Retry AI response:", retryResponse);
-
-        try {
-          const handled2 = handleGeneratedContent(retryResponse);
-          hasInlineData = handled2.hasInlineData;
-          imageURL = handled2.imageURL;
-          summary = handled2.summary;
-          // use retryResponse for downstream logic
-          // @ts-ignore
-          response = retryResponse;
-        } catch (err2) {
-          console.error("handleGeneratedContent retry failed", err2);
-          // throw the array exactly as requested
-          throw ["no content found, after retry"];
-        }
+        const handledRetry = handleGeneratedContent(retryResponse);
+        hasInlineData = handledRetry.hasInlineData;
+        imageURL = handledRetry.imageURL;
+        summary = handledRetry.summary || description;
+        // @ts-ignore keep downstream shape usage aligned
+        response = retryResponse;
       }
-      let imageURLFinal = imageURL;
 
+      let finalImageURL = imageURL;
       if (!hasInlineData && response?.candidates?.[0]?.content?.parts) {
-        // If no image generated, retry with only the first image and a summary of the previous attempt
-
         const textContent = response.candidates[0].content.parts
           .filter((part) => part.text)
           .map((part) => part.text)
           .join(" ");
-
-        if (textContent.includes("no human found")) {
-          throw new Error("No human found in the provided image.");
-        }
-        imageURLFinal = await retry(ai, base64Image, textContent);
+        finalImageURL = await retry(ai, base64ModelImage, textContent);
       }
 
-      if (!imageURLFinal) {
+      if (!finalImageURL) {
         await ctx.scheduler.runAfter(0, api.outfit.generationWentWrong, {
           outfitId: args.outfitId,
         });
-        throw new Error("No image URL returned from DALL·E");
+        throw new Error("No image URL returned from model");
       }
-      // console.log("Generating upload URL");
-      const postUrl = await ctx.storage.generateUploadUrl();
-      // console.log("Generated upload URL:", postUrl);
 
-      // console.log("Fetching and processing image");
-      const blob = dataURItoBlob(imageURLFinal);
-      const modalFile = new File([blob], "preview" + args.outfitId, {
+      const postUrl = await ctx.storage.generateUploadUrl();
+      const blob = dataURItoBlob(finalImageURL);
+      const previewFile = new File([blob], `preview-${args.outfitId}`, {
         type: blob.type || "application/octet-stream",
       });
 
-      // console.log("Uploading processed image");
-      const result = await fetch(postUrl, {
+      const uploadResult = await fetch(postUrl, {
         method: "POST",
-        headers: { "Content-Type": modalFile.type },
-        body: modalFile,
+        headers: { "Content-Type": previewFile.type },
+        body: previewFile,
       });
+      const uploadData = await uploadResult.json();
 
-      const data = await result.json();
-      // console.log("Upload complete, storage ID:", previewStorageId);
-      console.log("Generated outfit:", args.outfitId, data);
       await ctx.scheduler.runAfter(0, api.outfit.updateOutfitPreview, {
         outfitId: args.outfitId,
-        previewImageId: data.storageId,
+        previewImageId: uploadData.storageId,
         summary,
       });
     } catch (error) {
-      console.error("Error in generatePreviewWithAI:", error);
       await ctx.scheduler.runAfter(0, api.outfit.generationWentWrong, {
         outfitId: args.outfitId,
       });
-      throw new Error("No image URL returned from Google GenAI");
+      throw new Error(
+        error instanceof Error ? error.message : "Image generation failed",
+      );
     }
   },
 });

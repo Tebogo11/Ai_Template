@@ -35,8 +35,32 @@ export default defineSchema({
   outfit: defineTable({
     modal: v.optional(v.string()),
     accessories: v.array(v.object({ storageId: v.string() })),
+    themes: v.optional(v.array(v.string())),
     style_theme: v.optional(v.array(v.string())),
     initial_prompt: v.string(),
+    amount_of_change: v.optional(
+      v.union(
+        v.literal("None"),
+        v.literal("Light"),
+        v.literal("Moderate"),
+        v.literal("Major"),
+        v.literal("Complete"),
+      ),
+    ),
+    event: v.optional(
+      v.union(
+        v.literal("casual"),
+        v.literal("creative_workspace"),
+        v.literal("corporate"),
+        v.literal("date_night"),
+        v.literal("party"),
+        v.literal("formal"),
+        v.literal("editorial"),
+      ),
+    ),
+    generation_mode: v.optional(
+      v.union(v.literal("improve_only"), v.literal("style_transfer")),
+    ),
     preview_images: v.optional(v.string()),
     title: v.optional(v.string()),
     summary: v.optional(v.string()),
@@ -48,11 +72,13 @@ export default defineSchema({
 
     fit: v.optional(
       v.union(
+        v.literal("slimAndSharp"),
         v.literal("bodyCon"),
         v.literal("tailored"),
         v.literal("standardFit"),
         v.literal("relaxed"),
         v.literal("oversized"),
+        v.literal("flowing"),
       ),
     ),
     wardrobeId: v.id("wardrobe"),

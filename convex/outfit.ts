@@ -8,16 +8,41 @@ export const generateDataType = {
   accessories: v.array(v.object({ storageId: v.string() })),
   fit: v.optional(
     v.union(
+      v.literal("slimAndSharp"),
       v.literal("bodyCon"),
       v.literal("tailored"),
       v.literal("standardFit"),
       v.literal("relaxed"),
       v.literal("oversized"),
+      v.literal("flowing"),
     ),
   ),
+  amount_of_change: v.optional(
+    v.union(
+      v.literal("None"),
+      v.literal("Light"),
+      v.literal("Moderate"),
+      v.literal("Major"),
+      v.literal("Complete"),
+    ),
+  ),
+  event: v.optional(
+    v.union(
+      v.literal("casual"),
+      v.literal("creative_workspace"),
+      v.literal("corporate"),
+      v.literal("date_night"),
+      v.literal("party"),
+      v.literal("formal"),
+      v.literal("editorial"),
+    ),
+  ),
+  themes: v.optional(v.array(v.string())),
   style_theme: v.optional(v.array(v.string())),
   initial_prompt: v.string(),
-
+  generation_mode: v.optional(
+    v.union(v.literal("improve_only"), v.literal("style_transfer")),
+  ),
   is_new_outfit: v.optional(v.boolean()),
 };
 
@@ -30,6 +55,18 @@ export const generatorOutfit = mutation({
   handler: async (ctx, args) => {
     const user = await ctx.auth?.getUserIdentity();
     if (!user) throw new Error("Authentication required");
+    const themes = args.themes ?? args.style_theme ?? [];
+    const normalizedPrompt = args.initial_prompt?.trim() || "";
+    const hasCustomInput =
+      args.accessories.length > 0 ||
+      themes.length > 0 ||
+      normalizedPrompt.length > 0 ||
+      (args.amount_of_change && args.amount_of_change !== "None") ||
+      (args.event && args.event !== "casual") ||
+      (args.fit && args.fit !== "relaxed");
+    const generationMode =
+      args.generation_mode ??
+      (hasCustomInput ? "style_transfer" : "improve_only");
 
     let finalWardrobeId = args.wardrobeId as Id<"wardrobe">;
     if (!finalWardrobeId) {
@@ -43,14 +80,21 @@ export const generatorOutfit = mutation({
       modal: args.modal,
       accessories: args.accessories,
       fit: args.fit,
-      style_theme: args.style_theme,
-      initial_prompt: args.initial_prompt,
+      amount_of_change: args.amount_of_change,
+      event: args.event,
+      themes,
+      style_theme: args.style_theme ?? themes,
+      initial_prompt: normalizedPrompt,
+      generation_mode: generationMode,
       status: "generating",
       wardrobeId: finalWardrobeId,
     });
     const { title, wardrobeId, ...rest } = args;
     await ctx.scheduler.runAfter(0, internal.aiSystem.generatePreviewWithAI, {
       ...rest,
+      themes,
+      initial_prompt: normalizedPrompt,
+      generation_mode: generationMode,
       outfitId,
     });
     return { outfitId, wardrobeId: finalWardrobeId, title: args.title };

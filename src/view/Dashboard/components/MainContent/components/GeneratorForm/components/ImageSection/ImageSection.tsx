@@ -12,7 +12,7 @@ const ImageSection = () => {
     <div className="flex items-start justify-start max-h-[50dvh]">
       <div className="w-[70%] mr-5 ">
         <h2 className="input-label ">
-          Upload your modal{" "}
+          Upload your model{" "}
           <span className="font-light text-xs">(Required)</span>
         </h2>
         <FileInputBox

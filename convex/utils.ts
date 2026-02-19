@@ -59,11 +59,11 @@ export const retry = async (
 ) => {
   const rePrompt: ContentListUnion = [
     {
-      text: `Generate only the outfit image based on the following AI summary and model.
+      text: `Generate only the outfit image based on the following styling summary and model image.
         Do not include any extra text or description.
-        AI Summary: ${aiSummary}`,
+        Styling Summary: ${aiSummary}`,
     },
-    { text: `Modal: image 1` },
+    { text: `Model image: image 1` },
     {
       inlineData: {
         mimeType: "image/png",

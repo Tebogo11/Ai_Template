@@ -46,13 +46,13 @@ const FileInputBox: FC<ImageUploadProps> = ({
   const handleRemove = async () => {
     // setPreview(null);
     console.log("Removing image with storageId:", storageId);
-    if (storageId) {
-      await deleteImage({
-        storageId: storageId,
-        outfitColumnKey: isModal ? "modal" : "accessories",
-        outfitId: outfitId || "",
-      });
-    }
+    // if (storageId) {
+    //   await deleteImage({
+    //     storageId: storageId,
+    //     outfitColumnKey: isModal ? "modal" : "accessories",
+    //     outfitId: outfitId || "",
+    //   });
+    // }
 
     onChange?.(null);
   };
@@ -102,7 +102,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
           <p
             className={`text-base-100 tracking-wider text-center font-extrabold z-20 ${isSmall ? "text-xs" : "text-sm"}`}
           >
-            {isModal ? "Click to upload modal" : "Click to upload clothing"}
+            {isModal ? "Click to upload Model" : "Click to upload clothing"}
           </p>
 
           <input
