@@ -11,7 +11,7 @@ import { useAppSetting } from "@/store/useAppSetting";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const PreviewImage = () => {
-  const { outfitId, apiError, previewOutfit, isGettingValues , isGenerating} =
+  const { outfitId, apiError, previewOutfit, isGettingValues, isGenerating } =
     useGeneratorSetting();
   const { isPreviewPage } = useAppSetting();
 
@@ -28,12 +28,17 @@ const PreviewImage = () => {
 
   return (
     <div
-      className={` ${!isPreviewPage ? "hidden" : "flex "} md:flex flex-col  md:w-1/2 min-h-[90dvh] pb-5`}
+      className={`
+    ${!isPreviewPage ? "hidden" : "flex "}
+    md:flex flex-col md:w-2/3 lg:w-4/5
+    min-h-[92dvh] pb-5
+    border border-base-300
+    rounded-none p-5 relative
+    bg-base-300 rounded-tl-2xl
+    shadow-[inset_4px_4px_8px_rgba(0,0,0,0.25),inset_-4px_-4px_8px_rgba(255,255,255,0.05)]
+  `}
     >
       <div className="flex justify-between w-full">
-        <div className="hidden md:block">
-          <h2 className="form-label h-5">OUTFIT</h2>
-        </div>
         <div className="block md:hidden">
           <button
             className="btn btn-ghost btn-sm  rounded-sm active:scale-105 transition-transform px-0 pr-4"
@@ -48,7 +53,7 @@ const PreviewImage = () => {
           <HeaderRight outfit={outfit} outfits={outfits} />
         )}
       </div>
-      { isGenerating || outfit?.status === "generating" || isGettingValues ? (
+      {isGenerating || outfit?.status === "generating" || isGettingValues ? (
         <Loading text="Please give us a moment, we're generating your outfit" />
       ) : outfit?.status === "error" ? (
         <div className="flex flex-col flex-grow-1 bg-base-200 rounded-xs flex items-center justify-center p-5">

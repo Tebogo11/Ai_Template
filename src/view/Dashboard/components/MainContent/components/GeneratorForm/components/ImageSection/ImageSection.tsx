@@ -11,12 +11,12 @@ const ImageSection = () => {
   return (
     <div className="flex items-start justify-start max-h-[50dvh]">
       <div className="w-[70%] mr-5 ">
-        <h2 className="form-label ">
+        <h2 className="input-label ">
           Upload your modal{" "}
           <span className="font-light text-xs">(Required)</span>
         </h2>
         <FileInputBox
-          size="w-full h-[44dvh] p-2"
+          size="w-full  h-[44svh] p-2"
           value={modal}
           onChange={onChangeModal}
           idPrefix="modal"
@@ -24,7 +24,7 @@ const ImageSection = () => {
         />
       </div>
       <div className="w-[30%] ">
-        <h2 className="form-label">Clothing Items</h2>
+        <h2 className="input-label ">New Clothing</h2>
         <AccessoriesImageListUpload />
       </div>
     </div>

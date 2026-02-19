@@ -7,17 +7,14 @@ const MainContent = () => {
   useGetValues();
   return (
     <>
-      <div className="px-5 pb-10">
-        <div className="h-[75px]">
+      <div>
+        <div className="h-[8svh] px-5">
           <Header />
         </div>
-        <div className="flex flex-grow-1  justify-center gap-5 lg:px-10 ">
-          {/* <div className="w-1/2"> */}
+        <div className="flex w-screen justify-center gap-5 lg:pl-10 pl-5 ">
           <GeneratorForm />
-          {/* </div> */}
-          {/* <div className="w-1/2 ml-5 hidden md:block "> */}
+
           <PreviewImage />
-          {/* </div> */}
         </div>
       </div>
       <dialog id="my_modal_1" className="modal">

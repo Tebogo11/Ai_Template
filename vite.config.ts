@@ -27,4 +27,8 @@ export default defineConfig({
       view: path.resolve(__dirname, "./src/view"),
     },
   },
+    server: {
+    host: true,
+    port: 5173
+  }
 });

@@ -58,7 +58,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
   };
 
   useEffect(() => {
-    const normaliseUrl = async () => {
+    const normalizeUrl = async () => {
       const isConvex = isConvexStorageId(value || "");
 
       if (isConvex && value) {
@@ -77,7 +77,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
         setUrlInput(value);
       }
     };
-    normaliseUrl();
+    void normalizeUrl();
   }, [value]);
 
   return (
@@ -89,22 +89,20 @@ const FileInputBox: FC<ImageUploadProps> = ({
       {!urlInput ? (
         <label
           htmlFor={"image-upload" + idPrefix}
-          className={`flex flex-col items-center justify-center ${size} rounded cursor-pointer hover:border-secondary transition bg-base-300 border-4 border-dashed border-base-100 p-4`}
+          className={` relative  flex flex-col items-center justify-center ${size} rounded-2xl cursor-pointer hover:border-secondary transition bg-base-300 border-4 border-dashed border-base-100 p-4`}
         >
           <div
-            className={` ${isModal ? "block" : "hidden"} mb-2 block md:hidden`}
-          >
-            <InitialPage />
-          </div>
+            className={`absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-transparent blur-2xl opacity-70 ${isSmall ? "m-5" : "m-2"}`}
+          />
           <PhotoIcon
             className={`
-              ${isSmall ? `w-5 h-5 text-primary` : `w-10 h-10 text-primary`}
-            hidden md:block`}
+              ${isSmall ? `w-5 h-5 ` : `w-10 h-10 `}
+            hidden md:block text-base-100 z-20 `}
           />
           <p
-            className={`text-primary text-center ${isSmall ? "text-xs" : "text-sm"}`}
+            className={`text-base-100 tracking-wider text-center font-extrabold z-20 ${isSmall ? "text-xs" : "text-sm"}`}
           >
-            {isModal ? "Click to upload modal" : "Click to upload item"}
+            {isModal ? "Click to upload modal" : "Click to upload clothing"}
           </p>
 
           <input
@@ -118,7 +116,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
       ) : (
         urlInput && (
           <div
-            className={`relative ${size} overflow-hidden bg-base-200 flex justify-center items-center `}
+            className={`relative ${size} overflow-hidden bg-base-200 flex justify-center items-center rounded-2xl`}
           >
             <img
               src={urlInput}
@@ -136,9 +134,10 @@ const FileInputBox: FC<ImageUploadProps> = ({
               >
                 <EyeIcon className="h-5.5 w-5.5 text-base-content" />
               </button> */}
-            
+
               <button
                 type="button"
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={handleRemove}
                 className="  text-white text-xs   cursor-pointer "
               >
@@ -146,7 +145,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
                 {/* <TrashIcon className="h-4 w-4 text-error" /> */}
               </button>
             </div>
-       
+
             {showModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
                 <div className="relative bg-base-100 rounded-lg shadow-lg p-4">

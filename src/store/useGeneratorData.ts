@@ -1,3 +1,4 @@
+import { AmountOfChangeOption } from "@/view/Dashboard/components/MainContent/components/GeneratorForm/components/ToggleSelect/const";
 import { create } from "zustand";
 
 export type AccessoriesType = {
@@ -16,6 +17,7 @@ export type OutfitData = {
   modal: string;
   accessories: AccessoriesType[];
   fit: string;
+  event: string;
   themes: string[];
   initial_prompt: string;
 };
@@ -25,6 +27,8 @@ type GeneratorSetting = {
   modal: string | null;
   accessories: AccessoriesType[];
   fit: string;
+  amount_of_change: AmountOfChangeOption;
+  event: string;
   themes: string[];
   prompt: string;
   previewOutfit?: null | string;
@@ -32,6 +36,7 @@ type GeneratorSetting = {
   is_new_outfit: boolean;
   apiError: string | null;
   isGettingValues: boolean;
+
   setIsGettingValues: (isGettingValues: boolean) => void;
   setAccessories: (data: AccessoriesType[]) => void;
   setModal: (modalData: string | null) => void;
@@ -39,6 +44,7 @@ type GeneratorSetting = {
   removeAccessories: (id: string) => void;
   setStyleTheme: (data: string[]) => void;
   setFit: (data: string) => void;
+  setAmountOfChangeOption: (data: AmountOfChangeOption) => void;
   setPrompt: (data: string) => void;
   setPreviewOutfit: (data: string) => void;
   setIsGenerating: (data: boolean) => void;
@@ -46,6 +52,7 @@ type GeneratorSetting = {
   setIsNewOutfit: (data: boolean) => void;
   setApiError: (data: string | null) => void;
   setSelectedOutfit: (data: OutfitData | null) => void;
+  setEvent: (data: string) => void;
 };
 
 export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
@@ -111,9 +118,13 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
       });
     }
   },
-  fit: "standardFit",
+  fit: "relaxed",
   setFit: (data: string) => {
     set({ fit: data });
+  },
+  event: "casual",
+  setEvent: (data: string) => {
+    set({ event: data });
   },
   themes: [],
   setStyleTheme: (data: string[]) => {
@@ -122,5 +133,9 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   isGettingValues: false,
   setIsGettingValues: (data: boolean) => {
     set({ isGettingValues: data });
+  },
+  amount_of_change: AmountOfChangeOption.None,
+  setAmountOfChangeOption: (data: AmountOfChangeOption) => {
+    set({ amount_of_change: data });
   },
 }));

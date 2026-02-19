@@ -120,25 +120,28 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
 
   return (
     <>
-      <div className="absolute  right-0 z-20 w-36 bg-base-100 h-10  flex justify-center items-center p-2 rounded-t-xs">
-        <div className="flex space-x-4">
+      <div className="absolute  right-0 top-[0%] z-20 w-10 bg-base-300 h-36  flex flex-col justify-center items-center p-2 rounded-bl-sm ">
+        <div className="flex flex-col space-y-4">
           {isLoading ? (
             <ArrowPathIcon className="h-5 w-5 animate-spin text-neutral-content" />
           ) : (
-            <div className="tooltip" data-tip="Download Outfit Image">
+            <div
+              className="tooltip tooltip-left"
+              data-tip="Download Outfit Image"
+            >
               <ArrowDownTrayIcon
                 className="h-5 w-5 cursor-pointer text-base-content"
-                onClick={downloadImage}
+                onClick={() => void downloadImage()}
               />
             </div>
           )}
-          <div className="tooltip" data-tip="View Fullscreen">
+          <div className="tooltip tooltip-left" data-tip="View Fullscreen">
             <FullscreenIcon
               className="h-5 w-5 cursor-pointer text-base-content"
               onClick={() => setShowModal(true)}
             />
           </div>
-          <div className="tooltip" data-tip="Delete Outfit">
+          <div className="tooltip tooltip-left" data-tip="Delete Outfit">
             <TrashIcon
               className="h-5 w-5 cursor-pointer text-error hover:opacity-80 active:scale-110 transition-transform"
               onClick={() =>
@@ -151,8 +154,8 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
         </div>
         <div className="tooltip tooltip-left" data-tip="Use as Modal Image">
           <button
-            className="btn btn-sm btn-base-300 w-8 p-1 ml-2  flex justify-center items-center hover:opacity-80 active:scale-110 transition-transform"
-            onClick={onUseAsModal}
+            className="btn btn-sm btn-base-100 bg-white w-8 p-1 mt-2  flex justify-center items-center hover:opacity-80 active:scale-110 transition-transform"
+            onClick={() => void onUseAsModal()}
           >
             <PlusIcon className="h-10 w-10 text-base-content" />
           </button>
@@ -170,7 +173,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
             />
             <button
               type="button"
-              onClick={() => setShowModal(false)}
+              onClick={() => void setShowModal(false)}
               className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded hover:bg-black/80 transition cursor-pointer"
             >
               Close
@@ -190,7 +193,7 @@ const PreviewHeader = ({ outfits }: { outfits: Outfit[] }) => {
                 <div className="h-full w-full flex-1">
                   <button
                     className="btn btn-neutral bg-red-800"
-                    onClick={onDeleteOutfit}
+                    onClick={() => void onDeleteOutfit()}
                   >
                     Delete
                   </button>

@@ -13,6 +13,7 @@
     transition:
       background-color 0.3s,
       color 0.3s;
+    font-family: "Outfit", sans-serif;
   }
   h1 {
     font-family: "Outfit", sans-serif;
@@ -23,13 +24,20 @@
     font-weight: 600;
   }
 
-  p, span {
+  p,
+  span {
     font-family: "Outfit", sans-serif;
     font-weight: 400;
   }
   label {
     font-family: "Outfit", sans-serif;
     font-weight: 600;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font-family: "Outfit", sans-serif;
   }
 }
 
@@ -38,7 +46,11 @@
 }
 
 @utility form-label {
-  @apply mb-1 text-sm font-medium text-base-content;
+  @apply mb-1 text-xs font-medium text-base-content;
+}
+
+@utility input-label {
+  @apply mb-1 text-xs font-semibold text-base-content uppercase tracking-wide;
 }
 
 @utility form-slider-option {

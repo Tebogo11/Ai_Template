@@ -58,7 +58,7 @@ const Tags = () => {
   return (
     <div className="mt-2">
       <div className="flex items-center justify-between">
-        <h2 className="form-label m-0">Themes</h2>
+        <h2 className="input-label  m-0">Themes</h2>
         <span
           className={`text-xs font-semibold ${
             themes.length >= TAG_LIMIT ? "text-error" : "text-base-content"

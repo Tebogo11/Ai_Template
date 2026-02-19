@@ -19,7 +19,7 @@ export const getImageUrl = query({
 
 export const getImageUrlFunc = mutation({
   args: { storageId: v.optional(v.string()) },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args) =>   {
     if (!args.storageId) return null;
     console.log("Fetching URL for storage ID:", args.storageId);
     return await ctx.storage.getUrl(args.storageId as Id<"_storage">);

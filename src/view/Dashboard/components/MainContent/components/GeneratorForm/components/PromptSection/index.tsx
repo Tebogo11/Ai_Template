@@ -13,7 +13,7 @@ const PromptSection = () => {
   const { setPrompt, prompt, modal, isGenerating, outfitId } =
     useGeneratorSetting();
   const { setIsPreviewPage } = useAppSetting();
-  
+
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || "",
   });
@@ -26,22 +26,16 @@ const PromptSection = () => {
 
   const { onSubmit } = useSubmitForm();
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (prompt.trim()) {
-      onSubmit();
+      await onSubmit();
     }
   };
 
   const isSubmitDisabled = useMemo(() => {
-    return (
-      !Boolean(modal?.trim()) ||
-      !Boolean(prompt.trim()) ||
-      hasTokenLeft === false ||
-      isGenerating ||
-      outfit?.status === "generating"
-    );
-  }, [prompt, modal]);
+    return !modal?.trim();
+  }, [modal]);
 
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   useLayoutEffect(() => {
@@ -64,17 +58,20 @@ const PromptSection = () => {
   return (
     <div className="flex justify-start w-full h-full rounded-xs relative pt-2 pb-0">
       <form
-        onSubmit={handleSend}
+        onSubmit={(e) => void handleSend(e)}
         className={`relative flex flex-col justify-end ${imageUrl ? "w-[70%]" : "w-full"} md:w-full h-full ${imageUrl ? "mr-5" : ""} md:mr-0 `}
       >
-        <h2 className="form-label">
-          Design Prompt <span className="font-light text-xs">(Required)</span>
+        <h2 className="input-label">
+          Any specific instructions?{" "}
+          <span className="font-light text-xs">
+            (e.g. I want to try this dress with a leather jacket.)
+          </span>
         </h2>
 
         <div className="relative w-full">
           <textarea
             ref={textareaRef}
-            className={`textarea box-border w-full resize-none ${imageUrl ? "min-h-[18dvh]" : "min-h-[40px]"} md:min-h-[40px] px-4  py-2 border-1  border-base-300 shadow focus:outline-none focus:ring-2 focus:ring-base-300 transition-all break-words whitespace-pre-wrap bg-base-200  max-h-[18dvh]`}
+            className={`textarea box-border w-full resize-none ${imageUrl ? "min-h-[18dvh]" : "min-h-[40px]"} md:min-h-[40px] px-4 pr-20 py-2 border-1  border-base-300 shadow focus:outline-none focus:ring-2 focus:ring-base-300 transition-all break-words whitespace-pre-wrap bg-base-200  max-h-[18dvh]`}
             placeholder="e.g. I want to try this dress."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -88,21 +85,24 @@ const PromptSection = () => {
         </div>
         <button
           type="submit"
-          className="cursor-pointer absolute bottom-0.5 right-5 py-2 text-white font-semibold rounded-xl hover:scale-105 transition-all z-10"
+          className="btn btn-primary btn-sm cursor-pointer absolute bottom-[4px] right-[4px] text-white font-semibold hover:scale-105 transition-all z-10 "
           style={{ zIndex: 10 }}
-          disabled={isSubmitDisabled}
+          disabled={!!isSubmitDisabled}
         >
           {hasTokenLeft ? (
             isGenerating || outfit?.status === "generating" ? (
-              <Loading size="xs" />
-            ) : !isSubmitDisabled ? (
-              <PaparAirplaneIconSolid
-                className={`w-5 h-5 text-primary opacity-100`}
-              />
+              <div className="flex items-center gap-1">
+                <p className=" text-sm opacity-100">Generating...</p>
+                <Loading size="xs" color="base-100" />
+              </div>
             ) : (
-              <PaperAirplaneIcon
-                className={`w-5 h-5 text-primary ${isSubmitDisabled ? "opacity-50" : "opacity-100"}`}
-              />
+              <p className="text-sm opacity-100">
+                {prompt.trim() || !modal?.trim()
+                  ? !modal?.trim()
+                    ? "Add Modal"
+                    : "Create"
+                  : "No, Create"}
+              </p>
             )
           ) : (
             <p className="text-sm opacity-55">No tokens left</p>
@@ -112,7 +112,7 @@ const PromptSection = () => {
 
       {imageUrl && (
         <label
-          className="btn btn-ghost px-0 rounded-sm block md:hidden h-full pt-2 w-[30%] active:scale-105 transition-transform"
+          className="btn btn-ghost px-0 rounded-sm block md:hidden min-h-[21svh]  max-h-[21svh] pt-2 w-[30%] active:scale-105 transition-transform"
           onClick={() => setIsPreviewPage(true)}
         >
           <img
@@ -120,7 +120,7 @@ const PromptSection = () => {
             alt="Preview"
             loading="eager" // load immediately
             decoding="async" // doesn’t block rendering
-            className="w-full h-full object-cover object-center shadow rounded-sm"
+            className="w-full h-full object-cover object-top shadow rounded-sm"
           />
           <div className="flex flex-col max-h-6 absolute top-0 right-1 w-6 h-full ">
             <button
