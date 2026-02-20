@@ -17,10 +17,6 @@ const CustomClerkProvider = ({ children }: { children: React.ReactNode }) => {
       appearance={{
         ...(theme === "dark" ? clerkDark : clerkLight),
       }}
-      afterSignInUrl="/"
-      signInUrl="/login"
-      signUpUrl="/signup"
-      signInFallbackRedirectUrl="/login"
       publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
     >
       {children}

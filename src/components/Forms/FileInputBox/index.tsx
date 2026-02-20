@@ -93,10 +93,10 @@ const FileInputBox: FC<ImageUploadProps> = ({
           <PhotoIcon
             className={`
               ${isSmall ? `w-5 h-5 ` : `w-10 h-10 `}
-            hidden md:block text-base-100 z-20 `}
+            hidden md:block text-base-100 `}
           />
           <p
-            className={`text-base-100 tracking-wider text-center font-extrabold z-20 ${isSmall ? "text-xs" : "text-sm"}`}
+            className={`text-base-100 tracking-wider text-center font-extrabold ${isSmall ? "text-xs" : "text-sm"}`}
           >
             {isModal ? "Click to upload Model" : "Click to upload clothing"}
           </p>

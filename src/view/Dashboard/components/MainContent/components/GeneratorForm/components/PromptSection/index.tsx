@@ -82,8 +82,7 @@ const PromptSection = () => {
         </div>
         <button
           type="submit"
-          className="btn btn-primary btn-sm cursor-pointer absolute bottom-[4px] right-[4px] text-white font-semibold hover:scale-105 transition-all z-10 "
-          style={{ zIndex: 10 }}
+          className="btn btn-primary btn-sm cursor-pointer absolute bottom-[4px] right-[4px] text-white font-semibold hover:scale-105 transition-all  "
           disabled={!!isSubmitDisabled}
         >
           {hasTokenLeft ? (
