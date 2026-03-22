@@ -2,11 +2,11 @@ import {
   useGeneratorSetting,
   AccessoriesType,
   OutfitData,
-} from "@/store/useGeneratorData";
-import { AmountOfChangeOption } from "../components/GeneratorForm/components/ToggleSelect/const";
-import { useQuery } from "convex/react";
-import { useEffect } from "react";
-import { api } from "../../../../../../convex/_generated/api";
+} from '@/store/useGeneratorData';
+import { AmountOfChangeOption } from '../view/GeneratorForm/components/ToggleSelect/const';
+import { useQuery } from 'convex/react';
+import { useEffect } from 'react';
+import { api } from '../../../../convex/_generated/api';
 
 const useGetValues = () => {
   const { setSelectedOutfit, setPreviewOutfit, setIsGettingValues } =
@@ -14,7 +14,7 @@ const useGetValues = () => {
   const outfitID = useGeneratorSetting((s) => s.outfitId);
 
   const recentOutfit = useQuery(api.outfit.getOutfitById, {
-    outfitId: outfitID || "",
+    outfitId: outfitID || '',
   });
 
   // const getImageUrlList = useMutation(api.storage.getListImageUrl);
@@ -27,7 +27,7 @@ const useGetValues = () => {
       // const accessories = await getImageUrlList({
       //   storageIdsList: recentOutfit?.accessories.map((a) => a.storageId) || [],
       // });
-      console.log("recentOutfit", recentOutfit);
+      console.log('recentOutfit', recentOutfit);
       setSelectedOutfit({
         accessories:
           recentOutfit?.accessories?.map((url, index) => {
@@ -36,16 +36,15 @@ const useGetValues = () => {
               url: url.storageId,
             } as AccessoriesType;
           }) || [],
-        initial_prompt: recentOutfit?.initial_prompt || "",
-        modal: recentOutfit?.modal || "",
-        fit: recentOutfit?.fit || "relaxed",
-        event: recentOutfit?.event || "casual",
-        amount_of_change:
-          recentOutfit?.amount_of_change || AmountOfChangeOption.None,
+        initial_prompt: recentOutfit?.initial_prompt || '',
+        modal: recentOutfit?.modal || '',
+        fit: recentOutfit?.fit || 'relaxed',
+        event: recentOutfit?.event || 'casual',
+        amount_of_change: recentOutfit?.amount_of_change || AmountOfChangeOption.None,
         themes: recentOutfit?.themes || recentOutfit?.style_theme || [],
       } as OutfitData);
-      console.log("recentOutfit preview images", recentOutfit?.preview_images);
-      setPreviewOutfit(recentOutfit?.preview_images || "");
+      console.log('recentOutfit preview images', recentOutfit?.preview_images);
+      setPreviewOutfit(recentOutfit?.preview_images || '');
     };
     setIsGettingValues(true);
     if (outfitID && recentOutfit) {
@@ -53,14 +52,14 @@ const useGetValues = () => {
     } else {
       setSelectedOutfit({
         accessories: [] as AccessoriesType[],
-        initial_prompt: "",
-        modal: "",
-        fit: "relaxed",
-        event: "casual",
+        initial_prompt: '',
+        modal: '',
+        fit: 'relaxed',
+        event: 'casual',
         amount_of_change: AmountOfChangeOption.None,
         themes: [],
       } as OutfitData);
-      setPreviewOutfit("");
+      setPreviewOutfit('');
     }
     setIsGettingValues(false);
   }, [outfitID, recentOutfit, setSelectedOutfit]);

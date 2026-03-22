@@ -1,5 +1,5 @@
-import { AmountOfChangeOption } from "@/view/Dashboard/components/MainContent/components/GeneratorForm/components/ToggleSelect/const";
-import { create } from "zustand";
+import { AmountOfChangeOption } from '@/view/Dashboard/view/GeneratorForm/components/ToggleSelect/const';
+import { create } from 'zustand';
 
 export type AccessoriesType = {
   id: string;
@@ -7,10 +7,10 @@ export type AccessoriesType = {
 };
 
 export enum Season {
-  SPRING = "spring",
-  SUMMER = "summer",
-  AUTUMN = "autumn",
-  WINTER = "winter",
+  SPRING = 'spring',
+  SUMMER = 'summer',
+  AUTUMN = 'autumn',
+  WINTER = 'winter',
 }
 
 export type OutfitData = {
@@ -84,11 +84,11 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
       };
     });
   },
-  prompt: "",
+  prompt: '',
   setPrompt: (data: string) => {
     set({ prompt: data });
   },
-  previewOutfit: "",
+  previewOutfit: '',
   setPreviewOutfit: (data: string) => {
     set({ previewOutfit: data });
   },
@@ -100,7 +100,7 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   setOutfitId: (data: string | null) => {
     set({ outfitId: data });
   },
-  is_new_outfit: true,
+  is_new_outfit: false,
   setIsNewOutfit: (data: boolean) => {
     set({ is_new_outfit: data });
   },
@@ -121,11 +121,11 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
       });
     }
   },
-  fit: "relaxed",
+  fit: 'relaxed',
   setFit: (data: string) => {
     set({ fit: data });
   },
-  event: "casual",
+  event: 'casual',
   setEvent: (data: string) => {
     set({ event: data });
   },

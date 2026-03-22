@@ -1,6 +1,6 @@
-import { useGeneratorSetting } from "@/store/useGeneratorData";
-import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
-import { useMemo } from "react";
+import { useGeneratorSetting } from '@/store/useGeneratorData';
+import { ArrowBigLeft, ArrowBigRight } from 'lucide-react';
+import { useMemo } from 'react';
 
 interface Outfit {
   _id: string;
@@ -39,25 +39,25 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
           setOutfitId(outfits[idx - 1]._id);
         }}
         onKeyDown={(e) => {
-          if ((e.key === "Enter" || e.key === " ") && !prevDisabled)
+          if ((e.key === 'Enter' || e.key === ' ') && !prevDisabled)
             setOutfitId(outfits[idx - 1]._id);
         }}
         className={`group flex flex-col items-center select-none ${
-          prevDisabled ? "opacity-40 pointer-events-none" : "cursor-pointer"
+          prevDisabled ? 'pointer-events-none opacity-40' : 'cursor-pointer'
         }`}
       >
         <ArrowBigLeft
-          className={`w-5 h-5 transition-transform duration-200 ease-in-out transform group-hover:-translate-x-1 ${
-            prevDisabled ? "text-gray-300" : "text-base-content"
+          className={`h-5 w-5 transform transition-transform duration-200 ease-in-out group-hover:-translate-x-1 ${
+            prevDisabled ? 'text-gray-300' : 'text-base-content'
           }`}
         />
       </div>
 
       {/* Index / total with subtle animation */}
-      <div className="flex flex-col items-center cursor-default">
-        <p className="text-sm font-semibold leading-none transition-transform duration-200 transform hover:scale-105">
-          {outfit ? idx + 1 : 0}{" "}
-          <span className="text-xs text-muted">/ {outfits.length}</span>
+      <div className="flex cursor-default flex-col items-center">
+        <p className="text-sm leading-none font-semibold">
+          {outfit ? idx + 1 : 0}{' '}
+          <span className="text-muted text-xs">/ {outfits.length}</span>
         </p>
       </div>
 
@@ -72,16 +72,16 @@ const HeaderRight: React.FC<HeaderRightProps> = ({ outfit, outfits }) => {
           setOutfitId(outfits[idx + 1]._id);
         }}
         onKeyDown={(e) => {
-          if ((e.key === "Enter" || e.key === " ") && !nextDisabled)
+          if ((e.key === 'Enter' || e.key === ' ') && !nextDisabled)
             setOutfitId(outfits[idx + 1]._id);
         }}
         className={`group flex flex-col items-center gap-1 select-none ${
-          nextDisabled ? "opacity-40 pointer-events-none" : "cursor-pointer"
+          nextDisabled ? 'pointer-events-none opacity-40' : 'cursor-pointer'
         }`}
       >
         <ArrowBigRight
-          className={`w-5 h-5 transition-transform duration-200 ease-out transform group-hover:translate-x-2 ${
-            nextDisabled ? "text-gray-300" : "text-base-content"
+          className={`h-5 w-5 transform transition-transform duration-200 ease-out group-hover:translate-x-2 ${
+            nextDisabled ? 'text-gray-300' : 'text-base-content'
           }`}
         />
       </div>

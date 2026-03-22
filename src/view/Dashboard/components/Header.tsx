@@ -1,0 +1,159 @@
+import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
+import { useWardrobeStore } from '@/store/useWardrobeStore';
+import { UserButton } from '@clerk/clerk-react';
+
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '../../../../convex/_generated/api';
+import { useGeneratorSetting } from '@/store/useGeneratorData';
+import { useState } from 'react';
+import { Bars3BottomLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
+import { useAppSetting } from '@/store/useAppSetting';
+
+const Header = () => {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { title, setTitle, wardrobeId, setWardrobeId } = useWardrobeStore();
+  const { setShowSubscriptionModal } = useAppSetting();
+  const { setOutfitId } = useGeneratorSetting();
+
+  const user = useQuery(api.user.getters.getUser);
+  const changeTitle = useMutation(api.wardrobe.changeTitle);
+  const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
+
+  const onChangeTitle = () => {
+    if (wardrobeId) {
+      changeTitle({ title, wardrobeId });
+    }
+  };
+
+  const onCreateNewWardrobe = () => {
+    setWardrobeId('');
+    setTitle('');
+    setOutfitId(null);
+  };
+
+  const onDeleteWardrobe = async () => {
+    // Implement wardrobe deletion logic here
+    setIsDeleting(true);
+    try {
+      if (wardrobeId) {
+        await deleteWardrobe({ wardrobeId });
+      }
+      onCreateNewWardrobe();
+    } catch (error) {
+      console.error('Error deleting wardrobe:', error);
+      setIsDeleting(false);
+    }
+    setIsDeleting(false);
+    (document.getElementById('my_modal_1') as HTMLDialogElement).close();
+  };
+
+  return (
+    <>
+      <div className="bg-background dark:bg-darkBackground flex w-full items-start justify-between px-0 py-4">
+        <div className="flex items-center">
+          <label htmlFor="my-drawer" className="drawer-button ml-[-5px] cursor-pointer">
+            <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
+          </label>
+          <h2 className="login-outfit text-base-content mt-[2px] ml-3.5 hidden text-[20px] md:block">
+            Outfit
+          </h2>
+
+          <label className="input input-ghost bg-base-200 ml-2 flex w-fit cursor-pointer items-center border-2 font-bold focus:border-0">
+            <PencilIcon className="text-primary h-4 w-4" />
+            <input
+              type="search"
+              placeholder="Untitled wardrobe"
+              value={title}
+              className="max-w-33"
+              onBlur={onChangeTitle}
+              onChange={(e) => setTitle(e.target.value || 'Untitled wardrobe')}
+            />
+          </label>
+          {wardrobeId && (
+            <TrashIcon
+              className="text-error hover:animate-wiggle-more ml-2 h-5 w-6 cursor-pointer transition-transform active:scale-110"
+              onClick={() =>
+                (document.getElementById('my_modal_1') as HTMLDialogElement).showModal()
+              }
+            />
+          )}
+        </div>
+        <div className="mt-1 box-border flex cursor-pointer items-center space-x-4">
+          <div
+            className="tooltip tooltip-bottom mt-[-10px] ml-5 gap-2 md:mt-0 md:flex"
+            data-tip={
+              user?.plan === 'free'
+                ? 'Upgrade to premium for more credits'
+                : `Your credits will reset on ${user?.nextCreditCheck}`
+            }
+            onClick={() => setShowSubscriptionModal(true)}
+          >
+            <div className="= flex items-center gap-1">
+              <h2 className="text-base-content text-[10px] font-normal md:text-xs">
+                {user?.credits} Credits Left
+              </h2>
+            </div>
+            <div className="text-primary-content hover:text-secondary p-0.5 hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)]">
+              <div className="bg-primary hover:bg-base-100 px-5 py-1">
+                <p className="text-sm font-semibold">
+                  {user?.plan === 'free' ? 'Upgrade' : 'Manage'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden items-center space-x-2 md:flex">
+            <DarkModeSwitch />
+          </div>
+
+          <UserButton
+            appearance={{
+              elements: {
+                userButtonAvatarBox: 'w-30 h-30', // Custom width and height
+                userButtonPopoverCard: ' text-red-100', // Custom background for the popover card
+                userButtonPopoverActionButton: 'text-secondary', // Custom text color for action buttons
+              },
+            }}
+          />
+        </div>
+      </div>
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box w-5/12">
+          {!isDeleting ? (
+            <>
+              <h3 className="text-center text-lg font-bold">Are you sure?</h3>
+              <p className="py-4 text-center">
+                You want to delete this wardrobe and all of its outfits.
+              </p>
+              <div className="flex justify-between">
+                <div className="h-full w-full flex-1">
+                  <button
+                    className="btn btn-neutral bg-red-800"
+                    onClick={onDeleteWardrobe}
+                  >
+                    Delete
+                  </button>
+                </div>
+
+                <form method="dialog" className="h-fit">
+                  {/* if there is a button in form, it will close the modal */}
+                  <button className="btn">Cancel</button>
+                </form>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <span className="loading loading-bars loading-xl"></span>
+              <h2 className="text-base-content text-md mt-4 text-center font-medium">
+                Deleting Outfit
+                <span className="loading loading-dots loading-xs mt-1"></span>
+              </h2>
+            </div>
+          )}
+        </div>
+      </dialog>
+    </>
+  );
+};
+
+export default Header;

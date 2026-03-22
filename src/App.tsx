@@ -1,9 +1,9 @@
-import { Authenticated, Unauthenticated } from "convex/react";
-import Dashboard from "./view/Dashboard";
-import { useEffect } from "react";
-import { useAppSetting } from "./store/useAppSetting";
-import { themeChange } from "theme-change";
-import LandingPage from "./view/LandingPage";
+import { Authenticated, Unauthenticated } from 'convex/react';
+import Dashboard from './view/Dashboard';
+import { useEffect } from 'react';
+import { useAppSetting } from './store/useAppSetting';
+import { themeChange } from 'theme-change';
+import LandingPage from './view/LandingPage';
 
 export default function App() {
   const { theme } = useAppSetting();
@@ -15,13 +15,10 @@ export default function App() {
 
   return (
     <div
-      className="flex flex-col h-screen w-screen relative"
-      data-theme={theme === "light" ? "outfit" : "outfit-dark"}
+      className="relative flex min-h-[100svh] flex-col md:min-h-screen"
+      data-theme={theme === 'light' ? 'outfit' : 'outfit-dark'}
     >
-      <main
-        data-theme={theme}
-        className="flex-1 bg-base-100 overflow-auto min-w-[375px]"
-      >
+      <main data-theme={theme} className="bg-base-100 flex-1 overflow-auto">
         <Authenticated>
           <Dashboard />
         </Authenticated>

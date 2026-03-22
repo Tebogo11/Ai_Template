@@ -1,15 +1,30 @@
-import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
-import { useMutation } from "convex/react";
-import { useState, ChangeEvent, FC, useEffect } from "react";
-import { api } from "../../../../convex/_generated/api";
-import { PhotoIcon } from "@heroicons/react/24/solid";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { isConvexStorageId } from '@/utils/convex/isConvexStoargeid';
+import { useMutation } from 'convex/react';
+import { useState, ChangeEvent, FC, useEffect } from 'react';
+import { api } from '../../../../convex/_generated/api';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  Container,
+  UploadLabel,
+  UploadTitle,
+  UploadText,
+  UploadSubtitle,
+  SelectFileButton,
+  HiddenInput,
+  PreviewBox,
+  PreviewImage,
+  RemoveButton,
+  ModalOverlay,
+  ModalContent,
+  ModalImage,
+  ModalCloseButton,
+} from './styles';
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
-  value?: string | null; // Optional initial image URL
+  value?: string | null;
   className?: string;
-  size?: string; // Tailwind size classes, e.g. "w-64 h-64"
+  size?: string; // should describe the box itself, e.g. "w-full min-h-48"
   isSmall?: boolean;
   idPrefix: string;
   isModal?: boolean;
@@ -18,154 +33,146 @@ interface ImageUploadProps {
 const FileInputBox: FC<ImageUploadProps> = ({
   onChange,
   value = null,
-  className = "",
-  size = "w-64 h-64",
+  className = '',
+  size = 'w-64 h-64',
   isSmall = false,
   idPrefix,
   isModal = false,
 }) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
   const [urlInput, setUrlInput] = useState<string | null>(null);
   const [storageId, setStorageId] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-
-      onChange?.(imageUrl);
-    }
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    const imageUrl = URL.createObjectURL(file);
+    onChange?.(imageUrl);
   };
 
-  const handleRemove = async () => {
-    // setPreview(null);
-    console.log("Removing image with storageId:", storageId);
-    // if (storageId) {
-    //   await deleteImage({
-    //     storageId: storageId,
-    //     outfitColumnKey: isModal ? "modal" : "accessories",
-    //     outfitId: outfitId || "",
-    //   });
-    // }
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    processFile(file);
+  };
 
+  const handleDragOver = (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+
+    const file = event.dataTransfer.files?.[0];
+    if (!file) return;
+    processFile(file);
+  };
+
+  const handleRemove = () => {
+    // If you later delete from storage, use storageId here.
+    console.log('Removing image with storageId:', storageId);
+    setStorageId(null);
+    setUrlInput(null);
     onChange?.(null);
   };
 
   useEffect(() => {
+    let cancelled = false;
+
     const normalizeUrl = async () => {
-      const isConvex = isConvexStorageId(value || "");
+      const current = value || '';
+      const isConvex = isConvexStorageId(current);
 
       if (isConvex && value) {
-        const result = await getImageUrl({
-          storageId: value,
-        });
+        const result = await getImageUrl({ storageId: value });
+        if (cancelled) return;
 
         if (result) {
           setStorageId(value);
-          onChange?.(result);
           setUrlInput(result);
+          // IMPORTANT: don’t call onChange here unless you *intentionally* want to
+          // mutate parent state when resolving convex IDs.
           return;
         }
+
         setUrlInput(null);
-      } else {
-        setUrlInput(value);
+        setStorageId(null);
+        return;
       }
+
+      setUrlInput(value);
+      setStorageId(null);
     };
+
     void normalizeUrl();
-  }, [value]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [value, getImageUrl]);
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-full w-full  ${className} `}
-    >
-      {/* URL input always visible when no value */}
-
+    <Container className={className}>
       {!urlInput ? (
-        <label
-          htmlFor={"image-upload" + idPrefix}
-          className={` relative  flex flex-col items-center justify-center ${size} rounded-2xl cursor-pointer hover:border-secondary transition bg-base-300 border-4 border-dashed border-base-100 p-4`}
+        <UploadLabel
+          htmlFor={`image-upload${idPrefix}`}
+          size={size}
+          isDragging={isDragging}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
-          <div
-            className={`absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 to-transparent blur-2xl opacity-70 ${isSmall ? "m-5" : "m-2"}`}
-          />
-          <PhotoIcon
-            className={`
-              ${isSmall ? `w-5 h-5 ` : `w-10 h-10 `}
-            hidden md:block text-base-100 `}
-          />
-          <p
-            className={`text-base-100 tracking-wider text-center font-extrabold ${isSmall ? "text-xs" : "text-sm"}`}
-          >
-            {isModal ? "Click to upload Model" : "Click to upload clothing"}
-          </p>
-
-          <input
-            id={"image-upload" + idPrefix}
+          <UploadTitle>Upload Your Model</UploadTitle>
+          <UploadText>Drag and drop model image</UploadText>
+          <UploadSubtitle>
+            Best results with high-resolution full-body shots on clean backgrounds.
+          </UploadSubtitle>
+          <SelectFileButton as="span" onClick={(e) => e.preventDefault()}>
+            Select File
+          </SelectFileButton>
+          <HiddenInput
+            id={`image-upload${idPrefix}`}
             type="file"
             accept="image/*"
-            className="hidden"
             onChange={handleFileChange}
           />
-        </label>
+        </UploadLabel>
       ) : (
-        urlInput && (
-          <div
-            className={`relative ${size} overflow-hidden bg-base-200 flex justify-center items-center rounded-2xl`}
-          >
-            <img
-              src={urlInput}
-              alt="Preview"
-              loading="eager" // load immediately
-              decoding="async" // doesn’t block rendering
-              className="w-full h-full object-contain object-center shadow"
-            />
-            <div className="flex max-h-6 absolute top-0 right-0  h-full bg-base-100 ">
-              {/* <button
-                type="button"
-                onClick={() => setShowModal(true)}
-                className=" bg-base-100 text-white text-xs px-1
-                w-20 py-1  hover:bg-base-200 transition cursor-pointer"
-              >
-                <EyeIcon className="h-5.5 w-5.5 text-base-content" />
-              </button> */}
-
-              <button
-                type="button"
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onClick={handleRemove}
-                className="  text-white text-xs   cursor-pointer "
-              >
-                <XMarkIcon className="h-5.5 w-5.5 text-base-content hover:animate-jump animate-once" />
-                {/* <TrashIcon className="h-4 w-4 text-error" /> */}
-              </button>
-            </div>
-
-            {showModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                <div className="relative bg-base-100 rounded-lg shadow-lg p-4">
-                  <img
-                    src={urlInput}
-                    loading="eager" // load immediately
-                    decoding="async" // doesn’t block rendering
-                    alt="Full Preview"
-                    className="w-[90vw] h-[80vh] rounded object-contain object-center"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded hover:bg-black/80 transition cursor-pointer"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )
+        <PreviewBox size={size}>
+          <PreviewImage src={urlInput!} alt="Preview" loading="eager" decoding="async" />
+          <RemoveButton type="button" onClick={handleRemove} aria-label="Remove image">
+            <XMarkIcon style={{ width: 20, height: 20 }} />
+          </RemoveButton>
+          {showModal && (
+            <ModalOverlay>
+              <ModalContent>
+                <ModalImage
+                  src={urlInput!}
+                  loading="eager"
+                  decoding="async"
+                  alt="Full Preview"
+                />
+                <ModalCloseButton type="button" onClick={() => setShowModal(false)}>
+                  Close
+                </ModalCloseButton>
+              </ModalContent>
+            </ModalOverlay>
+          )}
+        </PreviewBox>
       )}
-    </div>
+    </Container>
   );
 };
 
