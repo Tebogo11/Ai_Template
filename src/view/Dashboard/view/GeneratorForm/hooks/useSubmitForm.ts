@@ -7,64 +7,48 @@ import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { AmountOfChangeOption } from '../components/ToggleSelect/const';
 
 const useSubmitForm = () => {
-  const {
-    modal,
-    accessories,
-    prompt,
-    setIsGenerating,
-    setOutfitId,
-    is_new_outfit,
-    setApiError,
-    setPreviewOutfit,
-  } = useGeneratorSetting();
+  const { modal, accessories, prompt, is_new_outfit, setOutfitId } =
+    useGeneratorSetting();
   const { title, setTitle, setWardrobeId, wardrobeId } = useWardrobeStore();
 
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
-  const generatorOutfit = useMutation(api.outfit.generatorOutfit);
+  const generateOutfit = useMutation(api.generator.mutation.generateOutfit);
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
   const invokeToken = useMutation(api.user.tokens.invokingToken);
 
   const onSubmit = async () => {
-    setApiError(null);
-    if (!modal) throw new Error('Modal is required');
-    setPreviewOutfit('');
-    setIsGenerating(true);
+    // 1. Format data to passes to mutation
 
-    try {
-      const { modalStorageId, accessoriesStorageIds } = await saveImagesToStorage(
+    if (modal) {
+      // 1.3 save images to storage and get their storage ids
+      const storageIds = await saveImagesToStorage(
         getImageUrl,
         generateUploadUrl,
         modal,
         accessories,
       );
 
-      const generateData = {
-        modal: modalStorageId,
-        accessories: accessoriesStorageIds,
-        initial_prompt: prompt,
+      const data = {
+        modal: storageIds.modalStorageId || '',
+        accessories: storageIds.accessoriesStorageIds,
+        prompt: prompt || '',
         is_new_outfit,
-        title,
-        wardrobeId,
-      } as GenerateDataType;
+        wardrobeId: wardrobeId as string | undefined,
+        title: title || 'Untitled Outfit',
+      };
 
+      console.log('Submitting with data:', data);
       const {
         outfitId,
-        wardrobeId: tempWardrobeId,
-        title: generatedTitle,
-      } = await generatorOutfit(generateData);
-
-      if (!outfitId) throw new Error('Failed to generate outfit');
+        wardrobeId: newWardrobeId,
+        title: newTitle,
+      } = await generateOutfit(data);
+      invokeToken();
+      setWardrobeId(newWardrobeId);
+      setTitle(newTitle);
       setOutfitId(outfitId);
-      setTitle(generatedTitle || 'untitled wardrobe');
-      setWardrobeId(tempWardrobeId);
-      await invokeToken();
-    } catch (err) {
-      setApiError((err as Error).message);
-    } finally {
-      setIsGenerating(false);
     }
   };
-
   return { onSubmit };
 };
 

@@ -6,21 +6,21 @@ export const Container = styled.div`
   /* height: clamp(200px, 30svh, 300px); */
 `;
 
-export const UploadLabel = styled.label<{ size: string; isDragging?: boolean }>`
+export const UploadLabel = styled.label<{ isDragging?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 0.275rem;
   border: 4px dashed var(--color-base-100, #e5e7eb);
   background: var(--color-base-300, #d1d5db);
   padding: 1rem;
   transition:
     border-color 0.2s,
     background-color 0.2s;
-  ${({ size }) => size};
+
   &:hover {
     border-color: var(--color-secondary, #a78bfa);
   }
@@ -30,7 +30,7 @@ export const UploadLabel = styled.label<{ size: string; isDragging?: boolean }>`
     border-color: var(--color-secondary, #a78bfa);
     background: rgba(167, 139, 250, 0.1);
   `}
-  height: clamp(200px, 40svh, 500px);
+  height: 40svh
 `;
 
 export const UploadTitle = styled.h3`
@@ -52,7 +52,7 @@ export const UploadText = styled.p<{ isSmall?: boolean }>`
 `;
 
 export const UploadSubtitle = styled.p`
-  color: var(--color-base-200, #9ca3af);
+  color: var(--color-base-content, #9ca3af);
   text-align: center;
   font-weight: 400;
   font-size: 0.875rem;
@@ -61,9 +61,9 @@ export const UploadSubtitle = styled.p`
 `;
 
 export const SelectFileButton = styled.button`
-  background: #fff;
+  background: var(--color-base-100, #fff);
   color: var(--color-base-content, #1f2937);
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-base-300, #d1d5db);
   padding: 0.625rem 1.75rem;
   border-radius: 0.375rem;
   font-weight: 600;
@@ -72,12 +72,12 @@ export const SelectFileButton = styled.button`
   transition: all 0.2s;
 
   &:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    /* background: var(--color-base-300, #f3f4f6); */
+    border-color: var(--color-base-content, #9ca3af);
   }
 
   &:active {
-    background: #e5e7eb;
+    background: var(--color-base-300, #e5e7eb);
   }
 `;
 
@@ -85,20 +85,21 @@ export const HiddenInput = styled.input`
   display: none;
 `;
 
-export const PreviewBox = styled.div<{ size: string }>`
+export const PreviewBox = styled.div<{}>`
   background: var(--color-base-200, #e5e7eb);
   position: relative;
   overflow: hidden;
-  border-radius: 1rem;
+  border-radius: 0.275rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  ${({ size }) => size};
+  max-height: 40svh;
 `;
 
 export const PreviewImage = styled.img`
   height: 100%;
   width: 100%;
+  max-height: 40svh;
   object-fit: contain;
   object-position: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -114,7 +115,7 @@ export const RemoveButton = styled.button`
   width: 2rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem;
+  border-radius: 0.275rem;
   cursor: pointer;
   position: absolute;
   top: 0.5rem;
@@ -137,7 +138,7 @@ export const ModalContent = styled.div`
   position: relative;
   width: 100%;
   max-width: 80rem;
-  border-radius: 0.5rem;
+  border-radius: 0.275rem;
   padding: 1rem;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 `;
@@ -145,7 +146,7 @@ export const ModalContent = styled.div`
 export const ModalImage = styled.img`
   max-height: 80svh;
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: 0.275rem;
   object-fit: contain;
   object-position: center;
 `;

@@ -4,16 +4,15 @@ import GeneratorForm from './GeneratorForm';
 import useGetValues from '../hooks/useGetValues';
 
 const MainContent = () => {
-  useGetValues();
+  // useGetValues();
   return (
     <>
-      <div>
+      <div className="bg-base-100 dark:bg-darkBase-300 flex h-full w-full flex-col">
         <div className="h-[8svh] px-5">
           <Header />
         </div>
         <div className="h-vh flex justify-center gap-5 pl-5 lg:pl-10">
           <GeneratorForm />
-
           <PreviewImage />
         </div>
       </div>

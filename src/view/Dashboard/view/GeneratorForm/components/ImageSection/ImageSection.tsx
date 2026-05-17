@@ -12,10 +12,10 @@ const ImageSection = () => {
   return (
     <Section>
       <InputLabel>
-        Upload your model <RequiredSpan>(Required)</RequiredSpan>
+        1. Upload your model <RequiredSpan>(Required)</RequiredSpan>
       </InputLabel>
       <FileInputBox
-        size="w-full max-h-90 min-h-90 "
+        size="w-full "
         value={modal}
         onChange={onChangeModal}
         idPrefix="modal"

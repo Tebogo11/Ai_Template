@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const FormContainer = styled.div<{ isPreviewPage: boolean }>`
   display: ${({ isPreviewPage }) => (isPreviewPage ? 'none' : 'flex')};
-  min-height: 90dvh;
+  height: 90svh;
   max-width: 450px;
   min-width: 450px;
   flex-direction: column;
@@ -14,9 +14,11 @@ export const ScrollableContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  flex: 0 0 80%;
+  /* flex: 0 0 70%; */
+  max-height: 75svh;
 `;
 
 export const PromptWrapper = styled.div`
   margin-top: auto;
+  flex: 1;
 `;

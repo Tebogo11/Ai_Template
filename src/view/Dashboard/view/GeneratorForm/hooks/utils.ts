@@ -1,7 +1,7 @@
-import { AccessoriesType } from "@/store/useGeneratorData";
-import { isConvexStorageId } from "@/utils/convex/isConvexStoargeid";
-import { ReactMutation } from "convex/react";
-import { FunctionReference } from "convex/server";
+import { AccessoriesType } from '@/store/useGeneratorData';
+import { isConvexStorageId } from '@/utils/convex/isConvexStoargeid';
+import { ReactMutation } from 'convex/react';
+import { FunctionReference } from 'convex/server';
 
 // Helper to fetch a file from a URL and convert to File object
 const urlToFile = async (url: string, filename: string): Promise<File> => {
@@ -9,7 +9,7 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
   const blob = await res.blob();
   // Try to infer type from blob, fallback to 'application/octet-stream'
   return new File([blob], filename, {
-    type: blob.type || "application/octet-stream",
+    type: blob.type || 'application/octet-stream',
   });
 };
 
@@ -19,11 +19,11 @@ const convertUrlToStorageId = async (
 ) => {
   // Implementation depends on specific requirements
   // This is a placeholder function
-  const modalFile = await urlToFile(modalUrl, "modal");
+  const modalFile = await urlToFile(modalUrl, 'modal');
   const postUrl = await generateUploadUrl();
   const result = await fetch(postUrl, {
-    method: "POST",
-    headers: { "Content-Type": modalFile.type },
+    method: 'POST',
+    headers: { 'Content-Type': modalFile.type },
     body: modalFile,
   });
   const { storageId } = await result.json();
@@ -33,8 +33,8 @@ const convertUrlToStorageId = async (
 export const saveImagesToStorage = async (
   getImageUrl: ReactMutation<
     FunctionReference<
-      "mutation",
-      "public",
+      'mutation',
+      'public',
       {
         storageId?: string | undefined;
       },
@@ -55,12 +55,9 @@ export const saveImagesToStorage = async (
   } else {
     const newImageUrl = await getImageUrl({ storageId: modal });
     if (!newImageUrl) {
-      throw new Error("Failed to fetch modal image URL from Convex");
+      throw new Error('Failed to fetch modal image URL from Convex');
     }
-    const storageId = await convertUrlToStorageId(
-      generateUploadUrl,
-      newImageUrl,
-    );
+    const storageId = await convertUrlToStorageId(generateUploadUrl, newImageUrl);
 
     modalStorageId = storageId;
   }
@@ -69,21 +66,15 @@ export const saveImagesToStorage = async (
   for (let i = 0; i < accessories.length; i++) {
     if (!isConvexStorageId(accessories[i].url)) {
       const accessoryUrl = accessories[i];
-      const storageId = await convertUrlToStorageId(
-        generateUploadUrl,
-        accessoryUrl.url,
-      );
+      const storageId = await convertUrlToStorageId(generateUploadUrl, accessoryUrl.url);
 
       accessoriesStorageIds.push({ storageId });
     } else {
       const newImageUrl = await getImageUrl({ storageId: accessories[i].url });
       if (!newImageUrl) {
-        throw new Error("Failed to fetch accessory image URL from Convex");
+        throw new Error('Failed to fetch accessory image URL from Convex');
       }
-      const storageId = await convertUrlToStorageId(
-        generateUploadUrl,
-        newImageUrl,
-      );
+      const storageId = await convertUrlToStorageId(generateUploadUrl, newImageUrl);
       accessoriesStorageIds.push({ storageId });
     }
   }

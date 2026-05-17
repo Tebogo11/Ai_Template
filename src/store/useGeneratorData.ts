@@ -1,5 +1,6 @@
 import { AmountOfChangeOption } from '@/view/Dashboard/view/GeneratorForm/components/ToggleSelect/const';
 import { create } from 'zustand';
+import { Id } from '../../convex/_generated/dataModel';
 
 export type AccessoriesType = {
   id: string;
@@ -24,7 +25,7 @@ export type OutfitData = {
 };
 
 type GeneratorSetting = {
-  outfitId: string | null;
+  outfitId: Id<'outfit'> | null;
   modal: string | null;
   accessories: AccessoriesType[];
   fit: string;
@@ -49,7 +50,7 @@ type GeneratorSetting = {
   setPrompt: (data: string) => void;
   setPreviewOutfit: (data: string) => void;
   setIsGenerating: (data: boolean) => void;
-  setOutfitId: (data: string | null) => void;
+  setOutfitId: (data: Id<'outfit'> | null) => void;
   setIsNewOutfit: (data: boolean) => void;
   setApiError: (data: string | null) => void;
   setSelectedOutfit: (data: OutfitData | null) => void;
@@ -97,7 +98,7 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
     set({ isGenerating: data });
   },
   outfitId: null,
-  setOutfitId: (data: string | null) => {
+  setOutfitId: (data: Id<'outfit'> | null) => {
     set({ outfitId: data });
   },
   is_new_outfit: false,

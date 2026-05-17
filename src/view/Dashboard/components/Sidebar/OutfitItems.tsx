@@ -1,12 +1,13 @@
-import { Id } from "../../../../../convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
-import { useWardrobeStore } from "@/store/useWardrobeStore";
-import { useGeneratorSetting } from "@/store/useGeneratorData";
-import dayjs from "dayjs";
+import { Id } from '../../../../../convex/_generated/dataModel';
+import { useQuery } from 'convex/react';
+import { api } from '../../../../../convex/_generated/api';
+import { useWardrobeStore } from '@/store/useWardrobeStore';
+import { useGeneratorSetting } from '@/store/useGeneratorData';
+import dayjs from 'dayjs';
+import useSetOutfit from '@/view/Dashboard/hooks/useSetOutfit';
 
 type OutfitItemsProps = {
-  _id: Id<"wardrobe">;
+  _id: Id<'wardrobe'>;
   _creationTime: number;
   title: string;
   user_id: string;
@@ -15,12 +16,13 @@ type OutfitItemsProps = {
 const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
   const { setOutfitId } = useGeneratorSetting();
-
-  const recentOutfit = useQuery(api.outfit.getRecentOutfitByWardrobeId, {
+  const { setOutfit } = useSetOutfit();
+  const recentOutfit = useQuery(api.outfit.query.getRecentOutfitByWardrobeId, {
     wardrobeId: _id,
   });
-  const imageUrl = useQuery(api.storage.getImageUrl, {
-    storageId: recentOutfit?.preview_images as Id<"_storage">,
+
+  const imageUrl = useQuery(api.outfit.preview.query.getPreviewImage, {
+    outfitId: recentOutfit?._id || undefined,
   });
 
   const onPickWardrobe = () => {
@@ -28,27 +30,29 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
     setWardrobeId(_id);
     setTitle(title);
     setOutfitId(recentOutfit?._id || null);
+    setOutfit({
+      prompt: recentOutfit?.initial_prompt,
+      isNewOutfit: recentOutfit?.is_new_outfit,
+      outfitId: recentOutfit?._id,
+    });
   };
 
   return (
     <div
       onClick={onPickWardrobe}
-      className={`p-4 border-t border-base-200 flex ${wardrobeId === _id ? "bg-base-200" : ""} hover:bg-base-200 cursor-pointer`}
+      className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
     >
       <img
-        src={imageUrl || "/assets/placeholder.png"}
+        src={imageUrl || '/assets/placeholder.png'}
         alt="Outfit Preview"
         loading="eager" // load immediately
         decoding="async" // doesn’t block rendering
-        className="w-6 h-8 object-cover rounded-xs mr-4"
+        className="border-base-300 mr-4 h-10 w-10 rounded-xs border-1 object-cover"
       />
       <div>
-        <h2 className="text-sm font-semibold">
-          {title || "Untitled Wardrobe"}
-        </h2>
+        <h2 className="text-sm font-semibold">{title || 'Untitled Wardrobe'}</h2>
         <p className="text-xs">
-          {dayjs(recentOutfit?._creationTime).format("MMM D, YYYY") ||
-            "Untitled Outfit"}
+          {dayjs(recentOutfit?._creationTime).format('MMM D, YYYY') || 'Untitled Outfit'}
         </p>
       </div>
     </div>

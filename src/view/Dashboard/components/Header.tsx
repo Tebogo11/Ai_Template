@@ -49,7 +49,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="bg-background dark:bg-darkBackground flex w-full items-start justify-between px-0 py-4">
+      <div className="flex w-full items-start justify-between px-0 py-4">
         <div className="flex items-center">
           <label htmlFor="my-drawer" className="drawer-button ml-[-5px] cursor-pointer">
             <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
@@ -80,7 +80,7 @@ const Header = () => {
         </div>
         <div className="mt-1 box-border flex cursor-pointer items-center space-x-4">
           <div
-            className="tooltip tooltip-bottom mt-[-10px] ml-5 gap-2 md:mt-0 md:flex"
+            className="tooltip tooltip-bottom md:mt-0c ml-5 flex items-center justify-center gap-2"
             data-tip={
               user?.plan === 'free'
                 ? 'Upgrade to premium for more credits'
@@ -88,14 +88,17 @@ const Header = () => {
             }
             onClick={() => setShowSubscriptionModal(true)}
           >
-            <div className="= flex items-center gap-1">
-              <h2 className="text-base-content text-[10px] font-normal md:text-xs">
+            <div className="mt-0.5 flex flex-col items-start">
+              <h2 className="text-base-content text-[8px] font-bold">
+                Available Credits:
+              </h2>
+              <h2 className="text-base-content text-[9px] font-normal md:text-xs">
                 {user?.credits} Credits Left
               </h2>
             </div>
-            <div className="text-primary-content hover:text-secondary p-0.5 hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)]">
-              <div className="bg-primary hover:bg-base-100 px-5 py-1">
-                <p className="text-sm font-semibold">
+            <div className="text-primary-content p-0.5 hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)] hover:text-[hsl(182,65%,25%)]">
+              <div className="bg-base-content hover:bg-base-100 px-2.5 py-1 md:px-5">
+                <p className="text-xs font-semibold md:text-sm">
                   {user?.plan === 'free' ? 'Upgrade' : 'Manage'}
                 </p>
               </div>
@@ -111,7 +114,7 @@ const Header = () => {
               elements: {
                 userButtonAvatarBox: 'w-30 h-30', // Custom width and height
                 userButtonPopoverCard: ' text-red-100', // Custom background for the popover card
-                userButtonPopoverActionButton: 'text-secondary', // Custom text color for action buttons
+                userButtonPopoverActionButton: 'text-primary', // Custom text color for action buttons
               },
             }}
           />

@@ -19,6 +19,8 @@ import {
   ModalImage,
   ModalCloseButton,
 } from './styles';
+import { useAppSetting } from '@/store/useAppSetting';
+import { relative } from 'path';
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
@@ -34,7 +36,6 @@ const FileInputBox: FC<ImageUploadProps> = ({
   onChange,
   value = null,
   className = '',
-  size = 'w-64 h-64',
   isSmall = false,
   idPrefix,
   isModal = false,
@@ -44,6 +45,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
   const [storageId, setStorageId] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const { theme } = useAppSetting();
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
 
   const processFile = (file: File) => {
@@ -128,18 +130,31 @@ const FileInputBox: FC<ImageUploadProps> = ({
       {!urlInput ? (
         <UploadLabel
           htmlFor={`image-upload${idPrefix}`}
-          size={size}
           isDragging={isDragging}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <UploadTitle>Upload Your Model</UploadTitle>
+          <div>
+            <img
+              src={
+                theme === 'dark'
+                  ? 'assets/form/Dark-Add-Model.png'
+                  : 'assets/form/Light-Add-Model.png'
+              }
+              alt="Default"
+              width={50}
+              height={50}
+            />
+          </div>
           <UploadText>Drag and drop model image</UploadText>
           <UploadSubtitle>
             Best results with high-resolution full-body shots on clean backgrounds.
           </UploadSubtitle>
-          <SelectFileButton as="span" onClick={(e) => e.preventDefault()}>
+          <SelectFileButton as="span" onClick={(e) => {
+            e.preventDefault();
+            document.getElementById(`image-upload${idPrefix}`)?.click();
+          }}>
             Select File
           </SelectFileButton>
           <HiddenInput
@@ -150,7 +165,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
           />
         </UploadLabel>
       ) : (
-        <PreviewBox size={size}>
+        <PreviewBox>
           <PreviewImage src={urlInput!} alt="Preview" loading="eager" decoding="async" />
           <RemoveButton type="button" onClick={handleRemove} aria-label="Remove image">
             <XMarkIcon style={{ width: 20, height: 20 }} />

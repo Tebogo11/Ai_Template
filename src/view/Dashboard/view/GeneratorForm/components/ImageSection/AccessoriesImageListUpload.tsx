@@ -1,113 +1,142 @@
-import FileInputBox from '@/components/Forms/FileInputBox';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
-import { ChangeEvent } from 'react';
+import { useRef, ChangeEvent, useState } from 'react';
+import {
+  Container,
+  UploadBox,
+  DragDropText,
+  ImageGrid,
+  ImageItem,
+  RemoveImageButton,
+  HiddenFileInput,
+  InputLabel,
+  RequiredSpan,
+  UploadText,
+  EmptyHintText,
+  EmptyHintSubtitle,
+} from './styles';
+import { useAppSetting } from '@/store/useAppSetting';
 
 const AccessoriesImageListUpload = () => {
   const { accessories, appendAccessories, removeAccessories, setAccessories } =
     useGeneratorSetting();
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadBoxRef = useRef<HTMLDivElement>(null);
 
-  const onChange = (fileUrl: string | null, index: string) => {
-    if (!fileUrl) {
-      removeAccessories(index);
-      return;
-    }
-    const isAmending = accessories.find((a) => a.id === index);
-    if (isAmending) {
-      const updatedAccessories = accessories.map((accessory) =>
-        accessory.id === index ? { ...accessory, url: fileUrl } : accessory,
-      );
-      setAccessories(updatedAccessories);
-    } else {
-      appendAccessories({ id: index, url: fileUrl });
-    }
+  const maxImages = 9;
+  const hasImages = accessories.length > 0;
+  const isFull = accessories.length >= maxImages;
+  const showUploadBox = !isFull;
+  const showDragDropText = !hasImages;
+
+  const { theme } = useAppSetting();
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    appendAccessories({
+      id: `${Date.now()}-${Math.random()}`,
+      url: imageUrl,
+    });
   };
 
-  const addMoreAccessories = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      appendAccessories({
-        id: `${accessories.length}`,
-        url: imageUrl,
-      });
-    }
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    const remaining = maxImages - accessories.length;
+    Array.from(files).slice(0, remaining).forEach(processFile);
+
+    event.target.value = '';
   };
 
-  const disableAddMore = accessories.length >= 5;
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+
+    const files = event.dataTransfer.files;
+    if (!files) return;
+
+    const remaining = maxImages - accessories.length;
+    Array.from(files).slice(0, remaining).forEach(processFile);
+  };
+
+  const handleRemoveAccessory = (id: string) => {
+    removeAccessories(id);
+  };
+
+  const handleUploadBoxClick = () => {
+    fileInputRef.current?.click();
+  };
 
   return (
     <section className="flex flex-col">
-      <h2 className="input-label m-0">
-        Upload Your Outfit to Try It On{' '}
-        <span className="text-xs font-light">(Required)</span>
-      </h2>
-      <div className="flex max-h-35 min-h-35 items-start gap-2">
-        {/* Scrollable image area */}
-        <div className="flex max-h-[100%] flex-1 items-center gap-1 overflow-x-auto overflow-y-hidden rounded-xl">
-          <FileInputBox
-            idPrefix="Accessories1"
-            size="w-23  max-h-30 min-h-30"
-            onChange={(fileUrl) => onChange(fileUrl, '0')}
-            value={accessories.find((a) => a.id === '0')?.url || ''}
-          />
-          <FileInputBox
-            idPrefix="Accessories2"
-            size="w-25  max-h-30 min-h-30"
-            onChange={(fileUrl) => onChange(fileUrl, '1')}
-            value={accessories.find((a) => a.id === '1')?.url || ''}
-          />
-          <FileInputBox
-            idPrefix="Accessories3"
-            size="w-25  max-h-30 min-h-30"
-            onChange={(fileUrl) => onChange(fileUrl, '2')}
-            value={accessories.find((a) => a.id === '2')?.url || ''}
-          />
-          <FileInputBox
-            idPrefix="Accessories3"
-            size="w-25  max-h-30 min-h-30"
-            onChange={(fileUrl) => onChange(fileUrl, '2')}
-            value={accessories.find((a) => a.id === '2')?.url || ''}
-          />
-          <FileInputBox
-            idPrefix="Accessories3"
-            size="w-25  max-h-30 min-h-30"
-            onChange={(fileUrl) => onChange(fileUrl, '2')}
-            value={accessories.find((a) => a.id === '2')?.url || ''}
-          />
-
-          {/* {accessories
-            .filter((a) => a.id !== '0' && a.id !== '1')
-            .map((accessUrl, index) => {
-              const id = `${index + 2}`;
-              return (
-                <FileInputBox
-                  key={id}
-                  idPrefix={'Accessories' + id}
-                  size="w-23  max-h-35 min-h-35"
-                  onChange={(fileUrl) => onChange(fileUrl, id)}
-                  value={accessUrl.url}
-                />
-              );
-            })} */}
-        </div>
-
-        {/* Smaller Add More button */}
-        {/* <label
-          htmlFor={`image-upload-accessories`}
-          className={`btn btn-secondary hover:bg-base-100 hover:text-secondary flex h-full max-h-25 w-20 cursor-pointer items-center justify-center rounded-xs border shadow-md ${disableAddMore ? 'opacity-40' : ''}`}
-        >
-          <h2 className="text-sm">
-            Add More <span className="text-xs">(max {accessories.length}/5)</span>
-          </h2>
-          <input
-            id="image-upload-accessories"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={() => !disableAddMore && addMoreAccessories}
-          />
-        </label> */}
-      </div>
+      <InputLabel>
+        2. Upload Your Outfit to Try It On <RequiredSpan>(Max 0-9)</RequiredSpan>
+      </InputLabel>
+      <Container
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        <UploadBox ref={uploadBoxRef} show={showUploadBox} onClick={handleUploadBoxClick}>
+          <div>
+            <img
+              src={
+                theme === 'dark'
+                  ? '/assets/form/Dark-Add-Outfit.png'
+                  : '/assets/form/Light-Add-Outfit.png'
+              }
+              alt="Default"
+              width={75}
+              height={75}
+            />
+          </div>
+          <UploadText>Click to Upload Clothing</UploadText>
+        </UploadBox>
+        <DragDropText show={showDragDropText}>
+          <EmptyHintText>Drag and drop clothing items</EmptyHintText>
+          <EmptyHintSubtitle>
+            Upload the clothing items you want to try on. You can upload up to 9 items.
+            Supported formats: JPG, PNG.
+          </EmptyHintSubtitle>
+        </DragDropText>
+        {accessories.length ? (
+          <ImageGrid>
+            {accessories.map((accessory) => (
+              <ImageItem key={accessory.id}>
+                <img src={accessory.url} alt="Outfit item" />
+                <RemoveImageButton
+                  type="button"
+                  onClick={() => handleRemoveAccessory(accessory.id)}
+                >
+                  ✕
+                </RemoveImageButton>
+              </ImageItem>
+            ))}
+          </ImageGrid>
+        ) : null}
+        <HiddenFileInput
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFileChange}
+        />
+      </Container>
     </section>
   );
 };

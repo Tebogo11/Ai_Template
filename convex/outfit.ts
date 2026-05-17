@@ -10,107 +10,109 @@ export const generateDataType = {
   is_new_outfit: v.optional(v.boolean()),
 };
 
-export const generatorOutfit = mutation({
-  args: {
-    ...generateDataType,
-    title: v.string(),
-    wardrobeId: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    const user = await ctx.auth?.getUserIdentity();
-    if (!user) throw new Error('Authentication required');
-    const normalizedPrompt = args.initial_prompt?.trim() || '';
+// export const generatorOutfit = mutation({
+//   args: {
+//     ...generateDataType,
+//     title: v.string(),
+//     wardrobeId: v.optional(v.string()),
+//   },
+//   handler: async (ctx, args) => {
+//     const user = await ctx.auth?.getUserIdentity();
+//     if (!user) throw new Error('Authentication required');
+//     const normalizedPrompt = args.initial_prompt?.trim() || '';
 
-    let finalWardrobeId = args.wardrobeId as Id<'wardrobe'>;
-    if (!finalWardrobeId) {
-      finalWardrobeId = await ctx.db.insert('wardrobe', {
-        user_id: user.subject || 'anonymous',
-        title: args.title,
-      });
-    }
+//     let finalWardrobeId = args.wardrobeId as Id<'wardrobe'>;
+//     if (!finalWardrobeId) {
+//       finalWardrobeId = await ctx.db.insert('wardrobe', {
+//         user_id: user.subject || 'anonymous',
+//         title: args.title,
+//       });
+//     }
 
-    const outfitId = await ctx.db.insert('outfit', {
-      modal: args.modal,
-      accessories: args.accessories,
-      initial_prompt: normalizedPrompt,
-      status: 'generating',
-      wardrobeId: finalWardrobeId,
-    });
+//     const outfitId = await ctx.db.insert('outfit', {
+//       modal: args.modal,
+//       accessories: args.accessories,
+//       initial_prompt: normalizedPrompt,
+//       status: 'generating',
+//       wardrobeId: finalWardrobeId,
+//     });
 
-    const { title, wardrobeId, ...rest } = args;
-    await ctx.scheduler.runAfter(0, internal.aiSystem.generatePreviewWithAI, {
-      ...rest,
-      initial_prompt: normalizedPrompt,
-      outfitId,
-    });
-    return { outfitId, wardrobeId: finalWardrobeId, title: args.title };
-  },
-});
+//     const { title, wardrobeId, ...rest } = args;
+//     await ctx.scheduler.runAfter(0, internal.aiSystem.generatePreviewWithAI, {
+//       ...rest,
+//       initial_prompt: normalizedPrompt,
+//       outfitId,
+//     });
+//     return { outfitId, wardrobeId: finalWardrobeId, title: args.title };
+//   },
+// });
 
-export const generationWentWrong = mutation({
-  args: {
-    outfitId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    await ctx.db.patch(args.outfitId as Id<'outfit'>, {
-      status: 'error',
-      error: 'Generation failed',
-    });
-  },
-});
+// export const generationWentWrong = mutation({
+//   args: {
+//     outfitId: v.string(),
+//   },
+//   handler: async (ctx, args) => {
+//     await ctx.db.patch(args.outfitId as Id<'outfit'>, {
+//       status: 'error',
+//       error: 'Generation failed',
+//     });
+//   },
+// });
 
-export const updateOutfitPreview = mutation({
-  args: {
-    outfitId: v.string(),
-    previewImageId: v.string(),
-    summary: v.string(),
-  },
-  handler: async (ctx, args) => {
-    try {
-      let title = '';
-      let summary = '';
-      console.log(
-        '[Function]: Updating outfit preview Args:',
-        args.outfitId,
-        args.previewImageId,
-        args.summary,
-      );
+// export const updateOutfitPreview = mutation({
+//   args: {
+//     outfitId: v.string(),
+//     previewImageId: v.string(),
+//     summary: v.string(),
+//   },
+//   handler: async (ctx, args) => {
+//     try {
+//       let title = '';
+//       let summary = '';
+//       console.log(
+//         '[Function]: Updating outfit preview Args:',
+//         args.outfitId,
+//         args.previewImageId,
+//         args.summary,
+//       );
 
-      if (args.summary) {
-        const [tempTitle, tempTitleDescription] = args.summary
-          .split('|')
-          .map((s) => s.trim());
+//       if (args.summary) {
+//         const [tempTitle, tempTitleDescription] = args.summary
+//           .split('|')
+//           .map((s) => s.trim());
 
-        title = tempTitle || 'Untitled Outfit';
-        summary = tempTitleDescription || args.summary;
-      }
+//         title = tempTitle || 'Untitled Outfit';
+//         summary = tempTitleDescription || args.summary;
+//       }
 
-      await ctx.db.patch(args.outfitId as Id<'outfit'>, {
-        preview_images: args.previewImageId,
-        title,
-        summary,
-        status: 'done',
-      });
-    } catch (error) {
-      console.error('[Error]: Failed to update outfit preview:', error);
-      await ctx.db.patch(args.outfitId as Id<'outfit'>, {
-        status: 'error',
-        error: error instanceof Error ? error.message : 'Unknown error occurred',
-      });
-      throw error;
-    }
-  },
-});
+//       await ctx.db.patch(args.outfitId as Id<'outfit'>, {
+//         preview_images: args.previewImageId,
+//         title,
+//         summary,
+//         status: 'done',
+//       });
+//     } catch (error) {
+//       console.error('[Error]: Failed to update outfit preview:', error);
+//       await ctx.db.patch(args.outfitId as Id<'outfit'>, {
+//         status: 'error',
+//         error: error instanceof Error ? error.message : 'Unknown error occurred',
+//       });
+//       throw error;
+//     }
+//   },
+// });
 
 // Get data URL from image URL
 export const getOutfitById = query({
   args: {
-    outfitId: v.string(),
+    outfitId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const outfitID = args.outfitId;
+    if (!outfitID) return null;
     const outfit = await ctx.db
       .query('outfit')
-      .filter((q) => q.eq(q.field('_id'), args.outfitId))
+      .filter((q) => q.eq(q.field('_id'), outfitID))
       .collect();
     return outfit[0] || null;
   },
@@ -130,59 +132,59 @@ export const getOutfitsByWardrobeId = query({
   },
 });
 
-export const getRecentOutfitByWardrobeId = query({
-  args: {
-    wardrobeId: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    if (!args.wardrobeId) return null;
-    const outfits = await ctx.db
-      .query('outfit')
-      .filter((q) => q.eq(q.field('wardrobeId'), args.wardrobeId))
-      .order('desc')
-      .take(1);
+// export const getRecentOutfitByWardrobeId = query({
+//   args: {
+//     wardrobeId: v.optional(v.string()),
+//   },
+//   handler: async (ctx, args) => {
+//     if (!args.wardrobeId) return null;
+//     const outfits = await ctx.db
+//       .query('outfit')
+//       .filter((q) => q.eq(q.field('wardrobeId'), args.wardrobeId))
+//       .order('desc')
+//       .take(1);
 
-    return outfits[0] || null;
-  },
-});
+//     return outfits[0] || null;
+//   },
+// });
 
-export const deleteOutfitById = mutation({
-  args: {
-    outfitId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    if (!args.outfitId) return null;
-    const outfit = await ctx.db
-      .query('outfit')
-      .filter((q) => q.eq(q.field('_id'), args.outfitId))
-      .take(1);
-    const currentOutfit = outfit[0];
-    if (!currentOutfit) return null;
+// export const deleteOutfitById = mutation({
+//   args: {
+//     outfitId: v.string(),
+//   },
+//   handler: async (ctx, args) => {
+//     if (!args.outfitId) return null;
+//     const outfit = await ctx.db
+//       .query('outfit')
+//       .filter((q) => q.eq(q.field('_id'), args.outfitId))
+//       .take(1);
+//     const currentOutfit = outfit[0];
+//     if (!currentOutfit) return null;
 
-    if (currentOutfit?.preview_images) {
-      await ctx.runMutation(api.storage.deleteImage, {
-        storageId: currentOutfit.preview_images,
-        outfitId: args.outfitId,
-        outfitColumnKey: 'preview_images',
-      });
-    }
-    if (currentOutfit?.modal) {
-      await ctx.runMutation(api.storage.deleteImage, {
-        storageId: currentOutfit.modal,
-        outfitId: args.outfitId,
-        outfitColumnKey: 'modal',
-      });
-    }
-    if (currentOutfit?.accessories && currentOutfit.accessories.length > 0) {
-      for (const accessory of currentOutfit.accessories) {
-        await ctx.runMutation(api.storage.deleteImage, {
-          storageId: accessory.storageId,
-          outfitId: args.outfitId,
-          outfitColumnKey: 'accessories',
-        });
-      }
-    }
+//     if (currentOutfit?.preview_images) {
+//       await ctx.runMutation(api.storage.deleteImage, {
+//         storageId: currentOutfit.preview_images,
+//         outfitId: args.outfitId,
+//         outfitColumnKey: 'preview_images',
+//       });
+//     }
+//     if (currentOutfit?.modal) {
+//       await ctx.runMutation(api.storage.deleteImage, {
+//         storageId: currentOutfit.modal,
+//         outfitId: args.outfitId,
+//         outfitColumnKey: 'modal',
+//       });
+//     }
+//     if (currentOutfit?.accessories && currentOutfit.accessories.length > 0) {
+//       for (const accessory of currentOutfit.accessories) {
+//         await ctx.runMutation(api.storage.deleteImage, {
+//           storageId: accessory.storageId,
+//           outfitId: args.outfitId,
+//           outfitColumnKey: 'accessories',
+//         });
+//       }
+//     }
 
-    return await ctx.db.delete(args.outfitId as Id<'outfit'>);
-  },
-});
+//     return await ctx.db.delete(args.outfitId as Id<'outfit'>);
+//   },
+// });

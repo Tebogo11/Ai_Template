@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import path from "path";
-import svgr from "vite-plugin-svgr";
-import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
+import svgr from 'vite-plugin-svgr';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -23,12 +23,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      view: path.resolve(__dirname, "./src/view"),
+      '@': path.resolve(__dirname, './src'),
+      '@/view': path.resolve(__dirname, './src/view'),
     },
   },
-    server: {
+  server: {
     host: true,
-    port: 5173
-  }
+    port: 5173,
+  },
 });
