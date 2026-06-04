@@ -19,6 +19,7 @@ import {
   HarmCategory,
   HarmBlockThreshold,
   Part,
+  HarmBlockMethod,
 } from '@google/genai';
 import { OUTFIT_GENERATION_PROMPT, OUTFIT_IMPROVEMENT_PROMPT } from '../const';
 
@@ -100,9 +101,14 @@ export const generateOutFitWithAI = internalAction({
           safetySettings: [
             {
               category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-              threshold: HarmBlockThreshold.OFF,
+              threshold: HarmBlockThreshold.BLOCK_NONE,
+            },
+            {
+              category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+              threshold: HarmBlockThreshold.BLOCK_NONE,
             },
           ],
+          imageConfig: { aspectRatio: '4:3' },
           responseModalities: ['TEXT', 'IMAGE'],
         },
       });
@@ -126,7 +132,11 @@ export const generateOutFitWithAI = internalAction({
             safetySettings: [
               {
                 category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold: HarmBlockThreshold.OFF,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
+              },
+              {
+                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+                threshold: HarmBlockThreshold.BLOCK_NONE,
               },
             ],
             imageConfig: { aspectRatio: '4:3' },

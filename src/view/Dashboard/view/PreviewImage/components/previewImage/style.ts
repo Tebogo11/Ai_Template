@@ -37,9 +37,8 @@ export const StyledImage = styled.img`
 
 export const EmblaCarouselContainer = styled.div`
   position: relative;
-  width: min(100%, 380px);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 238, 231, 0.94)), #fff;
+  min-width: 100%;
+
   border: 1px solid rgba(17, 17, 17, 0.08);
   border-radius: 0.5rem;
 
@@ -97,28 +96,6 @@ export const EmblaViewport = styled.div`
   border-radius: 0.95rem;
   padding: 0.4rem 0;
   cursor: grab;
-  outline: none;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 0.85rem;
-    z-index: 1;
-    pointer-events: none;
-  }
-
-  &::before {
-    left: 0;
-    background: linear-gradient(90deg, rgba(247, 243, 238, 0.96), transparent);
-  }
-
-  &::after {
-    right: 0;
-    background: linear-gradient(270deg, rgba(247, 243, 238, 0.96), transparent);
-  }
 
   &:active {
     cursor: grabbing;
@@ -129,9 +106,21 @@ export const EmblaViewport = styled.div`
   }
 `;
 
+export const TabBarContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-base-100, #fff);
+  padding: 0.25rem 0.4rem;
+  border: 2px solid rgba(30, 30, 30, 0.6);
+  box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
+  border-radius: 0.25rem;
+`;
+
 export const EmblaContainer = styled.div`
   display: flex;
-  touch-action: pan-y pinch-zoom;
   gap: 0.75rem;
   padding: 0 0;
   margin-right: 0.75rem;
@@ -139,9 +128,8 @@ export const EmblaContainer = styled.div`
 
 export const EmblaSlide = styled.div<{ $isSelected: boolean; $isFocused: boolean }>`
   flex: 0 0 auto;
-  min-width: 0;
-  width: 90px;
-  height: 116px;
+  width: fit-content;
+  height: 75svh;
   border-radius: 0.25rem;
   cursor: pointer;
   border: 1px solid
@@ -155,25 +143,10 @@ export const EmblaSlide = styled.div<{ $isSelected: boolean; $isFocused: boolean
     if ($isFocused) return '0 8px 18px rgba(17, 17, 17, 0.08)';
     return '0 8px 18px rgba(17, 17, 17, 0.08)';
   }};
-  opacity: ${({ $isSelected, $isFocused }) => {
-    if ($isSelected) return 1;
-    if ($isFocused) return 0.72;
-    return 0.72;
-  }};
-  transform: ${({ $isSelected, $isFocused }) => {
-    if ($isSelected) return 'translateY(-2px) scale(1.02)';
-    if ($isFocused) return 'translateY(0) scale(0.94)';
-    return 'translateY(0) scale(0.94)';
-  }};
-  transition:
-    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 220ms ease,
-    border-color 220ms ease,
-    opacity 180ms ease;
 
   &:hover {
     opacity: 0.96;
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-1px) scale(1.001);
   }
 `;
 

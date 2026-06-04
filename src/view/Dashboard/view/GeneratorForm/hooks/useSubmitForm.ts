@@ -2,9 +2,7 @@ import { useMutation } from 'convex/react';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import { api } from '../../../../../../convex/_generated/api';
 import { saveImagesToStorage } from './utils';
-import { GenerateDataType } from '../types';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
-import { AmountOfChangeOption } from '../components/ToggleSelect/const';
 
 const useSubmitForm = () => {
   const { modal, accessories, prompt, is_new_outfit, setOutfitId } =
@@ -44,8 +42,10 @@ const useSubmitForm = () => {
         title: newTitle,
       } = await generateOutfit(data);
       invokeToken();
-      setWardrobeId(newWardrobeId);
-      setTitle(newTitle);
+      if (!wardrobeId) {
+        setWardrobeId(newWardrobeId);
+        setTitle(newTitle);
+      }
       setOutfitId(outfitId);
     }
   };

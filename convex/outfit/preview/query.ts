@@ -21,10 +21,10 @@ export const getPreviewImage = query({
 
 // Get all preview images for a wardrobe
 export const getAllPreviewImages = query({
-  args: { wardrobeId: v.id('wardrobe') },
+  args: { wardrobeId: v.optional(v.id('wardrobe')) },
   handler: async (ctx, args) => {
     const wardrobeId = args.wardrobeId;
-
+    if (!wardrobeId) return [];
     // Get all outfits for the wardrobe
     const outfits = await ctx.db
       .query('outfit')

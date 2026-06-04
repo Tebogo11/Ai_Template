@@ -36,6 +36,7 @@ export const Container = styled.section`
   display: flex;
   min-height: min(92dvh, 920px);
   max-height: min(92dvh, 920px);
+  min-width: 320px;
   width: 100%;
   flex-direction: column;
   border: 1px solid var(--color-base-300, #d1d5db);
@@ -57,20 +58,6 @@ export const Container = styled.section`
   box-shadow:
     inset 4px 4px 8px rgb(0 0 0 / 0.25),
     inset -4px -4px 8px rgb(255 255 255 / 0.05);
-  @media (min-width: 768px) {
-    width: 66.666667%;
-  }
-
-  @media (min-width: 1024px) {
-    width: 80%;
-  }
-
-  @media (max-width: 768px) {
-    min-height: min(72dvh, 640px);
-    max-height: min(72dvh, 640px);
-    border-radius: 0.375rem;
-    padding: 1rem;
-  }
 `;
 
 export const Stage = styled.div`
@@ -222,4 +209,53 @@ export const ImageFrame = styled.div`
   justify-content: center;
   padding: clamp(0.5rem, 1.5vw, 1rem);
   overflow: auto;
+`;
+
+export const EdgeOptions = styled.div`
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    top: auto;
+    bottom: 0.65rem;
+    transform: none;
+    flex-direction: row;
+  }
+`;
+
+export const EdgeOptionButton = styled.button<{ $danger?: boolean }>`
+  border: 1px solid
+    ${({ $danger }) => ($danger ? 'rgba(220, 38, 38, 0.35)' : 'rgba(17, 17, 17, 0.2)')};
+  background: ${({ $danger }) =>
+    $danger ? 'rgba(220, 38, 38, 0.1)' : 'rgba(255, 255, 255, 0.9)'};
+  color: ${({ $danger }) => ($danger ? '#991b1b' : '#111')};
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition:
+    transform 140ms ease,
+    background 140ms ease,
+    box-shadow 140ms ease;
+
+  &:hover {
+    transform: translateX(-1px);
+    box-shadow: 0 8px 16px rgb(0 0 0 / 0.12);
+  }
+
+  @media (max-width: 768px) {
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
 `;

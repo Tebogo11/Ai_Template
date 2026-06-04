@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from 'react';
 
 type ZoomPanImageProps = {
   src: string;
@@ -14,12 +14,12 @@ type Point = { x: number; y: number };
 
 export default function ZoomPanImage({
   src,
-  alt = "",
+  alt = '',
   initialScale = 1,
   minScale = 0.5,
   maxScale = 6,
   wheelSpeed = 0.0015,
-  className = "",
+  className = '',
 }: ZoomPanImageProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -64,11 +64,7 @@ export default function ZoomPanImage({
     };
   };
 
-  const setScaleAround = (
-    nextScale: number,
-    clientX: number,
-    clientY: number,
-  ) => {
+  const setScaleAround = (nextScale: number, clientX: number, clientY: number) => {
     const c = containerRef.current;
     const img = imgRef.current;
     if (!c || !img) return;
@@ -109,10 +105,7 @@ export default function ZoomPanImage({
       // Begin pinch
       setIsPinching(true);
       const pts = Array.from(pointers.current.values());
-      pinchStartDistance.current = Math.hypot(
-        pts[0].x - pts[1].x,
-        pts[0].y - pts[1].y,
-      );
+      pinchStartDistance.current = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       pinchStartScale.current = scale;
 
       // center point at start of pinch
@@ -135,14 +128,9 @@ export default function ZoomPanImage({
       const distance = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (pinchStartDistance.current === 0) return;
 
-      const rawScale =
-        (distance / pinchStartDistance.current) * pinchStartScale.current;
+      const rawScale = (distance / pinchStartDistance.current) * pinchStartScale.current;
       const nextScale = Math.min(maxScale, Math.max(minScale, rawScale));
-      setScaleAround(
-        nextScale,
-        pinchCenterStart.current.x,
-        pinchCenterStart.current.y,
-      );
+      setScaleAround(nextScale, pinchCenterStart.current.x, pinchCenterStart.current.y);
       return;
     }
 
@@ -155,9 +143,7 @@ export default function ZoomPanImage({
     }
   };
 
-  const onPointerUpOrCancel: React.PointerEventHandler<HTMLDivElement> = (
-    e,
-  ) => {
+  const onPointerUpOrCancel: React.PointerEventHandler<HTMLDivElement> = (e) => {
     (e.target as Element).releasePointerCapture?.(e.pointerId);
     pointers.current.delete(e.pointerId);
 
@@ -197,18 +183,16 @@ export default function ZoomPanImage({
   // Keep translation clamped if container resizes
   useEffect(() => {
     const onResize = () => setTranslate((t) => clampTranslate(t));
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   return (
-    <div
-      className={`relative overflow-hidden touch-none select-none ${className} min-w-[90dvw] md:min-w-[350px]`}
-    >
+    <div className={`relative touch-none overflow-hidden select-none ${className} `}>
       {/* Interaction layer */}
       <div
         ref={containerRef}
-        className="absolute inset-0 min-h-0 min-w-[350px] touch-none cursor-grab active:cursor-grabbing"
+        className="absolute inset-0 min-h-0 min-w-[350px] cursor-grab touch-none active:cursor-grabbing"
         onWheel={handleWheel}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
@@ -223,25 +207,25 @@ export default function ZoomPanImage({
           src={src}
           alt={alt}
           draggable={false}
-          className="absolute top-1/2 left-1/2 will-change-transform pointer-events-none"
+          className="pointer-events-none top-1/2 left-1/2 will-change-transform"
           style={{
             transform: `translate(calc(-50% + ${translate.x}px), calc(-50% + ${translate.y}px)) scale(${scale})`,
-            transformOrigin: "center center",
+            transformOrigin: 'center center',
             // Smooth-ish, but not too laggy
-            transition:
-              isPanning || isPinching ? "none" : "transform 120ms ease-out",
+            transition: isPanning || isPinching ? 'none' : 'transform 120ms ease-out',
             // Make it behave like object-contain at scale=1 via CSS sizing:
-            maxWidth: "100%",
-            maxHeight: "100%",
+            minWidth: '475px',
+            maxWidth: '100%',
+            maxHeight: '100%',
           }}
         />
       </div>
 
       {/* Controls */}
-      <div className="absolute  w-full flex justify-center bottom-2 z-10  ">
+      <div className="absolute bottom-2 z-10 w-full justify-center">
         <button
           type="button"
-          className="btn bg-black/60 text-white px-3 py-2 text-sm backdrop-blur hover:bg-black/70"
+          className="btn bg-black/60 px-3 py-2 text-sm text-white backdrop-blur hover:bg-black/70"
           onClick={() => zoomBy(1 / 1.2)}
           aria-label="Zoom out"
         >
@@ -249,7 +233,7 @@ export default function ZoomPanImage({
         </button>
         <button
           type="button"
-          className="btn bg-black/60 text-white px-3 py-2 text-sm backdrop-blur hover:bg-black/70"
+          className="btn bg-black/60 px-3 py-2 text-sm text-white backdrop-blur hover:bg-black/70"
           onClick={reset}
           aria-label="Reset zoom"
         >
@@ -257,7 +241,7 @@ export default function ZoomPanImage({
         </button>
         <button
           type="button"
-          className="btn bg-black/60 text-white px-3 py-2 text-sm backdrop-blur hover:bg-black/70"
+          className="btn bg-black/60 px-3 py-2 text-sm text-white backdrop-blur hover:bg-black/70"
           onClick={() => zoomBy(1.2)}
           aria-label="Zoom in"
         >

@@ -5,6 +5,7 @@ import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import dayjs from 'dayjs';
 import useSetOutfit from '@/view/Dashboard/hooks/useSetOutfit';
+import { Link } from 'react-router';
 
 type OutfitItemsProps = {
   _id: Id<'wardrobe'>;
@@ -15,8 +16,8 @@ type OutfitItemsProps = {
 
 const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
-  const { setOutfitId } = useGeneratorSetting();
-  const { setOutfit } = useSetOutfit();
+  // const { setOutfitId } = useGeneratorSetting();
+  // const { setOutfit } = useSetOutfit();
   const recentOutfit = useQuery(api.outfit.query.getRecentOutfitByWardrobeId, {
     wardrobeId: _id,
   });
@@ -25,37 +26,40 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
     outfitId: recentOutfit?._id || undefined,
   });
 
-  const onPickWardrobe = () => {
-    // Implement wardrobe selection logic here
-    setWardrobeId(_id);
-    setTitle(title);
-    setOutfitId(recentOutfit?._id || null);
-    setOutfit({
-      prompt: recentOutfit?.initial_prompt,
-      isNewOutfit: recentOutfit?.is_new_outfit,
-      outfitId: recentOutfit?._id,
-    });
-  };
+  // const onPickWardrobe = () => {
+  //   // Implement wardrobe selection logic here
+  //   setWardrobeId(_id);
+  //   setTitle(title);
+  //   setOutfitId(recentOutfit?._id || null);
+  //   setOutfit({
+  //     prompt: recentOutfit?.initial_prompt,
+  //     isNewOutfit: recentOutfit?.is_new_outfit,
+  //     outfitId: recentOutfit?._id,
+  //   });
+  // };
 
   return (
-    <div
-      onClick={onPickWardrobe}
-      className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
-    >
-      <img
-        src={imageUrl || '/assets/placeholder.png'}
-        alt="Outfit Preview"
-        loading="eager" // load immediately
-        decoding="async" // doesn’t block rendering
-        className="border-base-300 mr-4 h-10 w-10 rounded-xs border-1 object-cover"
-      />
-      <div>
-        <h2 className="text-sm font-semibold">{title || 'Untitled Wardrobe'}</h2>
-        <p className="text-xs">
-          {dayjs(recentOutfit?._creationTime).format('MMM D, YYYY') || 'Untitled Outfit'}
-        </p>
+    <Link to={`/wardrobes/${_id}/outfits/${recentOutfit?._id || ''}`}>
+      <div
+        // onClick={onPickWardrobe}
+        className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
+      >
+        <img
+          src={imageUrl || '/assets/placeholder.png'}
+          alt="Outfit Preview"
+          loading="eager" // load immediately
+          decoding="async" // doesn’t block rendering
+          className="border-base-300 mr-4 h-10 w-10 rounded-xs border-1 object-cover"
+        />
+        <div>
+          <h2 className="text-sm font-semibold">{title || 'Untitled Wardrobe'}</h2>
+          <p className="text-xs">
+            {dayjs(recentOutfit?._creationTime).format('MMM D, YYYY') ||
+              'Untitled Outfit'}
+          </p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

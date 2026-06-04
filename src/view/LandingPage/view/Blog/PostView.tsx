@@ -1,6 +1,6 @@
-import { useParams, Link } from "react-router-dom";
-import { posts } from "./data";
-import Seo from "../components/Seo";
+import { useParams, Link } from 'react-router';
+import { posts } from './data';
+import Seo from '../components/Seo';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
@@ -8,15 +8,17 @@ export default function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="container mx-auto max-w-4xl pt-32 px-4">
-        <h1 className="text-3xl font-black mb-4">Post not found</h1>
-        <Link to="/blog" className="btn btn-primary btn-sm">Back to Blog</Link>
+      <div className="container mx-auto max-w-4xl px-4 pt-32">
+        <h1 className="mb-4 text-3xl font-black">Post not found</h1>
+        <Link to="/blog" className="btn btn-primary btn-sm">
+          Back to Blog
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="bg-base-100 min-h-screen">
       <Seo
         title={`${post.title} — Outfit AI Blog`}
         description={post.excerpt}
@@ -25,23 +27,35 @@ export default function BlogPostPage() {
         siteBase="https://o-ai.co.uk"
         type="article"
         structuredData={{
-          "@type": "BlogPosting",
+          '@type': 'BlogPosting',
           headline: post.title,
           image: post.image,
           datePublished: post.date,
-          author: { "@type": "Organization", name: "Outfit AI" },
-          keywords: post.tags.join(", "),
+          author: { '@type': 'Organization', name: 'Outfit AI' },
+          keywords: post.tags.join(', '),
         }}
       />
-      <article className="container mx-auto max-w-3xl pt-28 pb-16 px-4">
-        <Link to="/blog" className="link link-primary">← Back to Blog</Link>
-        <h1 className="text-4xl md:text-5xl font-black mt-4 mb-4">{post.title}</h1>
-        <div className="text-sm opacity-60 mb-6">{new Date(post.date).toDateString()}</div>
-        <img src={post.image} alt={post.title} className="w-full rounded-lg shadow mb-8" />
-        <p className="text-lg leading-8 text-base-content/80 whitespace-pre-line">{post.content}</p>
-        <div className="mt-8 flex gap-2 flex-wrap">
+      <article className="container mx-auto max-w-3xl px-4 pt-28 pb-16">
+        <Link to="/blog" className="link link-primary">
+          ← Back to Blog
+        </Link>
+        <h1 className="mt-4 mb-4 text-4xl font-black md:text-5xl">{post.title}</h1>
+        <div className="mb-6 text-sm opacity-60">
+          {new Date(post.date).toDateString()}
+        </div>
+        <img
+          src={post.image}
+          alt={post.title}
+          className="mb-8 w-full rounded-lg shadow"
+        />
+        <p className="text-base-content/80 text-lg leading-8 whitespace-pre-line">
+          {post.content}
+        </p>
+        <div className="mt-8 flex flex-wrap gap-2">
           {post.tags.map((t) => (
-            <span key={t} className="badge badge-outline">{t}</span>
+            <span key={t} className="badge badge-outline">
+              {t}
+            </span>
           ))}
         </div>
       </article>

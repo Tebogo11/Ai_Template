@@ -111,3 +111,21 @@ export const getFormImages = mutation({
     return { modelFinal, accessories: accessoriesWithUrls.reverse() };
   },
 });
+
+export const getOutfitDetailsForEdit = mutation({
+  args: { outfitId: v.id('outfit') },
+  handler: async (ctx, args) => {
+    const outfit = await ctx.db.get(args.outfitId);
+    if (!outfit) throw new Error('Outfit not found');
+    const model = await ctx.db
+      .query('model')
+      .filter((q) => q.eq(q.field('outfitId'), args.outfitId))
+      .first();
+    const accessories = await ctx.db
+      .query('accessories')
+
+      .filter((q) => q.eq(q.field('outfitId'), args.outfitId))
+      .collect();
+    return { outfit, model, accessories };
+  },
+});

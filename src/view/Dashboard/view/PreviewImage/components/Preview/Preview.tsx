@@ -14,9 +14,9 @@ type PreviewProps = {
 
 const Preview: React.FC<PreviewProps> = ({ imageUrl, outfit, outfits }) => {
   return (
-    <div className="relative flex h-full max-h-full flex-col justify-between rounded-xs">
+    <div className="flex h-full max-h-full flex-col justify-between rounded-xs">
       {/* Image area */}
-      <div className="relative min-h-[300px] flex-1 rounded bg-neutral-900">
+      <div className="min-h-[300px] flex-1 rounded bg-neutral-900">
         <PreviewHeader outfits={outfits} />
         {imageUrl ? (
           <ZoomPanImage

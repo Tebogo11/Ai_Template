@@ -2,6 +2,7 @@ import Header from '../components/Header';
 import PreviewImage from './PreviewImage/PreviewImage';
 import GeneratorForm from './GeneratorForm';
 import useGetValues from '../hooks/useGetValues';
+import Routes from './Routes';
 
 const MainContent = () => {
   // useGetValues();
@@ -11,10 +12,7 @@ const MainContent = () => {
         <div className="h-[8svh] px-5">
           <Header />
         </div>
-        <div className="h-vh flex justify-center gap-5 pl-5 lg:pl-10">
-          <GeneratorForm />
-          <PreviewImage />
-        </div>
+        <Routes />
       </div>
       <dialog id="my_modal_1" className="modal">
         <div className="modal-box">
