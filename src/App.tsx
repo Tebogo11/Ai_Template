@@ -1,9 +1,9 @@
 import { Authenticated, Unauthenticated } from 'convex/react';
-import Dashboard from './view/Dashboard';
 import { useEffect } from 'react';
 import { useAppSetting } from './store/useAppSetting';
 import { themeChange } from 'theme-change';
 import LandingPage from './view/LandingPage';
+import Routes from './view/Dashboard/Routes';
 
 export default function App() {
   const { theme } = useAppSetting();
@@ -20,7 +20,7 @@ export default function App() {
     >
       <main data-theme={theme} className="bg-base-100 flex-1 overflow-auto">
         <Authenticated>
-          <Dashboard />
+          <Routes />
         </Authenticated>
         <Unauthenticated>
           <LandingPage />

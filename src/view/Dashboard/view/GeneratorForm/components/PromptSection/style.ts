@@ -79,7 +79,7 @@ export const Textarea = styled.textarea<{ hasImage: boolean }>`
 export const SubmitButton = styled.button<{ isDisabled: boolean; isGenerating: boolean }>`
   position: absolute;
   right: 5px;
-  bottom: 10px;
+  bottom: 12px;
   padding: 0.375rem 0.75rem;
   background-color: var(--color-primary, #6366f1);
   color: var(--color-primary-content, #ffffff);

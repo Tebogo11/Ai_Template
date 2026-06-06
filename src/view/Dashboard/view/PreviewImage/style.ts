@@ -34,8 +34,8 @@ const float = keyframes`
 export const Container = styled.section`
   position: relative;
   display: flex;
-  min-height: min(92dvh, 920px);
-  max-height: min(92dvh, 920px);
+  min-height: 90svh;
+  max-height: 90svh;
   min-width: 320px;
   width: 100%;
   flex-direction: column;
@@ -43,6 +43,7 @@ export const Container = styled.section`
   border-radius: 0.275rem 0 0 0;
 
   padding: 1.25rem;
+  padding-top: 0;
   background: hsl(0deg 0% 100%);
 
   overflow: hidden;
@@ -90,7 +91,7 @@ export const StateCard = styled.div<StateCardProps>`
   padding: clamp(1.5rem, 3vw, 2.5rem);
   text-align: center;
   overflow: hidden;
-
+  margin-top: 2.5rem;
   ${({ $variant }) =>
     $variant === 'loading' &&
     css`

@@ -5,7 +5,7 @@ import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import dayjs from 'dayjs';
 import useSetOutfit from '@/view/Dashboard/hooks/useSetOutfit';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 
 type OutfitItemsProps = {
   _id: Id<'wardrobe'>;
@@ -15,7 +15,7 @@ type OutfitItemsProps = {
 };
 
 const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
-  const { setWardrobeId, setTitle, wardrobeId } = useWardrobeStore();
+  const { wardrobeId } = useParams<{ wardrobeId?: string }>();
   // const { setOutfitId } = useGeneratorSetting();
   // const { setOutfit } = useSetOutfit();
   const recentOutfit = useQuery(api.outfit.query.getRecentOutfitByWardrobeId, {
@@ -39,7 +39,7 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   // };
 
   return (
-    <Link to={`/wardrobes/${_id}/outfits/${recentOutfit?._id || ''}`}>
+    <Link to={`/wardrobe/${_id}/outfit/${recentOutfit?._id}`} className="block">
       <div
         // onClick={onPickWardrobe}
         className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}

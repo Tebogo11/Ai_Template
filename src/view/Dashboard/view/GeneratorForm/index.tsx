@@ -10,22 +10,26 @@ import {
   ChevronIcon,
 } from './styles';
 import AccessoriesImageListUpload from './components/ImageSection/AccessoriesImageListUpload';
-import { ChevronLeft } from 'lucide-react';
 import { useState } from 'react';
+import useSetFormValues from './hooks/useSetFormValues';
 
 const GeneratorForm = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  useSetFormValues();
   return (
     <FormContainer isDrawerOpen={isDrawerOpen}>
-      <ScrollableContent>
-        <ImageSection />
-        <IsNewOutput />
-        <AccessoriesImageListUpload />
-      </ScrollableContent>
-      <PromptWrapper>
-        <PromptSection />
-      </PromptWrapper>
+      {isDrawerOpen && (
+        <>
+          <ScrollableContent>
+            <ImageSection />
+            <IsNewOutput />
+            <AccessoriesImageListUpload />
+          </ScrollableContent>
+          <PromptWrapper>
+            <PromptSection />
+          </PromptWrapper>
+        </>
+      )}
       <DrawerTriggerContainer
         isDrawerOpen={isDrawerOpen}
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}

@@ -1,33 +1,30 @@
 import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
-import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { UserButton } from '@clerk/clerk-react';
-
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import { useState } from 'react';
 import { Bars3BottomLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useAppSetting } from '@/store/useAppSetting';
+import { useParams } from 'react-router';
 
 const Header = () => {
+  const { wardrobeId } = useParams();
+
+  const wardrobe = useQuery(
+    api.wardrobe.query.getWardrobeById,
+    wardrobeId ? ({ wardrobeId: wardrobeId } as any) : 'skip',
+  );
+
   const [isDeleting, setIsDeleting] = useState(false);
-  const { title, setTitle, wardrobeId, setWardrobeId } = useWardrobeStore();
   const { setShowSubscriptionModal } = useAppSetting();
   const { setOutfitId } = useGeneratorSetting();
 
   const user = useQuery(api.user.getters.getUser);
   const changeTitle = useMutation(api.wardrobe.changeTitle);
-  const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
-
-  const onChangeTitle = () => {
-    if (wardrobeId) {
-      changeTitle({ title, wardrobeId });
-    }
-  };
+  // const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
 
   const onCreateNewWardrobe = () => {
-    setWardrobeId('');
-    setTitle('');
     setOutfitId(null);
   };
 
@@ -36,9 +33,9 @@ const Header = () => {
     setIsDeleting(true);
     try {
       if (wardrobeId) {
-        await deleteWardrobe({ wardrobeId });
+        // await deleteWardrobe({ wardrobeId });
       }
-      onCreateNewWardrobe();
+      onCreateNewWardrobe(); // Delete
     } catch (error) {
       console.error('Error deleting wardrobe:', error);
       setIsDeleting(false);
@@ -63,10 +60,14 @@ const Header = () => {
             <input
               type="search"
               placeholder="Untitled wardrobe"
-              value={title}
+              value={wardrobeId ? wardrobe?.title : ''}
               className="max-w-33"
-              onBlur={onChangeTitle}
-              onChange={(e) => setTitle(e.target.value || 'Untitled wardrobe')}
+              onChange={(e) =>
+                changeTitle({
+                  title: e.target.value || 'Untitled wardrobe',
+                  wardrobeId: wardrobeId!,
+                })
+              }
             />
           </label>
           {wardrobeId && (

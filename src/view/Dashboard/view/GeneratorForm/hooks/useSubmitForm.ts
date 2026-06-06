@@ -3,11 +3,14 @@ import { useGeneratorSetting } from '@/store/useGeneratorData';
 import { api } from '../../../../../../convex/_generated/api';
 import { saveImagesToStorage } from './utils';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
+import { useNavigate, useParams } from 'react-router';
 
 const useSubmitForm = () => {
-  const { modal, accessories, prompt, is_new_outfit, setOutfitId } =
-    useGeneratorSetting();
-  const { title, setTitle, setWardrobeId, wardrobeId } = useWardrobeStore();
+  const { wardrobeId } = useParams<{ wardrobeId: string }>();
+  const { modal, accessories, prompt, is_new_outfit } = useGeneratorSetting();
+
+  const { title } = useWardrobeStore();
+  const navigate = useNavigate();
 
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
   const generateOutfit = useMutation(api.generator.mutation.generateOutfit);
@@ -36,17 +39,9 @@ const useSubmitForm = () => {
       };
 
       console.log('Submitting with data:', data);
-      const {
-        outfitId,
-        wardrobeId: newWardrobeId,
-        title: newTitle,
-      } = await generateOutfit(data);
+      const { outfitId, wardrobeId: newWardrobeId } = await generateOutfit(data);
       invokeToken();
-      if (!wardrobeId) {
-        setWardrobeId(newWardrobeId);
-        setTitle(newTitle);
-      }
-      setOutfitId(outfitId);
+      navigate(`/wardrobe/${newWardrobeId}/outfit/${outfitId}`);
     }
   };
   return { onSubmit };

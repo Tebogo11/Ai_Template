@@ -1,18 +1,16 @@
 import Flex from '@/components/Core/Flex';
 import { useAppSetting } from '@/store/useAppSetting';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { useGeneratorSetting } from '@/store/useGeneratorData';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { usePaginatedQuery } from 'convex/react';
 import { useEffect, useRef } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import OutfitItems from './OutfitItems';
 import useSetOutfit from '../../hooks/useSetOutfit';
+import { Link, useNavigate } from 'react-router';
 
 const SideBar = () => {
-  const { setWardrobeId, setTitle } = useWardrobeStore();
   const { theme } = useAppSetting();
-  const { clearOutfit } = useSetOutfit();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const isLoadingMoreRef = useRef(false);
 
@@ -22,6 +20,7 @@ const SideBar = () => {
     { initialNumItems: 10 },
   );
 
+  const navigate = useNavigate();
   useEffect(() => {
     if (status !== 'LoadingMore') {
       isLoadingMoreRef.current = false;
@@ -30,9 +29,7 @@ const SideBar = () => {
 
   const onCreateNewWardrobe = () => {
     // Logic to create a new wardrobe
-    setWardrobeId('');
-    setTitle('');
-    clearOutfit();
+    navigate('/');
   };
 
   const onScrollWardrobes = () => {
@@ -74,7 +71,7 @@ const SideBar = () => {
               Outfit
             </h1>
           </Flex>
-          <div>
+          <Link to="/" className="btn btn-sm btn-neutral h-8 w-8 rounded-sm p-1">
             <label
               htmlFor="my-drawer"
               aria-label="close sidebar"
@@ -83,7 +80,7 @@ const SideBar = () => {
             >
               <PlusIcon className="h-10 w-10" />
             </label>
-          </div>
+          </Link>
         </Flex>
         <div className="mt-13.5">
           <p className="text-base-content mb-2 text-right text-xs opacity-40">

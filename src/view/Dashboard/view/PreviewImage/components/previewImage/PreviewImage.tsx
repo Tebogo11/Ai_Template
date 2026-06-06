@@ -1,23 +1,21 @@
 import React from 'react';
 import {
   PreviewThumbImage,
-  EmblaViewport,
-  EmblaContainer,
-  EmblaSlide,
-  EmblaCarouselContainer,
-  EmblaControls,
-  EmblaNavButton,
-  EmblaMeta,
-  EmblaCounter,
+  PreviewCarouselArrowButton,
+  PreviewCarouselContainer,
+  PreviewCarouselCounter,
+  PreviewCarouselFrame,
+  PreviewCarouselMeta,
+  PreviewCarouselTrack,
+  PreviewCarouselViewport,
   TabBarContainer,
 } from './style';
-import { useMutation, useQuery } from 'convex/react';
+import { useQuery } from 'convex/react';
 import { api } from '../../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../../convex/_generated/dataModel';
-import useEmblaCarousel from 'embla-carousel-react';
-import { EmblaOptionsType } from 'embla-carousel';
-import useSetOutfit from '@/view/Dashboard/hooks/useSetOutfit';
-import { useGeneratorSetting } from '@/store/useGeneratorData';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router';
+import ActionSection from './ActionSection';
 
 type PreviewImageProps = {
   wardrobeId?: string | null;
@@ -25,249 +23,117 @@ type PreviewImageProps = {
   outfitStatus?: string | null;
 };
 
-const carouselOptions: EmblaOptionsType = {
-  align: 'start',
-  containScroll: 'trimSnaps',
-  dragFree: false,
-  skipSnaps: false,
-  slidesToScroll: 'auto',
-};
-
 const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
   wardrobeId,
   currentOutfitId,
-  outfitStatus,
 }) => {
+  const navigate = useNavigate();
   const otherOutfitList =
     useQuery(api.outfit.preview.query.getAllPreviewImages, {
       wardrobeId: wardrobeId ? (wardrobeId as Id<'wardrobe'>) : undefined,
     }) || [];
-  const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
-  const wheelDeltaRef = React.useRef(0);
-  const userInitiatedSelectionRef = React.useRef(false);
 
-  const { setOutfitId } = useGeneratorSetting();
-  const { setOutfit } = useSetOutfit();
-  const getOutfit = useMutation(api.outfit.mutation.getOutfitDetailsForEdit);
+  const totalSlides = otherOutfitList.length;
+  const selectedIndex = React.useMemo(() => {
+    if (!otherOutfitList.length || !currentOutfitId) {
+      return 0;
+    }
 
-  const onSelect = React.useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  const selectedOutfitIndex = React.useMemo(() => {
-    if (!otherOutfitList || !currentOutfitId) return -1;
-
-    return otherOutfitList.findIndex(
+    const matchedIndex = otherOutfitList.findIndex(
       (outfit) => String(outfit.outfitId) === String(currentOutfitId),
     );
-  }, [otherOutfitList, currentOutfitId]);
 
-  React.useEffect(() => {
-    if (!emblaApi) return;
-    onSelect();
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    return matchedIndex >= 0 ? matchedIndex : 0;
+  }, [currentOutfitId, otherOutfitList]);
 
-    return () => {
-      emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
-    };
-  }, [emblaApi, onSelect]);
+  const navigateToIndex = (nextIndex: number) => {
+    const selectedOutfit = otherOutfitList[nextIndex];
 
-  React.useEffect(() => {
-    onSelect();
-  }, [emblaApi, onSelect]);
-
-  React.useEffect(() => {
-    if (outfitStatus !== 'done') return;
-    if (!userInitiatedSelectionRef.current) return;
-
-    const visibleOutfit = otherOutfitList?.[selectedIndex];
-    if (!visibleOutfit?.outfitId) return;
-    if (String(visibleOutfit.outfitId) === String(currentOutfitId)) return;
-
-    let cancelled = false;
-
-    const syncVisibleOutfit = async () => {
-      if (!visibleOutfit.outfitId) return;
-      const newSelectedOutfit = await getOutfit({
-        outfitId: visibleOutfit.outfitId as Id<'outfit'>,
-      });
-
-      if (cancelled) return;
-
-      setOutfitId(newSelectedOutfit.outfit?._id || null);
-      setOutfit({
-        prompt: newSelectedOutfit.outfit?.initial_prompt,
-        isNewOutfit: newSelectedOutfit.outfit?.is_new_outfit,
-        outfitId: newSelectedOutfit.outfit?._id,
-      });
-    };
-
-    void syncVisibleOutfit();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    currentOutfitId,
-    getOutfit,
-    otherOutfitList,
-    selectedIndex,
-    setOutfit,
-    setOutfitId,
-    outfitStatus,
-  ]);
-
-  React.useEffect(() => {
-    return () => {
-      wheelDeltaRef.current = 0;
-    };
-  }, []);
-
-  const goToPrev = () => emblaApi?.scrollPrev();
-  const goToNext = () => emblaApi?.scrollNext();
-  const totalSlides = otherOutfitList?.length ?? 0;
-  const activeIndex = selectedIndex;
-  const selectedPreviewIndex =
-    selectedOutfitIndex >= 0 ? selectedOutfitIndex : selectedIndex;
-
-  const handleViewportWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    if (!emblaApi) return;
-
-    const dominantDelta =
-      Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-
-    if (Math.abs(dominantDelta) < 6) return;
-
-    event.preventDefault();
-    userInitiatedSelectionRef.current = true;
-    wheelDeltaRef.current += dominantDelta;
-
-    if (wheelDeltaRef.current >= 32) {
-      emblaApi.scrollNext();
-      wheelDeltaRef.current = 0;
+    if (!wardrobeId || !selectedOutfit?.outfitId) {
+      return;
     }
 
-    if (wheelDeltaRef.current <= -32) {
-      emblaApi.scrollPrev();
-      wheelDeltaRef.current = 0;
-    }
+    navigate(`/wardrobe/${wardrobeId}/outfit/${selectedOutfit.outfitId}`);
   };
 
-  const handleViewportKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!emblaApi) return;
+  const goToPrev = () => {
+    if (totalSlides <= 1) return;
+    navigateToIndex((selectedIndex - 1 + totalSlides) % totalSlides);
+  };
 
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      userInitiatedSelectionRef.current = true;
-      emblaApi.scrollPrev();
-    }
-
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      userInitiatedSelectionRef.current = true;
-      emblaApi.scrollNext();
-    }
-
-    if (event.key === 'Home') {
-      event.preventDefault();
-      userInitiatedSelectionRef.current = true;
-      emblaApi.scrollTo(0);
-    }
-
-    if (event.key === 'End' && totalSlides > 0) {
-      event.preventDefault();
-      userInitiatedSelectionRef.current = true;
-      emblaApi.scrollTo(totalSlides - 1);
-    }
+  const goToNext = () => {
+    if (totalSlides <= 1) return;
+    navigateToIndex((selectedIndex + 1) % totalSlides);
   };
 
   if (!otherOutfitList || otherOutfitList.length === 0) {
     return null;
   }
   return (
-    <EmblaCarouselContainer>
-      <EmblaMeta>
+    <PreviewCarouselContainer>
+      <PreviewCarouselMeta>
         <TabBarContainer>
-          <EmblaCounter>
-            <h3 className="text-base-content text-xs font-black">
-              Outfits {selectedPreviewIndex + 1} / {totalSlides}
-            </h3>
-          </EmblaCounter>
-          <EmblaControls>
-            <EmblaNavButton
-              onClick={() => {
-                userInitiatedSelectionRef.current = true;
-                goToPrev();
-              }}
-              disabled={!canScrollPrev}
-            >
-              Prev
-            </EmblaNavButton>
-            <EmblaNavButton
-              onClick={() => {
-                userInitiatedSelectionRef.current = true;
-                goToNext();
-              }}
-              disabled={!canScrollNext}
-            >
-              Next
-            </EmblaNavButton>
-          </EmblaControls>
+          <PreviewCarouselCounter>
+            <h3 className="text-base-content text-xs font-black">Outfits</h3>
+            <div className="flex items-center gap-4">
+              {totalSlides > 1 && (
+                <h3 className="text-base-content text-xs font-black">
+                  {selectedIndex + 1} / {totalSlides}
+                </h3>
+              )}
+              <ActionSection />
+            </div>
+          </PreviewCarouselCounter>
         </TabBarContainer>
-      </EmblaMeta>
+      </PreviewCarouselMeta>
 
-      <EmblaViewport
-        ref={emblaRef}
+      <PreviewCarouselViewport
         tabIndex={0}
         role="group"
-        aria-label="Outfit preview carousel"
-        onWheel={handleViewportWheel}
-        onKeyDown={handleViewportKeyDown}
-        className="embla"
+        aria-label="Outfit preview viewer"
       >
-        <EmblaContainer className="embla__container">
+        <PreviewCarouselTrack
+          style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
+        >
           {otherOutfitList.map((outfit, index) => {
-            const isSelectedSlide = selectedPreviewIndex === index;
-            const isFocusedSlide = activeIndex === index;
-
             return (
-              <div
-                className="flex h-full min-w-full items-center justify-center px-5"
+              <PreviewCarouselFrame
                 key={outfit.outfitId}
+                aria-label={`Preview ${index + 1}`}
               >
-                <EmblaSlide
-                  key={outfit.outfitId}
-                  $isSelected={isSelectedSlide}
-                  $isFocused={isFocusedSlide}
-                  className="embla__slide"
-                  onClick={() => {
-                    userInitiatedSelectionRef.current = true;
-                    emblaApi?.scrollTo(index);
-                  }}
-                  aria-label={`Preview ${index + 1}`}
-                  aria-current={isSelectedSlide ? 'true' : undefined}
-                >
-                  <PreviewThumbImage
-                    $isSelected={isSelectedSlide}
-                    $isFocused={isFocusedSlide}
-                    src={outfit.imageUrl ?? ''}
-                    alt="Other outfit preview"
-                  />
-                </EmblaSlide>
-              </div>
+                <PreviewThumbImage
+                  src={outfit.imageUrl ?? ''}
+                  alt="Other outfit preview"
+                />
+              </PreviewCarouselFrame>
             );
           })}
-        </EmblaContainer>
-      </EmblaViewport>
-    </EmblaCarouselContainer>
+        </PreviewCarouselTrack>
+        {totalSlides > 1 && (
+          <>
+            <PreviewCarouselArrowButton
+              type="button"
+              aria-label="Previous image"
+              $side="left"
+              onClick={goToPrev}
+              disabled={totalSlides <= 1}
+            >
+              <ChevronLeftIcon className="h-5 w-5 text-white" />
+            </PreviewCarouselArrowButton>
+
+            <PreviewCarouselArrowButton
+              type="button"
+              aria-label="Next image"
+              $side="right"
+              onClick={goToNext}
+              disabled={totalSlides <= 1}
+            >
+              <ChevronRightIcon className="h-5 w-5 text-white" />
+            </PreviewCarouselArrowButton>
+          </>
+        )}
+      </PreviewCarouselViewport>
+    </PreviewCarouselContainer>
   );
 };
 

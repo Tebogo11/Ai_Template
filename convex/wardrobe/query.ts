@@ -2,6 +2,15 @@ import { paginationOptsValidator } from 'convex/server';
 import { query } from '../_generated/server';
 import { v } from 'convex/values';
 
+export const getWardrobeById = query({
+  args: { wardrobeId: v.id('wardrobe') },
+  handler: async (ctx, args) => {
+    const wardrobe = await ctx.db.get(args.wardrobeId);
+    if (!wardrobe) throw new Error('Wardrobe not found');
+    return wardrobe;
+  },
+});
+
 export const getAllWardrobesByUserId = query({
   args: { paginationOpts: paginationOptsValidator },
   handler: async (ctx, args) => {
@@ -17,7 +26,7 @@ export const getAllWardrobesByUserId = query({
 });
 
 export const isEmptyWardrobe = query({
-  args: { wardrobeId: v.union(v.string(), v.null()) },
+  args: { wardrobeId: v.optional(v.string()) },
   handler: async (ctx, args) => {
     if (!args.wardrobeId) return true; // Consider a non-existent wardrobe as empty
     const outfits = await ctx.db

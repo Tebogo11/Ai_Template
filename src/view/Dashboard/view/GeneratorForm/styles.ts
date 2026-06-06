@@ -5,7 +5,7 @@ type FormContainerProps = {
   isDrawerOpen: boolean;
 };
 export const FormContainer = styled.div<FormContainerProps>`
-  display: ${({ isDrawerOpen }) => (isDrawerOpen ? 'none' : 'flex')};
+  display: flex;
   height: 92svh;
   width: clamp(375px, 90vw, 450px);
   max-width: 450px;
@@ -20,9 +20,10 @@ export const FormContainer = styled.div<FormContainerProps>`
     padding-left: 1.25rem;
     z-index: 10;
     background: var(--color-base-100, #f9fafb);
-    display: flex;
+
     box-shadow: 2px 12px 12px 0px rgba(0, 0, 0, 0.2);
-    min-width: 355px;
+    width: ${({ isDrawerOpen }) => (isDrawerOpen ? 'calc(100vw - 40px)' : '40px')};
+    min-width: ${({ isDrawerOpen }) => (isDrawerOpen ? '355px' : '40px')};
   }
 `;
 
@@ -47,17 +48,19 @@ export const DrawerTriggerContainer = styled.div<DrawerTriggerContainerProps>`
   place-items: center;
   position: absolute;
   width: 40px;
-  height: 40px;
+  height: 50px;
   background: var(--color-base-100, #f9fafb);
   left: 100%;
+  top: 40%;
   box-shadow: 8px 8px 10px 0.34px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
   @media (min-width: 992px) {
     display: none;
   }
 `;
 
 export const ChevronIcon = styled(ChevronLeft)<{ isDrawerOpen: boolean }>`
-  transform: ${({ isDrawerOpen }) => (isDrawerOpen ? 'rotate(180deg)' : 'none')};
+  transform: ${({ isDrawerOpen }) => (!isDrawerOpen ? 'rotate(180deg)' : 'none')};
 `;
