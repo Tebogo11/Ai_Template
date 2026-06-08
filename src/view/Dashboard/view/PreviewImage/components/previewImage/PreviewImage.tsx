@@ -13,9 +13,10 @@ import {
 import { useQuery } from 'convex/react';
 import { api } from '../../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../../convex/_generated/dataModel';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router';
 import ActionSection from './ActionSection';
+import { motion, Variants } from 'framer-motion';
+import { useGeneratorSetting } from '@/store/useGeneratorData';
 
 type PreviewImageProps = {
   wardrobeId?: string | null;
@@ -23,10 +24,38 @@ type PreviewImageProps = {
   outfitStatus?: string | null;
 };
 
+const arrowButtonVariant: Variants = {
+  animate: {
+    x: 0,
+
+    transition: { type: 'spring', duration: 1.3, ease: 'easeOut', bounce: 0.4 },
+  },
+};
+
+const arrowInteractionTransition = {
+  type: 'spring' as const,
+  duration: 0.8,
+  stiffness: 150,
+  ease: 'easeIn' as const,
+  bounce: 0.4,
+};
+
+const getArrowWhileHover = (xDirection: 1 | -1) => ({
+  scale: 1.01,
+  x: 5 * xDirection,
+  transition: arrowInteractionTransition,
+});
+
+const getArrowWhileTap = (xDirection: 1 | -1) => ({
+  scale: [0.95, 1.01],
+  x: 10 * xDirection,
+  transition: arrowInteractionTransition,
+});
 const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
   wardrobeId,
   currentOutfitId,
 }) => {
+  const { setModal } = useGeneratorSetting();
   const navigate = useNavigate();
   const otherOutfitList =
     useQuery(api.outfit.preview.query.getAllPreviewImages, {
@@ -66,6 +95,16 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
     navigateToIndex((selectedIndex + 1) % totalSlides);
   };
 
+  const addModal = () => {
+    setModal(otherOutfitList[selectedIndex].imageUrl ?? '');
+  };
+
+  const downloadImage = () => {};
+
+  const fullView = () => {};
+
+  const deleteOutfit = () => {};
+
   if (!otherOutfitList || otherOutfitList.length === 0) {
     return null;
   }
@@ -74,14 +113,21 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
       <PreviewCarouselMeta>
         <TabBarContainer>
           <PreviewCarouselCounter>
-            <h3 className="text-base-content text-xs font-black">Outfits</h3>
+            <h3 className="text-base-content text-xs font-black">
+              {totalSlides > 1 ? 'Outfits' : 'Outfit'}
+            </h3>
             <div className="flex items-center gap-4">
               {totalSlides > 1 && (
                 <h3 className="text-base-content text-xs font-black">
                   {selectedIndex + 1} / {totalSlides}
                 </h3>
               )}
-              <ActionSection />
+              <ActionSection
+                addModal={addModal}
+                downloadImage={downloadImage}
+                fullView={fullView}
+                deleteOutfit={deleteOutfit}
+              />
             </div>
           </PreviewCarouselCounter>
         </TabBarContainer>
@@ -117,8 +163,26 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
               $side="left"
               onClick={goToPrev}
               disabled={totalSlides <= 1}
+              animate="animate"
+              initial={{ x: 20 }}
+              variants={arrowButtonVariant}
+              whileHover={getArrowWhileHover(-1)}
+              whileTap={getArrowWhileTap(-1)}
             >
-              <ChevronLeftIcon className="h-5 w-5 text-white" />
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className="size-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                />
+              </motion.svg>
             </PreviewCarouselArrowButton>
 
             <PreviewCarouselArrowButton
@@ -127,8 +191,26 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
               $side="right"
               onClick={goToNext}
               disabled={totalSlides <= 1}
+              animate="animate"
+              initial={{ x: -20 }}
+              variants={arrowButtonVariant}
+              whileHover={getArrowWhileHover(1)}
+              whileTap={getArrowWhileTap(1)}
             >
-              <ChevronRightIcon className="h-5 w-5 text-white" />
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className="size-5"
+              >
+                <motion.path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+              </motion.svg>
             </PreviewCarouselArrowButton>
           </>
         )}

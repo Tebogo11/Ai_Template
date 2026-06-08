@@ -1,27 +1,5 @@
-import styled, { keyframes } from 'styled-components';
-
-const revealUp = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const progressPulse = keyframes`
-  0%,
-  100% {
-    filter: saturate(100%);
-  }
-
-  50% {
-    filter: saturate(128%);
-  }
-`;
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const PreviewCarouselContainer = styled.div`
   position: relative;
@@ -33,7 +11,10 @@ export const PreviewCarouselContainer = styled.div`
   flex-direction: column;
   gap: 0.75rem;
   min-height: 180px;
-  animation: ${revealUp} 260ms ease;
+
+  @media (max-width: 992px) {
+    padding-left: 1rem;
+  }
 `;
 
 export const PreviewCarouselMeta = styled.div`
@@ -85,7 +66,7 @@ export const PreviewCarouselTrack = styled.div`
   transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
 `;
 
-export const PreviewCarouselFrame = styled.div`
+export const PreviewCarouselFrame = styled(motion.div)`
   flex: 0 0 100%;
   min-width: 100%;
   height: min(75svh, 780px);
@@ -102,29 +83,28 @@ export const PreviewThumbImage = styled.img`
   border-radius: inherit;
 `;
 
-export const PreviewCarouselArrowButton = styled.button<{ $side: 'left' | 'right' }>`
+export const PreviewCarouselArrowButton = styled(motion.button)<{
+  $side: 'left' | 'right';
+}>`
   position: absolute;
   top: 50%;
-  ${({ $side }) => ($side === 'left' ? 'left: 0.75rem;' : 'right: 0.75rem;')}
   transform: translateY(-50%);
+  ${({ $side }) => ($side === 'left' ? 'left: 0.75rem;' : 'right: 0.75rem;')}
+
   width: 3.25rem;
   height: 3.25rem;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(0, 0, 0, 0.45);
   color: #fff;
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
+
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
 
   &:hover:not(:disabled) {
     background: rgba(0, 0, 0, 0.6);
-    transform: translateY(-50%) scale(1.04);
   }
 
   &:disabled {
@@ -141,7 +121,7 @@ export const ActionContainer = styled.div`
   justify-content: space-around;
 `;
 
-export const ActionItem = styled.div`
+export const ActionItem = styled(motion.button)`
   color: var(--color-base-content, #000);
   border: 3px solid var(--color-base-content, #0000);
   background: var(--color-base-100, #fff);
@@ -150,7 +130,7 @@ export const ActionItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 0.15rem;
+
   cursor: pointer;
   box-shadow: 4px 12px rgba(17, 17, 17, 0.08);
 `;

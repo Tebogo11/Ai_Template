@@ -1,12 +1,9 @@
 import { useGeneratorSetting } from '@/store/useGeneratorData';
-import { EyeIcon } from '@heroicons/react/24/outline';
 import React, { useMemo, useLayoutEffect } from 'react';
 import useSubmitForm from '../../hooks/useSubmitForm';
 import Loading from '@/components/Core/Loading';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../../../../convex/_generated/api';
-import { Id } from '../../../../../../../convex/_generated/dataModel';
-import { useAppSetting } from '@/store/useAppSetting';
 import {
   Container,
   FormWrapper,
@@ -14,22 +11,13 @@ import {
   TextareaContainer,
   Textarea,
   SubmitButton,
-  PreviewLabel,
-  PreviewImage,
-  PreviewButtonContainer,
-  PreviewButton,
   LoadingContainer,
 } from './style';
 
 const PromptSection = () => {
-  const { setPrompt, prompt, modal, isGenerating, outfitId } = useGeneratorSetting();
-  const { setIsPreviewPage } = useAppSetting();
-
-  const outfit = null;
+  const { setPrompt, prompt, modal, isGenerating } = useGeneratorSetting();
 
   const hasTokenLeft = useQuery(api.user.tokens.hasTokenLeft);
-
-  const imageUrl = null;
 
   const { onSubmit } = useSubmitForm();
 
@@ -60,7 +48,7 @@ const PromptSection = () => {
 
   return (
     <Container>
-      <FormWrapper hasImage={!!imageUrl} onSubmit={(e) => void handleSend(e)}>
+      <FormWrapper onSubmit={(e) => void handleSend(e)}>
         <InputLabel>
           3. Any specific instructions? <span>(Optional)</span>
         </InputLabel>
@@ -68,7 +56,6 @@ const PromptSection = () => {
         <TextareaContainer>
           <Textarea
             ref={textareaRef}
-            hasImage={!!imageUrl}
             placeholder="e.g. I want a red dress with floral patterns"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -107,17 +94,6 @@ const PromptSection = () => {
           )}
         </SubmitButton>
       </FormWrapper>
-
-      {imageUrl && (
-        <PreviewLabel onClick={() => setIsPreviewPage(true)}>
-          <PreviewImage src={imageUrl} alt="Preview" loading="eager" decoding="async" />
-          <PreviewButtonContainer>
-            <PreviewButton type="button" onClick={() => {}}>
-              <EyeIcon />
-            </PreviewButton>
-          </PreviewButtonContainer>
-        </PreviewLabel>
-      )}
     </Container>
   );
 };

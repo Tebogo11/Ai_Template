@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import Header from '../components/Header';
 import GeneratorForm from './GeneratorForm';
 import PreviewImage from './PreviewImage/PreviewImage';
 import WardrobeModalProvider from './WardrobeModalContext';
 
 const MainContent = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // useGetValues();
   return (
     <>
@@ -13,8 +15,11 @@ const MainContent = () => {
         </div>
         <WardrobeModalProvider>
           <div className="flex gap-5 pl-5 lg:pl-10">
-            <GeneratorForm />
-            <PreviewImage />
+            <GeneratorForm
+              isDrawerOpen={isDrawerOpen}
+              setIsDrawerOpen={setIsDrawerOpen}
+            />
+            <PreviewImage isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
           </div>
         </WardrobeModalProvider>
       </div>

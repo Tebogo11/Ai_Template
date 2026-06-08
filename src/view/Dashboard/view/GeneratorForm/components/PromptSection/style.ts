@@ -12,14 +12,14 @@ export const Container = styled.div`
   padding-bottom: 0;
 `;
 
-export const FormWrapper = styled.form<{ hasImage: boolean }>`
+export const FormWrapper = styled.form`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  width: ${({ hasImage }) => (hasImage ? '75%' : '100%')};
+  width: 100%;
   height: 100%;
-  margin-right: ${({ hasImage }) => (hasImage ? '1.25rem' : '0')};
+  margin-right: 0;
 
   @media (max-width: 768px) {
     width: 100%;
@@ -45,11 +45,11 @@ export const TextareaContainer = styled.div`
   width: 100%;
 `;
 
-export const Textarea = styled.textarea<{ hasImage: boolean }>`
+export const Textarea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-  min-height: ${({ hasImage }) => (hasImage ? '12dvh' : '40px')};
+  min-height: 43px;
   border: 1px solid var(--color-base-300, #d1d5db);
   border-radius: 0.25rem;
   background-color: var(--color-base-200, #e5e7eb);

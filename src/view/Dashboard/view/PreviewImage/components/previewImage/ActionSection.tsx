@@ -1,17 +1,66 @@
 import React from 'react';
 import { ActionContainer, ActionItem } from './style';
+import { Variants } from 'framer-motion';
 
-const ActionSection = () => {
+type ActionSectionProps = {
+  addModal: () => void;
+  downloadImage: () => void;
+  fullView: () => void;
+  deleteOutfit: () => void;
+};
+
+const actionIconsVariant: Variants = {
+  initial: { opacity: 0, y: 10 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring', duration: 0.5, ease: 'easeOut' },
+  },
+  whileHover: {
+    scale: 1.1,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 2,
+      duration: 0.5,
+      ease: 'easeInOut',
+    },
+  },
+  whileTap: {
+    scale: 0.95,
+    transition: {
+      type: 'spring',
+      stiffness: 100,
+      damping: 2,
+      duration: 0.2,
+      ease: 'easeInOut',
+    },
+  },
+};
+
+const ActionSection = ({
+  addModal,
+  downloadImage,
+  fullView,
+  deleteOutfit,
+}: ActionSectionProps) => {
   return (
     <ActionContainer>
-      <ActionItem>
+      <ActionItem
+        onClick={addModal}
+        variants={actionIconsVariant}
+        initial="initial"
+        animate="animate"
+        whileHover="whileHover"
+        whileTap="whileTap"
+      >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          xmlns="http://www.w8.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          stroke-width="3"
           stroke="currentColor"
-          className="size-6"
+          className="size-5"
         >
           <path
             stroke-linecap="round"
@@ -20,14 +69,21 @@ const ActionSection = () => {
           />
         </svg>
       </ActionItem>
-      <ActionItem>
+      <ActionItem
+        onClick={downloadImage}
+        variants={actionIconsVariant}
+        initial="initial"
+        animate="animate"
+        whileHover="whileHover"
+        whileTap="whileTap"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth="1.5"
+          strokeWidth="3"
           stroke="currentColor"
-          className="size-6"
+          className="size-5"
         >
           <path
             stroke-linecap="round"
@@ -36,14 +92,21 @@ const ActionSection = () => {
           />
         </svg>
       </ActionItem>
-      <ActionItem>
+      <ActionItem
+        onClick={fullView}
+        variants={actionIconsVariant}
+        initial="initial"
+        animate="animate"
+        whileHover="whileHover"
+        whileTap="whileTap"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          stroke-width="3"
           stroke="currentColor"
-          className="size-6"
+          className="size-5"
         >
           <path
             stroke-linecap="round"
@@ -52,14 +115,21 @@ const ActionSection = () => {
           />
         </svg>
       </ActionItem>
-      <ActionItem>
+      <ActionItem
+        onClick={deleteOutfit}
+        variants={actionIconsVariant}
+        initial="initial"
+        animate="animate"
+        whileHover="whileHover"
+        whileTap="whileTap"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0.5 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          className="size-6"
+          stroke-width="3"
+          stroke="hsla(0, 100%, 55%)"
+          className="size-5"
         >
           <path
             stroke-linecap="round"

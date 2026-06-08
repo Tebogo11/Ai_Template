@@ -21,16 +21,6 @@ const shimmer = keyframes`
 	}
 `;
 
-const float = keyframes`
-	0%,
-	100% {
-		transform: translateY(0px);
-	}
-	50% {
-		transform: translateY(-8px);
-	}
-`;
-
 export const Container = styled.section`
   position: relative;
   display: flex;
@@ -153,7 +143,6 @@ export const StatusOrb = styled.div<StateCardProps>`
   border-radius: 999px;
   border: 1px solid rgb(255 255 255 / 0.2);
   backdrop-filter: blur(14px);
-  animation: ${float} 3s ease-in-out infinite;
 
   ${({ $variant }) =>
     $variant === 'loading' &&

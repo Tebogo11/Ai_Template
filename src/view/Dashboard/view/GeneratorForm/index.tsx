@@ -1,24 +1,46 @@
 import ImageSection from './components/ImageSection/ImageSection';
 import PromptSection from './components/PromptSection';
-import { useAppSetting } from '@/store/useAppSetting';
 import IsNewOutput from './components/ToggleSection/IsNewOutput';
-import {
-  FormContainer,
-  ScrollableContent,
-  PromptWrapper,
-  DrawerTriggerContainer,
-  ChevronIcon,
-} from './styles';
+import { FormContainer, ScrollableContent, PromptWrapper } from './styles';
 import AccessoriesImageListUpload from './components/ImageSection/AccessoriesImageListUpload';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSetFormValues from './hooks/useSetFormValues';
+import useWindowSize from '@/hook/useWindowSize';
+import DrawerClosedPreview from './DrawerClosedPreview';
+import DrawerTrigger from './DrawerTrigger';
 
-const GeneratorForm = () => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+export const MOBILE_WIDTH = 992;
+
+type GeneratorFormProps = {
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isDrawerOpen: boolean;
+};
+const GeneratorForm = ({ setIsDrawerOpen, isDrawerOpen }: GeneratorFormProps) => {
   useSetFormValues();
+  const { width, isMobile } = useWindowSize();
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsDrawerOpen(true);
+    } else {
+      setIsDrawerOpen(false);
+    }
+  }, [width, isMobile]);
+
   return (
-    <FormContainer isDrawerOpen={isDrawerOpen}>
-      {isDrawerOpen && (
+    <FormContainer
+      isDrawerOpen={isDrawerOpen || !isMobile}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!isDrawerOpen) {
+          setIsDrawerOpen(true);
+        }
+      }}
+      initial={{ width: !isDrawerOpen ? 'calc(100vw - 40px)' : '50px' }}
+      animate={{ width: isDrawerOpen ? 'calc(100vw - 40px)' : '50px' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+    >
+      {isDrawerOpen || !isMobile ? (
         <>
           <ScrollableContent>
             <ImageSection />
@@ -29,13 +51,10 @@ const GeneratorForm = () => {
             <PromptSection />
           </PromptWrapper>
         </>
+      ) : (
+        <DrawerClosedPreview />
       )}
-      <DrawerTriggerContainer
-        isDrawerOpen={isDrawerOpen}
-        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-      >
-        <ChevronIcon className="size-6" isDrawerOpen={isDrawerOpen} />
-      </DrawerTriggerContainer>
+      <DrawerTrigger isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
     </FormContainer>
   );
 };

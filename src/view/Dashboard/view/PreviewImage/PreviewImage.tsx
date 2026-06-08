@@ -18,7 +18,11 @@ import PreviewImageDisplay from './components/previewImage/PreviewImage';
 import { Id } from '../../../../../convex/_generated/dataModel';
 import { useParams } from 'react-router';
 
-const PreviewImage = () => {
+type PreviewImageProps = {
+  setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isDrawerOpen: boolean;
+};
+const PreviewImage = ({ setIsDrawerOpen, isDrawerOpen }: PreviewImageProps) => {
   const { outfitId, wardrobeId } = useParams<{
     outfitId: Id<'outfit'>;
     wardrobeId: Id<'wardrobe'>;
@@ -44,7 +48,11 @@ const PreviewImage = () => {
   const showErrorState = outfit?.status === 'error';
 
   return (
-    <Container>
+    <Container
+      onClick={(e) => {
+        setIsDrawerOpen(false);
+      }}
+    >
       <Stage>
         {showLoadingState && (
           <StateCard $variant="loading">
