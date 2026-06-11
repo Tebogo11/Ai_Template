@@ -36,12 +36,23 @@ export const getRecentOutfitByWardrobeId = query({
   },
   handler: async (ctx, args) => {
     if (!args.wardrobeId) return null;
-    const outfits = await ctx.db
+    const recentOutfits = await ctx.db
       .query('outfit')
       .filter((q) => q.eq(q.field('wardrobeId'), args.wardrobeId))
       .order('desc')
       .take(1);
 
-    return outfits[0] || null;
+    const outfits = await ctx.db
+      .query('outfit')
+      .filter((q) =>
+        q.and(
+          q.eq(q.field('wardrobeId'), args.wardrobeId),
+          q.eq(q.field('status'), 'done'),
+        ),
+      )
+      .order('desc')
+      .collect();
+    console.log('Outfits for wardrobe', args.wardrobeId, outfits);
+    return { recentOutfit: recentOutfits[0] || null, outfitCount: outfits.length };
   },
 });

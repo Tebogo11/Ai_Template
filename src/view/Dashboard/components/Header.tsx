@@ -2,40 +2,40 @@ import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
 import { UserButton } from '@clerk/clerk-react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { useGeneratorSetting } from '@/store/useGeneratorData';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bars3BottomLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useAppSetting } from '@/store/useAppSetting';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const Header = () => {
   const { wardrobeId } = useParams();
+  const navigate = useNavigate();
 
   const wardrobe = useQuery(
     api.wardrobe.query.getWardrobeById,
     wardrobeId ? ({ wardrobeId: wardrobeId } as any) : 'skip',
   );
 
+  useEffect(() => {
+    if (wardrobeId && wardrobe === null) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate, wardrobe, wardrobeId]);
+
   const [isDeleting, setIsDeleting] = useState(false);
   const { setShowSubscriptionModal } = useAppSetting();
-  const { setOutfitId } = useGeneratorSetting();
 
   const user = useQuery(api.user.getters.getUser);
   const changeTitle = useMutation(api.wardrobe.changeTitle);
-  // const deleteWardrobe = useMutation(api.wardrobe.deleteWardrobe);
-
-  const onCreateNewWardrobe = () => {
-    setOutfitId(null);
-  };
+  const deleteWardrobe = useMutation(api.wardrobe.mutation.deleteWardrobe);
 
   const onDeleteWardrobe = async () => {
     // Implement wardrobe deletion logic here
     setIsDeleting(true);
     try {
       if (wardrobeId) {
-        // await deleteWardrobe({ wardrobeId });
+        await deleteWardrobe({ wardrobeId });
       }
-      onCreateNewWardrobe(); // Delete
     } catch (error) {
       console.error('Error deleting wardrobe:', error);
       setIsDeleting(false);
@@ -47,10 +47,10 @@ const Header = () => {
   return (
     <>
       <div className="flex w-full items-start justify-between px-0 py-2">
-        <div className="flex items-center">
+        <div className="ml-[-10px] flex items-center">
           <label
             htmlFor="my-drawer"
-            className="drawer-button mr-[9px] ml-[-10px] cursor-pointer md:ml-[-5px]"
+            className="drawer-button cursor-pointer md:ml-[-5px]"
           >
             <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
           </label>
@@ -125,7 +125,7 @@ const Header = () => {
         </div>
       </div>
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box w-5/12">
+        <div className="modal-box w-5/12 max-w-[325px]">
           {!isDeleting ? (
             <>
               <h3 className="text-center text-lg font-bold">Are you sure?</h3>

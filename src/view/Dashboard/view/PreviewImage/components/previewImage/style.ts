@@ -9,6 +9,8 @@ export const PreviewCarouselContainer = styled(motion.div)`
   margin-top: 0.05rem;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
   gap: 0.75rem;
   min-height: 180px;
 
@@ -25,6 +27,7 @@ export const PreviewCarouselContainer = styled(motion.div)`
 export const PreviewCarouselMeta = styled.div`
   display: grid;
   gap: 0.45rem;
+  height: 2.25rem;
 `;
 
 export const PreviewCarouselCounter = styled.div`
@@ -51,7 +54,7 @@ export const PreviewCarouselViewport = styled.div`
   }
 `;
 
-export const TabBarContainer = styled.div`
+export const TabBarContainer = styled(motion.div)`
   display: flex;
   width: 100%;
   gap: 0.5rem;

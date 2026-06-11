@@ -12,21 +12,20 @@ export const changeTitle = mutation({
   },
 });
 
-// export const deleteWardrobe = mutation({
-//   args: { wardrobeId: v.string() },
-//   handler: async (ctx, args) => {
-//     const { wardrobeId } = args;
-//     const outfits = await ctx.db
-//       .query("outfit")
-//       .filter((q) => q.eq(q.field("wardrobeId"), wardrobeId))
-//       .collect();
+export const deleteWardrobe = mutation({
+  args: { wardrobeId: v.string() },
+  handler: async (ctx, args) => {
+    const { wardrobeId } = args;
+    const outfits = await ctx.db
+      .query('outfit')
+      .filter((q) => q.eq(q.field('wardrobeId'), wardrobeId))
+      .collect();
 
-//     for (const outfit of outfits) {
-//       await ctx.runMutation(api.outfit.deleteOutfitById, {
-//         outfitId: outfit._id,
-//       });
-//     }
-//     await ctx.db.delete(wardrobeId as Id<"wardrobe">);
-//     //Not complete
-//   },
-// });
+    for (const outfit of outfits) {
+      await ctx.runMutation(api.outfit.mutation.deleteOutfitById, {
+        outfitId: outfit._id,
+      });
+    }
+    await ctx.db.delete(wardrobeId as Id<'wardrobe'>);
+  },
+});

@@ -56,7 +56,7 @@ const PromptSection = () => {
         <TextareaContainer>
           <Textarea
             ref={textareaRef}
-            placeholder="e.g. I want a red dress with floral patterns"
+            placeholder="e.g. I want a red dress with floral patterns, full body view, "
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             rows={1}

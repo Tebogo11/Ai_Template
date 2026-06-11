@@ -49,7 +49,7 @@ export const Textarea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   resize: none;
-  min-height: 43px;
+  min-height: 70px;
   border: 1px solid var(--color-base-300, #d1d5db);
   border-radius: 0.25rem;
   background-color: var(--color-base-200, #e5e7eb);
@@ -60,7 +60,7 @@ export const Textarea = styled.textarea`
   white-space: pre-wrap;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   transition: all 0.15s;
-
+  font-size: 0.95rem;
   &:focus {
     outline: none;
     box-shadow: 0 0 0 2px var(--color-base-300, #d1d5db);

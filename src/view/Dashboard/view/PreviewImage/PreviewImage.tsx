@@ -6,7 +6,7 @@ import { Container, Stage, StateBody, StateCard, StateTitle } from './style';
 import GuideSlide from './components/Guide';
 import PreviewImageDisplay from './components/previewImage/PreviewImage';
 import { Id } from '../../../../../convex/_generated/dataModel';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import generatingIconData from '../../../../assets/lottie/generatingIcon.json';
 import errorIconData from '../../../../assets/lottie/errorIcon.json';
 import deletingOutft from '../../../../assets/lottie/deletingOutfit.json';
@@ -14,6 +14,7 @@ import deletingOutft from '../../../../assets/lottie/deletingOutfit.json';
 import Lottie, { Options } from 'react-lottie';
 import { AnimatePresence, motion } from 'framer-motion';
 import useSubmitForm from '../GeneratorForm/hooks/useSubmitForm';
+import useSetOutfit from '../../hooks/useSetOutfit';
 
 type PreviewImageProps = {
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,9 +25,11 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
     outfitId: Id<'outfit'>;
     wardrobeId: Id<'wardrobe'>;
   }>();
+
   const { onSubmit } = useSubmitForm();
   const { isGenerating, setIsGenerating, isDeleting } = useGeneratorSetting();
-
+  const { setOutfit } = useSetOutfit();
+  const navigate = useNavigate();
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || undefined,
   });
@@ -39,8 +42,16 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
     wardrobeId: wardrobeId as Id<'wardrobe'>,
   });
 
-  const hasImage = !!outfitId && outfit?.status === 'done' && Boolean(imageUrl);
+  const otherOutfitList =
+    useQuery(api.outfit.preview.query.getAllPreviewImages, {
+      wardrobeId: wardrobeId ? (wardrobeId as Id<'wardrobe'>) : undefined,
+    }) || [];
 
+  const deleteWardrobe = useMutation(api.wardrobe.mutation.deleteWardrobe);
+  const deleteOutfitById = useMutation(api.outfit.mutation.deleteOutfitById);
+
+  const hasImage = !!outfitId && outfit?.status === 'done' && Boolean(imageUrl);
+  const totalSlides = otherOutfitList.length;
   const showPreview = outfit?.status !== 'error' && outfit?.status === 'done';
   const showLoadingState = outfit?.status === 'generating' || isGenerating;
   const showErrorState = outfit?.status === 'error' && !isGenerating;
@@ -72,17 +83,18 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
       preserveAspectRatio: 'xMidYMid slice',
     },
   };
+
   useEffect(() => {
     if (isGenerating && (outfit?.status === 'generating' || outfit?.status === 'error')) {
       setIsGenerating(false);
     }
   }, [setIsGenerating, isGenerating, outfit?.status]);
 
-  useEffect(() => {
-    // if status is error then delete the outfit,
-    // if its the only outfit delete the wardrobe as well
-  }, [setIsGenerating, isGenerating, outfit?.status]);
-
+  const onDeleteAndTryAgain = async () => {
+    const oldOutfitId = outfitId as Id<'outfit'>;
+    await onSubmit(); // or run submit after delete, depending on intent
+    await deleteOutfitById({ outfitId: oldOutfitId });
+  };
   // Placeholder for delete state, you can manage this state based on your logic when deleting an outfit
   return (
     <AnimatePresence>
@@ -118,10 +130,7 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  //Delete current outfit
-                  onSubmit();
-                }}
+                onClick={onDeleteAndTryAgain}
                 className="mt-4 cursor-pointer rounded-md bg-red-500 px-4 py-2 text-sm font-bold tracking-wider text-white"
               >
                 Delete & Try Again
@@ -142,7 +151,10 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
             wardrobeId={wardrobeId as Id<'wardrobe'>}
             currentOutfitId={outfitId}
             outfitStatus={outfit?.status}
-            isNotActiveState={showLoadingState || showErrorState || isDeleting}
+            isNotActiveState={
+              isEmptyWardrobe || showLoadingState || showErrorState || isDeleting
+            }
+            otherOutfitList={otherOutfitList}
           />
           {isEmptyWardrobe &&
             !showLoadingState &&

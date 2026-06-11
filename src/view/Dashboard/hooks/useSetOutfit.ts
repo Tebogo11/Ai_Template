@@ -11,6 +11,8 @@ const useSetOutfit = () => {
   const getFormImages = useMutation(api.outfit.mutation.getFormImages);
 
   const setOutfit = async ({
+    modal,
+    accessories,
     prompt,
     isNewOutfit,
     outfitId,
@@ -25,13 +27,18 @@ const useSetOutfit = () => {
     if (outfitId !== undefined) setOutfitId(outfitId);
     if (prompt !== undefined) setPrompt(prompt);
     if (isNewOutfit !== undefined) setIsNewOutfit(isNewOutfit);
-
-    const data = await getFormImages({
-      outfitId: outfitId as Id<'outfit'>,
-    });
-    if (data?.modelFinal) setModal(data.modelFinal);
-    if (data?.accessories) setAccessories(data.accessories);
-    setDashboardLoading(false);
+    if (modal !== undefined) {
+      setModal(modal);
+      if (accessories) setAccessories(accessories);
+      setDashboardLoading(false);
+    } else {
+      const data = await getFormImages({
+        outfitId: outfitId as Id<'outfit'>,
+      });
+      if (data?.modelFinal) setModal(data.modelFinal);
+      if (data?.accessories) setAccessories(data.accessories);
+      setDashboardLoading(false);
+    }
   };
 
   const clearOutfit = () => {

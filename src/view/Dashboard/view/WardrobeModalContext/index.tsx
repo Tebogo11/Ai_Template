@@ -25,10 +25,6 @@ const WardrobeModalProvider = ({ children }: { children: React.ReactNode }) => {
   //   const syncedTitleForWardrobeRef = useRef<string | null>(null);
   // const { setOutfitId } = useGeneratorSetting();
   // const { setOutfit } = useSetOutfit();
-  const wardrobe = useQuery(
-    api.wardrobe.query.getWardrobeById,
-    wardrobeId ? ({ wardrobeId } as any) : 'skip',
-  );
 
   return (
     <WardrobeModalContext.Provider value={{ wardrobeId, outfitId }}>

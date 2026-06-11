@@ -6,7 +6,6 @@ export const getWardrobeById = query({
   args: { wardrobeId: v.id('wardrobe') },
   handler: async (ctx, args) => {
     const wardrobe = await ctx.db.get(args.wardrobeId);
-    if (!wardrobe) throw new Error('Wardrobe not found');
     return wardrobe;
   },
 });

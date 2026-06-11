@@ -18,12 +18,12 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   const { wardrobeId } = useParams<{ wardrobeId?: string }>();
   // const { setOutfitId } = useGeneratorSetting();
   // const { setOutfit } = useSetOutfit();
-  const recentOutfit = useQuery(api.outfit.query.getRecentOutfitByWardrobeId, {
+  const outfitsData = useQuery(api.outfit.query.getRecentOutfitByWardrobeId, {
     wardrobeId: _id,
   });
 
   const imageUrl = useQuery(api.outfit.preview.query.getPreviewImage, {
-    outfitId: recentOutfit?._id || undefined,
+    outfitId: outfitsData?.recentOutfit?._id || undefined,
   });
 
   // const onPickWardrobe = () => {
@@ -39,10 +39,13 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
   // };
 
   return (
-    <Link to={`/wardrobe/${_id}/outfit/${recentOutfit?._id}`} className="block">
+    <Link
+      to={`/wardrobe/${_id}/outfit/${outfitsData?.recentOutfit?._id}`}
+      className="block"
+    >
       <div
         // onClick={onPickWardrobe}
-        className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
+        className={`border-base-200 flex items-center border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
       >
         {!imageUrl ? (
           <div className="border-base-300 mr-4 grid h-10 w-10 place-items-center rounded-xs border-1">
@@ -60,9 +63,12 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
         <div>
           <h2 className="text-sm font-semibold">{title || 'Untitled Wardrobe'}</h2>
           <p className="text-xs">
-            {dayjs(recentOutfit?._creationTime).format('MMM D, YYYY') ||
+            {dayjs(outfitsData?.recentOutfit?._creationTime).format('MMM D, YYYY') ||
               'Untitled Outfit'}
           </p>
+        </div>
+        <div className="bg-base-300 ml-auto flex h-6 w-6 items-center justify-center gap-1 rounded-xs text-xs">
+          <div>{outfitsData?.outfitCount || 0}</div>
         </div>
       </div>
     </Link>
