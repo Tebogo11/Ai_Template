@@ -13,7 +13,6 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as aiSystem from "../aiSystem.js";
 import type * as const_ from "../const.js";
 import type * as generator_action from "../generator/action.js";
 import type * as generator_mutation from "../generator/mutation.js";
@@ -42,7 +41,6 @@ import type * as wardrobe from "../wardrobe.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  aiSystem: typeof aiSystem;
   const: typeof const_;
   "generator/action": typeof generator_action;
   "generator/mutation": typeof generator_mutation;

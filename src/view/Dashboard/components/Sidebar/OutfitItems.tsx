@@ -1,10 +1,7 @@
 import { Id } from '../../../../../convex/_generated/dataModel';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
-import { useWardrobeStore } from '@/store/useWardrobeStore';
-import { useGeneratorSetting } from '@/store/useGeneratorData';
 import dayjs from 'dayjs';
-import useSetOutfit from '@/view/Dashboard/hooks/useSetOutfit';
 import { Link, useParams } from 'react-router';
 
 type OutfitItemsProps = {

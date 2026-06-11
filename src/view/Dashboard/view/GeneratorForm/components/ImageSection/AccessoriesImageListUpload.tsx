@@ -1,5 +1,5 @@
 import { useGeneratorSetting } from '@/store/useGeneratorData';
-import { useRef, ChangeEvent, useState } from 'react';
+import { useRef, ChangeEvent } from 'react';
 import {
   Container,
   UploadBox,
@@ -17,9 +17,8 @@ import {
 import { useAppSetting } from '@/store/useAppSetting';
 
 const AccessoriesImageListUpload = () => {
-  const { accessories, appendAccessories, removeAccessories, setAccessories } =
-    useGeneratorSetting();
-  const [isDragging, setIsDragging] = useState(false);
+  const { accessories, appendAccessories, removeAccessories } = useGeneratorSetting();
+  // const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadBoxRef = useRef<HTMLDivElement>(null);
 
@@ -53,19 +52,19 @@ const AccessoriesImageListUpload = () => {
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setIsDragging(true);
+    // setIsDragging(true);
   };
 
   const handleDragLeave = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setIsDragging(false);
+    // setIsDragging(false);
   };
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    setIsDragging(false);
+    // setIsDragging(false);
 
     const files = event.dataTransfer.files;
     if (!files) return;

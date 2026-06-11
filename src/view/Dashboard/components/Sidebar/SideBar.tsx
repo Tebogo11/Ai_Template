@@ -1,12 +1,10 @@
 import Flex from '@/components/Core/Flex';
 import { useAppSetting } from '@/store/useAppSetting';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { usePaginatedQuery } from 'convex/react';
 import { useEffect, useRef } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import OutfitItems from './OutfitItems';
-import useSetOutfit from '../../hooks/useSetOutfit';
 import { Link, useNavigate } from 'react-router';
 
 const SideBar = () => {

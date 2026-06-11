@@ -3,7 +3,7 @@ import PromptSection from './components/PromptSection';
 import IsNewOutput from './components/ToggleSection/IsNewOutput';
 import { FormContainer, ScrollableContent, PromptWrapper } from './styles';
 import AccessoriesImageListUpload from './components/ImageSection/AccessoriesImageListUpload';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useSetFormValues from './hooks/useSetFormValues';
 import useWindowSize from '@/hook/useWindowSize';
 import DrawerClosedPreview from './DrawerClosedPreview';

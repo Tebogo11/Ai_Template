@@ -1,8 +1,5 @@
-import { useQuery } from 'convex/react';
-import React, { createContext, useEffect, useRef } from 'react';
-import { api } from '../../../../../convex/_generated/api';
+import React, { createContext } from 'react';
 import { useParams } from 'react-router';
-import { useWardrobeStore } from '@/store/useWardrobeStore';
 
 export const WardrobeModalContext = createContext<{
   wardrobeId: string | undefined;

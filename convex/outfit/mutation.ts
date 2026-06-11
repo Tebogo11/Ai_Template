@@ -1,7 +1,6 @@
 import { v } from 'convex/values';
 import { internalMutation, mutation } from '../_generated/server';
 import { Id } from '../_generated/dataModel';
-import { api } from '../_generated/api';
 
 export const saveModelAndAccessories = internalMutation({
   args: {

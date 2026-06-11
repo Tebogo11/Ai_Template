@@ -19,7 +19,6 @@ import {
   HarmCategory,
   HarmBlockThreshold,
   Part,
-  HarmBlockMethod,
 } from '@google/genai';
 import { OUTFIT_GENERATION_PROMPT, OUTFIT_IMPROVEMENT_PROMPT } from '../const';
 
@@ -116,13 +115,13 @@ export const generateOutFitWithAI = internalAction({
       // 6. Extract image from response
       let hasInlineData = false;
       let imageURL = '';
-      let summary = '';
+      // let summary = '';
 
       try {
         const handled = handleGeneratedContent(response);
         hasInlineData = handled.hasInlineData;
         imageURL = handled.imageURL;
-        summary = handled.summary || '';
+        // summary = handled.summary || '';
       } catch {
         // Retry with IMAGE-only modality
         const retryResponse = await ai.models.generateContent({
@@ -147,7 +146,7 @@ export const generateOutFitWithAI = internalAction({
         const handledRetry = handleGeneratedContent(retryResponse);
         hasInlineData = handledRetry.hasInlineData;
         imageURL = handledRetry.imageURL;
-        summary = handledRetry.summary || '';
+        // summary = handledRetry.summary || '';
         response = retryResponse;
       }
 

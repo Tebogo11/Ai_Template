@@ -1,7 +1,6 @@
 import { v } from 'convex/values';
 import { mutation } from './_generated/server';
 import { Id } from './_generated/dataModel';
-import { api } from './_generated/api';
 
 export const changeTitle = mutation({
   args: { title: v.string(), wardrobeId: v.string() },

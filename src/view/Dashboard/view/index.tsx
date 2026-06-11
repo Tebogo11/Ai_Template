@@ -6,7 +6,6 @@ import WardrobeModalProvider from './WardrobeModalContext';
 
 const MainContent = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  // useGetValues();
   return (
     <>
       <div className="bg-base-100 dark:bg-darkBase-300 flex h-full w-full flex-col">

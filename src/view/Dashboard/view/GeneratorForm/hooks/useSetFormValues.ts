@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { api } from '../../../../../../convex/_generated/api';
 import { useQuery } from 'convex/react';

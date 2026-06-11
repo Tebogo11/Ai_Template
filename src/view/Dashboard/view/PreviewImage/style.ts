@@ -1,26 +1,5 @@
 import { motion } from 'framer-motion';
-import styled, { css, keyframes } from 'styled-components';
-
-const gradientShift = keyframes`
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-`;
-
-const shimmer = keyframes`
-	from {
-		transform: translateX(-100%);
-	}
-	to {
-		transform: translateX(100%);
-	}
-`;
+import styled, { css } from 'styled-components';
 
 export const Container = styled(motion.div)`
   position: relative;

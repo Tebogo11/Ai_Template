@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import React from 'react';
 import { DrawerClosedFormPreview, MobileViewLabel } from './styles';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import { PlusIcon } from '@heroicons/react/24/outline';

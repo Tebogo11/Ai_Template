@@ -6,15 +6,13 @@ import { Container, Stage, StateBody, StateCard, StateTitle } from './style';
 import GuideSlide from './components/Guide';
 import PreviewImageDisplay from './components/previewImage/PreviewImage';
 import { Id } from '../../../../../convex/_generated/dataModel';
-import { useNavigate, useParams } from 'react-router';
 import generatingIconData from '../../../../assets/lottie/generatingIcon.json';
 import errorIconData from '../../../../assets/lottie/errorIcon.json';
 import deletingOutft from '../../../../assets/lottie/deletingOutfit.json';
-
 import Lottie, { Options } from 'react-lottie';
 import { AnimatePresence, motion } from 'framer-motion';
 import useSubmitForm from '../GeneratorForm/hooks/useSubmitForm';
-import useSetOutfit from '../../hooks/useSetOutfit';
+import { useParams } from 'react-router';
 
 type PreviewImageProps = {
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,8 +26,6 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
 
   const { onSubmit } = useSubmitForm();
   const { isGenerating, setIsGenerating, isDeleting } = useGeneratorSetting();
-  const { setOutfit } = useSetOutfit();
-  const navigate = useNavigate();
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || undefined,
   });
@@ -47,11 +43,9 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
       wardrobeId: wardrobeId ? (wardrobeId as Id<'wardrobe'>) : undefined,
     }) || [];
 
-  const deleteWardrobe = useMutation(api.wardrobe.mutation.deleteWardrobe);
   const deleteOutfitById = useMutation(api.outfit.mutation.deleteOutfitById);
 
   const hasImage = !!outfitId && outfit?.status === 'done' && Boolean(imageUrl);
-  const totalSlides = otherOutfitList.length;
   const showPreview = outfit?.status !== 'error' && outfit?.status === 'done';
   const showLoadingState = outfit?.status === 'generating' || isGenerating;
   const showErrorState = outfit?.status === 'error' && !isGenerating;
@@ -99,7 +93,7 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
   return (
     <AnimatePresence>
       <Container
-        onClick={(e) => {
+        onClick={() => {
           setIsDrawerOpen(false);
         }}
       >
