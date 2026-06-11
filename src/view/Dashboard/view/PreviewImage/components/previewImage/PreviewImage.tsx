@@ -10,11 +10,12 @@ import {
   PreviewCarouselViewport,
   TabBarContainer,
 } from './style';
-import { useQuery } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../../../../convex/_generated/api';
 import { Id } from '../../../../../../../convex/_generated/dataModel';
 import { useNavigate } from 'react-router';
 import ActionSection from './ActionSection';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 
@@ -52,20 +53,25 @@ const getArrowWhileTap = (xDirection: 1 | -1) => ({
   x: 10 * xDirection,
   transition: arrowInteractionTransition,
 });
+
 const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
   wardrobeId,
   currentOutfitId,
   isNotActiveState,
 }) => {
   const [isFullViewOpen, setIsFullViewOpen] = React.useState(false);
-  const { setModal } = useGeneratorSetting();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const { isDeleting, setModal, setIsDeleting } = useGeneratorSetting();
   const navigate = useNavigate();
+
   const otherOutfitList =
     useQuery(api.outfit.preview.query.getAllPreviewImages, {
       wardrobeId: wardrobeId ? (wardrobeId as Id<'wardrobe'>) : undefined,
     }) || [];
+  const deleteOutfitById = useMutation(api.outfit.mutation.deleteOutfitById);
 
   const totalSlides = otherOutfitList.length;
+
   const selectedIndex = React.useMemo(() => {
     if (!otherOutfitList.length || !currentOutfitId) {
       return 0;
@@ -156,8 +162,42 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
     if (!selectedImageUrl) {
       return;
     }
-
     setIsFullViewOpen(true);
+  };
+
+  const openDeleteConfirm = () => {
+    if (!otherOutfitList[selectedIndex]?.outfitId) {
+      return;
+    }
+
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteConfirm = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const confirmDeleteOutfit = async () => {
+    if (!otherOutfitList[selectedIndex]?.outfitId) {
+      return;
+    }
+
+    setIsDeleting(true);
+    await deleteOutfitById({ outfitId: otherOutfitList[selectedIndex].outfitId })
+      .then(() => {
+        setIsDeleteModalOpen(false);
+
+        if (totalSlides === 1) {
+          // Delete Wardrobe if it was the last outfit, or navigate to wardrobe view if there are other outfits remaining.
+          navigate(`/wardrobe/${wardrobeId}`);
+        } else {
+          const nextIndex = selectedIndex === 0 ? 1 : selectedIndex - 1;
+          navigateToIndex(nextIndex);
+        }
+      })
+      .finally(() => {
+        setIsDeleting(false);
+      });
   };
 
   React.useEffect(() => {
@@ -175,9 +215,7 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [isFullViewOpen]);
 
-  const deleteOutfit = () => {};
-
-  if (!otherOutfitList || otherOutfitList.length === 0 || isNotActiveState) {
+  if (isNotActiveState) {
     return null;
   }
   return (
@@ -191,22 +229,80 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
         <PreviewCarouselMeta>
           <TabBarContainer>
             <PreviewCarouselCounter>
-              <h3 className="text-base-content text-xs font-black">
+              <h3 className="text-base-content pt-[1px] text-xs font-semibold tracking-[0.08em] uppercase">
                 {totalSlides > 1 ? 'Outfits' : 'Outfit'}
               </h3>
-              <div className="flex items-center gap-4">
+              <div className="border-base-content mx-1 mb-0.25 h-[1px] w-full border-1 border-dashed" />
+              <motion.div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <motion.div
+                    className="bg-base-content h-0.75 w-0.75 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0, duration: 0.3, ease: 'easeIn' }}
+                  />
+                  <motion.div
+                    className="bg-base-content h-1 w-1 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.1, duration: 0.3, ease: 'easeIn' }}
+                  />
+                  <motion.div
+                    className="bg-base-content h-1.25 w-1.25 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2, duration: 0.3, ease: 'easeIn' }}
+                  />
+                  <motion.div
+                    className="bg-base-content h-1.5 w-1.5 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.3, duration: 0.3, ease: 'easeIn' }}
+                  />
+                  <motion.div
+                    className="bg-base-content h-1.75 w-1.75 rounded-full"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.4, duration: 0.5, ease: 'easeOut' }}
+                  />
+                </div>
                 {totalSlides > 1 && (
-                  <h3 className="text-base-content text-xs font-black">
-                    {selectedIndex + 1} / {totalSlides}
-                  </h3>
+                  <motion.div
+                    className="bg-base-100 border-base-content flex w-10 items-center justify-around rounded-md border-2 px-1 py-1"
+                    initial={{ x: -10 }}
+                    animate={{ x: 0 }}
+                    transition={{ delay: 1, duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <AnimatePresence>
+                      <motion.h3
+                        key={selectedIndex}
+                        className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase"
+                        initial={{ x: 2, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{
+                          type: 'spring',
+                          bounce: 0.6,
+                          duration: 0.5,
+                          ease: 'easeOut',
+                        }}
+                        exit={{ x: -2, opacity: 0 }}
+                      >
+                        {selectedIndex + 1}
+                      </motion.h3>
+                    </AnimatePresence>
+                    <div className="border-base-content/50 mx-1 h-5 w-[4px] border-2" />
+                    <h3 className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase">
+                      {totalSlides}
+                    </h3>
+                  </motion.div>
                 )}
                 <ActionSection
                   addModal={addModal}
                   downloadImage={downloadImage}
                   fullView={fullView}
-                  deleteOutfit={deleteOutfit}
+                  deleteOutfit={openDeleteConfirm}
                 />
-              </div>
+              </motion.div>
             </PreviewCarouselCounter>
           </TabBarContainer>
         </PreviewCarouselMeta>
@@ -321,6 +417,13 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
             </div>
           </div>
         )}
+
+        <ConfirmDeleteModal
+          isOpen={isDeleteModalOpen}
+          isDeleting={isDeleting}
+          onClose={closeDeleteConfirm}
+          onConfirm={confirmDeleteOutfit}
+        />
       </PreviewCarouselContainer>
     </AnimatePresence>
   );

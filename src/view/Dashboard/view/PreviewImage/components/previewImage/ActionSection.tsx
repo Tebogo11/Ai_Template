@@ -1,4 +1,3 @@
-import React from 'react';
 import { ActionContainer, ActionItem } from './style';
 import { Variants } from 'framer-motion';
 
@@ -60,7 +59,7 @@ const ActionSection = ({
           viewBox="0 0 24 24"
           stroke-width="2"
           stroke="currentColor"
-          className="size-5"
+          className="size-4"
         >
           <path
             stroke-linecap="round"
@@ -83,7 +82,7 @@ const ActionSection = ({
           viewBox="0 0 24 24"
           strokeWidth="2"
           stroke="currentColor"
-          className="size-5"
+          className="size-4"
         >
           <path
             stroke-linecap="round"
@@ -106,7 +105,7 @@ const ActionSection = ({
           viewBox="0 0 24 24"
           stroke-width="2"
           stroke="currentColor"
-          className="size-5"
+          className="size-4"
         >
           <path
             stroke-linecap="round"
@@ -128,8 +127,8 @@ const ActionSection = ({
           fill="none"
           viewBox="0.5 0 24 24"
           stroke-width="2"
-          stroke="hsla(0, 100%, 55%)"
-          className="size-5"
+          stroke="currentColor"
+          className="size-4"
         >
           <path
             stroke-linecap="round"

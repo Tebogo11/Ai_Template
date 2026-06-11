@@ -2,21 +2,15 @@ import { useGeneratorSetting } from '@/store/useGeneratorData';
 import React, { useEffect } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../../convex/_generated/api';
-import {
-  Container,
-  Stage,
-  StateBody,
-  StateCard,
-  StateTitle,
-  StatusGlyph,
-  StatusOrb,
-} from './style';
+import { Container, Stage, StateBody, StateCard, StateTitle } from './style';
 import GuideSlide from './components/Guide';
 import PreviewImageDisplay from './components/previewImage/PreviewImage';
 import { Id } from '../../../../../convex/_generated/dataModel';
 import { useParams } from 'react-router';
-import generatingIconData from '../../../../../public/assets/lottie/generatingicon.json';
-import errorIconData from '../../../../../public/assets/lottie/errorIcon.json';
+import generatingIconData from '../../../../assets/lottie/generatingIcon.json';
+import errorIconData from '../../../../assets/lottie/errorIcon.json';
+import deletingOutft from '../../../../assets/lottie/deletingOutfit.json';
+
 import Lottie, { Options } from 'react-lottie';
 import { AnimatePresence, motion } from 'framer-motion';
 import useSubmitForm from '../GeneratorForm/hooks/useSubmitForm';
@@ -31,8 +25,7 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
     wardrobeId: Id<'wardrobe'>;
   }>();
   const { onSubmit } = useSubmitForm();
-  const { isGenerating, setIsGenerating } = useGeneratorSetting();
-  const deleteOutfitById = useMutation(api.outfit.mutation.deleteOutfitById);
+  const { isGenerating, setIsGenerating, isDeleting } = useGeneratorSetting();
 
   const outfit = useQuery(api.outfit.getOutfitById, {
     outfitId: outfitId || undefined,
@@ -71,6 +64,14 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
     },
   };
 
+  const deletingOutfitAnimationOptions: Options = {
+    loop: true,
+    autoplay: true,
+    animationData: deletingOutft,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
   useEffect(() => {
     if (isGenerating && (outfit?.status === 'generating' || outfit?.status === 'error')) {
       setIsGenerating(false);
@@ -82,6 +83,7 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
     // if its the only outfit delete the wardrobe as well
   }, [setIsGenerating, isGenerating, outfit?.status]);
 
+  // Placeholder for delete state, you can manage this state based on your logic when deleting an outfit
   return (
     <AnimatePresence>
       <Container
@@ -90,7 +92,7 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
         }}
       >
         <Stage>
-          {showLoadingState && (
+          {!isDeleting && showLoadingState && (
             <StateCard $variant="loading">
               <Lottie options={loadingAnimationOptions} height={200} width={200} />
 
@@ -102,12 +104,14 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
             </StateCard>
           )}
 
-          {showErrorState && (
+          {!isDeleting && showErrorState && (
             <StateCard $variant="error">
               <Lottie options={errorAnimationOptions} height={200} width={200} />
 
-              <StateTitle>Preview generation failed</StateTitle>
-              <StateBody>
+              <StateTitle style={{ textAlign: 'center', color: '#fff' }}>
+                Preview generation failed
+              </StateTitle>
+              <StateBody style={{ textAlign: 'center', color: '#fff' }}>
                 Something interrupted the render. Try generating again after adjusting the
                 prompt or simplifying the accessory selection.
               </StateBody>
@@ -118,21 +122,35 @@ const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
                   //Delete current outfit
                   onSubmit();
                 }}
-                className="mt-4 cursor-pointer rounded-md bg-red-500 px-4 py-2 text-white"
+                className="mt-4 cursor-pointer rounded-md bg-red-500 px-4 py-2 text-sm font-bold tracking-wider text-white"
               >
-                Try Again
+                Delete & Try Again
               </motion.button>
             </StateCard>
           )}
+
+          {isDeleting && (
+            <StateCard $variant="deleting">
+              <Lottie options={deletingOutfitAnimationOptions} height={200} width={200} />
+
+              <StateTitle>Deleting outfit...</StateTitle>
+              <StateBody>Your outfit is being deleted. Please wait a moment.</StateBody>
+            </StateCard>
+          )}
+
           <PreviewImageDisplay
             wardrobeId={wardrobeId as Id<'wardrobe'>}
             currentOutfitId={outfitId}
             outfitStatus={outfit?.status}
-            isNotActiveState={showLoadingState || showErrorState}
+            isNotActiveState={showLoadingState || showErrorState || isDeleting}
           />
-          {isEmptyWardrobe && !showLoadingState && !showErrorState && !showPreview && (
-            <GuideSlide outfitStatus={outfit?.status} hasImage={hasImage} />
-          )}
+          {isEmptyWardrobe &&
+            !showLoadingState &&
+            !showErrorState &&
+            !showPreview &&
+            !isDeleting && (
+              <GuideSlide outfitStatus={outfit?.status} hasImage={hasImage} />
+            )}
         </Stage>
       </Container>
     </AnimatePresence>

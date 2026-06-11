@@ -50,7 +50,7 @@ const Header = () => {
         <div className="flex items-center">
           <label
             htmlFor="my-drawer"
-            className="drawer-button mr-[9px] ml-[-18px] cursor-pointer md:ml-[-5px]"
+            className="drawer-button mr-[9px] ml-[-10px] cursor-pointer md:ml-[-5px]"
           >
             <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
           </label>
@@ -84,7 +84,7 @@ const Header = () => {
         </div>
         <div className="mt-1 box-border flex cursor-pointer items-center space-x-4">
           <div
-            className="tooltip tooltip-bottom md:mt-0c ml-5 flex items-center justify-center gap-2"
+            className="tooltip tooltip-bottom md:mt-0c ml-1 flex items-center justify-center gap-2"
             data-tip={
               user?.plan === 'free'
                 ? 'Upgrade to premium for more credits'
@@ -93,11 +93,11 @@ const Header = () => {
             onClick={() => setShowSubscriptionModal(true)}
           >
             <div className="mt-0.5 flex flex-col items-start">
-              <h2 className="text-base-content text-[8px] font-bold md:text-[8px]">
+              <h2 className="text-base-content text-[7px] font-bold md:text-[8px]">
                 Available Credits:
               </h2>
-              <h2 className="text-base-content text-[9px] font-normal md:text-[10px]">
-                {user?.credits} Credits Left
+              <h2 className="text-base-content text-[8px] font-normal md:text-[9px]">
+                {user?.credits} Credit Left
               </h2>
             </div>
             <div className="text-primary-content p-0.5 hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)] hover:text-[hsl(182,65%,25%)]">

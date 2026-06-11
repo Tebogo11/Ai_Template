@@ -63,7 +63,7 @@ export const Stage = styled.div`
 `;
 
 type StateCardProps = {
-  $variant?: 'loading' | 'error' | 'empty';
+  $variant?: 'loading' | 'error' | 'empty' | 'deleting';
 };
 
 export const StateCard = styled.div<StateCardProps>`
@@ -83,29 +83,13 @@ export const StateCard = styled.div<StateCardProps>`
     $variant === 'loading' &&
     css`
       background: var(--color-primary-content, #fffaf1);
-      /* color: var(--color-primary-content, #fffaf1);
-      background: linear-gradient(
-        120deg,
-        var(--color-primary, #b86c09),
-        var(--color-accent, #0e6393),
-        var(--color-secondary, #0f6d69),
-        var(--color-primary, #b86c09)
-      );
-      background-size: 220% 220%;
-      animation: ${gradientShift} 8s ease infinite;
+    `}
 
-      &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          90deg,
-          transparent 0%,
-          rgb(255 255 255 / 0.08) 50%,
-          transparent 100%
-        );
-        animation: ${shimmer} 2.2s linear infinite;
-      } */
+  ${({ $variant }) =>
+    $variant === 'deleting' &&
+    css`
+      background: var(--color-base-200, #fffaf1);
+      color: var(--color-base-content, #fffaf1);
     `}
 
   ${({ $variant }) =>

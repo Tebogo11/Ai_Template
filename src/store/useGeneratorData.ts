@@ -38,6 +38,7 @@ type GeneratorSetting = {
   is_new_outfit: boolean;
   apiError: string | null;
   isGettingValues: boolean;
+  isDeleting: boolean;
 
   setIsGettingValues: (isGettingValues: boolean) => void;
   setAccessories: (data: AccessoriesType[]) => void;
@@ -55,6 +56,7 @@ type GeneratorSetting = {
   setApiError: (data: string | null) => void;
   setSelectedOutfit: (data: OutfitData | null) => void;
   setEvent: (data: string) => void;
+  setIsDeleting: (data: boolean) => void;
 };
 
 export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
@@ -141,5 +143,9 @@ export const useGeneratorSetting = create<GeneratorSetting>((set) => ({
   amount_of_change: AmountOfChangeOption.None,
   setAmountOfChangeOption: (data: AmountOfChangeOption) => {
     set({ amount_of_change: data });
+  },
+  isDeleting: false,
+  setIsDeleting: (data: boolean) => {
+    set({ isDeleting: data });
   },
 }));
