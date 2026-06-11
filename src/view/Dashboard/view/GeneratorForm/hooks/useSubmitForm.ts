@@ -7,7 +7,8 @@ import { useNavigate, useParams } from 'react-router';
 
 const useSubmitForm = () => {
   const { wardrobeId } = useParams<{ wardrobeId: string }>();
-  const { modal, accessories, prompt, is_new_outfit } = useGeneratorSetting();
+  const { modal, accessories, prompt, is_new_outfit, setIsGenerating } =
+    useGeneratorSetting();
 
   const { title } = useWardrobeStore();
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const useSubmitForm = () => {
 
   const onSubmit = async () => {
     // 1. Format data to passes to mutation
-
+    setIsGenerating(true);
     if (modal) {
       // 1.3 save images to storage and get their storage ids
       const storageIds = await saveImagesToStorage(

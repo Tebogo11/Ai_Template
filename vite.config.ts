@@ -25,6 +25,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@/view': path.resolve(__dirname, './src/view'),
+      '@/convex': path.resolve(__dirname, './convex'),
+      '@/assets': path.resolve(__dirname, './public/assets'),
     },
   },
   server: {

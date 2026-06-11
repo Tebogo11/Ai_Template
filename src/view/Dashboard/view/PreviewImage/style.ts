@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import styled, { css, keyframes } from 'styled-components';
 
 const gradientShift = keyframes`
@@ -21,7 +22,7 @@ const shimmer = keyframes`
 	}
 `;
 
-export const Container = styled.section`
+export const Container = styled(motion.div)`
   position: relative;
   display: flex;
   min-height: 90svh;
@@ -32,7 +33,6 @@ export const Container = styled.section`
   border: 1px solid var(--color-base-300, #d1d5db);
   border-radius: 0.275rem 0 0 0;
 
-  padding: 1.25rem;
   padding-top: 0;
   background: hsl(0deg 0% 100%);
 
@@ -59,9 +59,6 @@ export const Stage = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
-
-  border-radius: 1rem;
-
   overflow: hidden;
 `;
 
@@ -81,11 +78,12 @@ export const StateCard = styled.div<StateCardProps>`
   padding: clamp(1.5rem, 3vw, 2.5rem);
   text-align: center;
   overflow: hidden;
-  margin-top: 2.5rem;
+
   ${({ $variant }) =>
     $variant === 'loading' &&
     css`
-      color: var(--color-primary-content, #fffaf1);
+      background: var(--color-primary-content, #fffaf1);
+      /* color: var(--color-primary-content, #fffaf1);
       background: linear-gradient(
         120deg,
         var(--color-primary, #b86c09),
@@ -107,13 +105,13 @@ export const StateCard = styled.div<StateCardProps>`
           transparent 100%
         );
         animation: ${shimmer} 2.2s linear infinite;
-      }
+      } */
     `}
 
   ${({ $variant }) =>
     $variant === 'error' &&
     css`
-      color: var(--color-error-content, #fff5f5);
+      color: '#fff';
       background:
         radial-gradient(circle at top, rgb(255 255 255 / 0.12), transparent 35%),
         linear-gradient(160deg, var(--color-error, #dc2626), rgb(87 18 18 / 0.94));
@@ -122,7 +120,7 @@ export const StateCard = styled.div<StateCardProps>`
 	${({ $variant }) =>
     $variant === 'empty' &&
     css`
-      color: var(--color-base-content, #111827);
+      color: '#fff';
       background:
         radial-gradient(circle at top, rgb(255 255 255 / 0.4), transparent 35%),
         linear-gradient(
@@ -179,6 +177,7 @@ export const StateTitle = styled.h3`
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   line-height: 1.1;
   font-weight: 800;
+  color: --var(--color-primary-content, #fffaf1);
 `;
 
 export const StateBody = styled.p`
@@ -189,6 +188,7 @@ export const StateBody = styled.p`
   font-size: clamp(0.95rem, 1.45vw, 1.05rem);
   line-height: 1.7;
   opacity: 0.9;
+  color: --var(--color-primary-content, #fffaf1);
 `;
 
 export const ImageFrame = styled.div`

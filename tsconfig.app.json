@@ -9,6 +9,7 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
@@ -25,7 +26,9 @@
     /* Import paths */
     "paths": {
       "@/*": ["./src/*"],
-      "@/view/*": ["./src/view/*"]
+      "@/view/*": ["./src/view/*"],
+      "@/assets/*": ["./public/assets/*"],
+      "@/public/assets/*": ["./public/assets/*"]
     }
   },
   "include": ["src"]

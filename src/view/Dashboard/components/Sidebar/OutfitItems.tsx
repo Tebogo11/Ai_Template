@@ -44,13 +44,19 @@ const OutfitItems = ({ _id, title }: OutfitItemsProps) => {
         // onClick={onPickWardrobe}
         className={`border-base-200 flex border-t p-4 ${wardrobeId === _id ? 'bg-base-200' : ''} hover:bg-base-200 cursor-pointer`}
       >
-        <img
-          src={imageUrl || '/assets/placeholder.png'}
-          alt="Outfit Preview"
-          loading="eager" // load immediately
-          decoding="async" // doesn’t block rendering
-          className="border-base-300 mr-4 h-10 w-10 rounded-xs border-1 object-cover"
-        />
+        {!imageUrl ? (
+          <div className="border-base-300 mr-4 grid h-10 w-10 place-items-center rounded-xs border-1">
+            ?
+          </div>
+        ) : (
+          <img
+            src={imageUrl || '/assets/placeholder.png'}
+            alt="Outfit Preview"
+            loading="eager" // load immediately
+            decoding="async" // doesn’t block rendering
+            className="border-base-300 mr-4 h-10 w-10 rounded-xs border-1 object-cover"
+          />
+        )}
         <div>
           <h2 className="text-sm font-semibold">{title || 'Untitled Wardrobe'}</h2>
           <p className="text-xs">

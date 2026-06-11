@@ -6,7 +6,6 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import {
   Container,
   UploadLabel,
-  UploadTitle,
   UploadText,
   UploadSubtitle,
   SelectFileButton,
@@ -20,25 +19,36 @@ import {
   ModalCloseButton,
 } from './styles';
 import { useAppSetting } from '@/store/useAppSetting';
-import { relative } from 'path';
+import { motion } from 'framer-motion';
 
 interface ImageUploadProps {
   onChange?: (file: string | null) => void;
   value?: string | null;
   className?: string;
   size?: string; // should describe the box itself, e.g. "w-full min-h-48"
-  isSmall?: boolean;
   idPrefix: string;
-  isModal?: boolean;
 }
+
+export const imageAnimationVariant = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
+};
+
+const isValidImageSource = (source: string | null | undefined) => {
+  if (!source) {
+    return false;
+  }
+
+  const normalized = source.trim();
+  return normalized.length > 0 && normalized !== 'undefined' && normalized !== 'null';
+};
 
 const FileInputBox: FC<ImageUploadProps> = ({
   onChange,
   value = null,
   className = '',
-  isSmall = false,
   idPrefix,
-  isModal = false,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [urlInput, setUrlInput] = useState<string | null>(null);
@@ -47,6 +57,10 @@ const FileInputBox: FC<ImageUploadProps> = ({
 
   const { theme } = useAppSetting();
   const getImageUrl = useMutation(api.storage.getImageUrlFunc);
+  const placeholderImageSrc =
+    theme === 'dark'
+      ? '/assets/form/Dark-Add-Model.png'
+      : '/assets/form/Light-Add-Model.png';
 
   const processFile = (file: File) => {
     if (!file.type.startsWith('image/')) return;
@@ -94,15 +108,22 @@ const FileInputBox: FC<ImageUploadProps> = ({
     let cancelled = false;
 
     const normalizeUrl = async () => {
-      const current = value || '';
+      const current = typeof value === 'string' ? value.trim() : '';
+
+      if (!isValidImageSource(current)) {
+        setUrlInput(null);
+        setStorageId(null);
+        return;
+      }
+
       const isConvex = isConvexStorageId(current);
 
-      if (isConvex && value) {
-        const result = await getImageUrl({ storageId: value });
+      if (isConvex) {
+        const result = await getImageUrl({ storageId: current });
         if (cancelled) return;
 
-        if (result) {
-          setStorageId(value);
+        if (isValidImageSource(result)) {
+          setStorageId(current);
           setUrlInput(result);
           // IMPORTANT: don’t call onChange here unless you *intentionally* want to
           // mutate parent state when resolving convex IDs.
@@ -114,7 +135,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
         return;
       }
 
-      setUrlInput(value);
+      setUrlInput(current);
       setStorageId(null);
     };
 
@@ -125,6 +146,7 @@ const FileInputBox: FC<ImageUploadProps> = ({
     };
   }, [value, getImageUrl]);
 
+  console.log('FileInputBox render', { value, urlInput, storageId });
   return (
     <Container className={className}>
       {!urlInput ? (
@@ -135,26 +157,27 @@ const FileInputBox: FC<ImageUploadProps> = ({
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <div>
-            <img
-              src={
-                theme === 'dark'
-                  ? 'assets/form/Dark-Add-Model.png'
-                  : 'assets/form/Light-Add-Model.png'
-              }
-              alt="Default"
-              width={50}
-              height={50}
-            />
-          </div>
+          <motion.div
+            variants={imageAnimationVariant}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {isValidImageSource(placeholderImageSrc) && (
+              <img src={placeholderImageSrc} alt="Default" width={50} height={50} />
+            )}
+          </motion.div>
           <UploadText>Drag and drop model image</UploadText>
           <UploadSubtitle>
             Best results with high-resolution full-body shots on clean backgrounds.
           </UploadSubtitle>
-          <SelectFileButton as="span" onClick={(e) => {
-            e.preventDefault();
-            document.getElementById(`image-upload${idPrefix}`)?.click();
-          }}>
+          <SelectFileButton
+            as="span"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById(`image-upload${idPrefix}`)?.click();
+            }}
+          >
             Select File
           </SelectFileButton>
           <HiddenInput
@@ -166,7 +189,20 @@ const FileInputBox: FC<ImageUploadProps> = ({
         </UploadLabel>
       ) : (
         <PreviewBox>
-          <PreviewImage src={urlInput!} alt="Preview" loading="eager" decoding="async" />
+          <motion.div
+            style={{ width: '100%', height: '100%' }}
+            variants={imageAnimationVariant}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <PreviewImage
+              src={urlInput!}
+              alt="Preview"
+              loading="eager"
+              decoding="async"
+            />
+          </motion.div>
           <RemoveButton type="button" onClick={handleRemove} aria-label="Remove image">
             <XMarkIcon style={{ width: 20, height: 20 }} />
           </RemoveButton>

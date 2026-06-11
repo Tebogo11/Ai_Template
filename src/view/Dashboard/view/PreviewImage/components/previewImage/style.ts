@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 
-export const PreviewCarouselContainer = styled.div`
+export const PreviewCarouselContainer = styled(motion.div)`
   position: relative;
   min-width: 100%;
   border-radius: 0.5rem;
-  padding: 0rem 0rem 0.85rem;
+
   margin-top: 0.05rem;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,12 @@ export const PreviewCarouselContainer = styled.div`
   min-height: 180px;
 
   @media (max-width: 992px) {
-    padding-left: 1rem;
+    padding: 0rem 0.75rem 0.85rem;
+    padding-left: 2.5rem;
+  }
+
+  @media (min-width: 992px) {
+    padding: 0rem 2rem 0.85rem;
   }
 `;
 
@@ -55,7 +60,7 @@ export const TabBarContainer = styled.div`
   justify-content: space-between;
   background: var(--color-base-100, #fff);
   padding: 0.25rem 0.4rem;
-  border: 3px solid var(--color-base-content, #0000);
+  border: 1px solid var(--color-base-content, #0000);
   box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
   border-radius: 0.2rem;
 `;
@@ -123,7 +128,7 @@ export const ActionContainer = styled.div`
 
 export const ActionItem = styled(motion.button)`
   color: var(--color-base-content, #000);
-  border: 3px solid var(--color-base-content, #0000);
+  border: 1px solid var(--color-base-content, #0000);
   background: var(--color-base-100, #fff);
   width: 2.25rem;
   height: 2.25rem;

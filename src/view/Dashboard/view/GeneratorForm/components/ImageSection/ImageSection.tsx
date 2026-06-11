@@ -19,7 +19,6 @@ const ImageSection = () => {
         value={modal}
         onChange={onChangeModal}
         idPrefix="modal"
-        isModal
       />
     </Section>
   );

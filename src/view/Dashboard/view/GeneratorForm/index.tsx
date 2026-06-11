@@ -36,8 +36,8 @@ const GeneratorForm = ({ setIsDrawerOpen, isDrawerOpen }: GeneratorFormProps) =>
           setIsDrawerOpen(true);
         }
       }}
-      initial={{ width: !isDrawerOpen ? 'calc(100vw - 40px)' : '50px' }}
-      animate={{ width: isDrawerOpen ? 'calc(100vw - 40px)' : '50px' }}
+      initial={{ width: !isDrawerOpen ? 'calc(100vw - 80px)' : '50px' }}
+      animate={{ width: isDrawerOpen ? 'calc(100vw - 80px)' : '50px' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {isDrawerOpen || !isMobile ? (

@@ -10,7 +10,7 @@ const MainContent = () => {
   return (
     <>
       <div className="bg-base-100 dark:bg-darkBase-300 flex h-full w-full flex-col">
-        <div className="h-[8svh] px-5">
+        <div className="px-5">
           <Header />
         </div>
         <WardrobeModalProvider>

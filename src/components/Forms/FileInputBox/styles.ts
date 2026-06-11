@@ -30,7 +30,7 @@ export const UploadLabel = styled.label<{ isDragging?: boolean }>`
     border-color: var(--color-secondary, #a78bfa);
     background: rgba(167, 139, 250, 0.1);
   `}
-  height: 40svh
+  height: 40svh;
 `;
 
 export const UploadTitle = styled.h3`
@@ -93,13 +93,12 @@ export const PreviewBox = styled.div<{}>`
   display: flex;
   align-items: center;
   justify-content: center;
-  max-height: 40svh;
+  height: 40svh;
 `;
 
 export const PreviewImage = styled.img`
   height: 100%;
   width: 100%;
-  max-height: 40svh;
   object-fit: contain;
   object-position: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);

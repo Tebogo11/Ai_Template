@@ -7,7 +7,7 @@ type FormContainerProps = {
 };
 export const FormContainer = styled(motion.div)<FormContainerProps>`
   display: flex;
-  height: 92svh;
+  height: calc(100svh - 55px);
   width: clamp(375px, 90vw, 450px);
   max-width: 450px;
   min-width: 475px;
@@ -81,14 +81,11 @@ export const DrawerClosedFormPreview = styled.div`
     height: 42px;
     object-fit: contain;
     object-position: center;
-    border: 2px solid var(--color-base-content, #0000);
+    border: 1px solid var(--color-base-content, #0000);
     border-radius: 2px;
     background: var(--color-base-200, #fff);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     padding: 2px;
-    box-shadow:
-      inset 1px 1px 2px 0px rgba(0, 0, 0, 0.5),
-      inset -1px -1px 2px 0px rgba(0, 0, 0, 0.5);
   }
 `;
 

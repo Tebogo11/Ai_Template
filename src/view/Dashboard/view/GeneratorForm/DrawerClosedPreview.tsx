@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import React from 'react';
 import { DrawerClosedFormPreview, MobileViewLabel } from './styles';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
 const DrawerClosedPreview = () => {
   const { modal, accessories } = useGeneratorSetting();
@@ -11,11 +12,24 @@ const DrawerClosedPreview = () => {
         <div>
           <MobileViewLabel className="font-bold">Modal:</MobileViewLabel>
           {modal && <img src={modal} alt="Logo" />}
+          <div className="bg-base-200 mb-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm">
+            <PlusIcon className="text-base-500 size-5" />
+          </div>
           <MobileViewLabel className="font-bold">Outfits:</MobileViewLabel>
+          <div className="bg-base-200 mb-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm p-2 px-4">
+            <div className="border-base-400 mx-[2px] rounded-[3px] border-1 border-dashed p-[2px]">
+              <p className="text-base-500 py-[1px] text-[0.35rem] font-bold tracking-[-0.09em] uppercase">
+                Try Something On
+              </p>
+            </div>
+          </div>
           {accessories &&
             accessories.map((accessory, index) => (
               <img key={index} src={accessory.url} alt={`Accessory ${index + 1}`} />
             ))}
+          <div className="bg-base-200 mb-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-sm">
+            <PlusIcon className="text-base-500 size-5" />
+          </div>
         </div>
         <motion.div
           className="bg-primary border-base-300 flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-2 rounded-sm border-2 pr-1"

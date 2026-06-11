@@ -309,7 +309,7 @@
   --color-warning: hsl(43, 100%, 69%);
   --color-warning-content: hsl(41, 75%, 5%);
 
-  --color-error: hsl(10, 95%, 75%);
+  --color-error: hsl(5, 98%, 65%);
   --color-error-content: hsl(8, 57%, 5%);
   --radius-selector: 0.25rem;
   --radius-field: 0.2rem;

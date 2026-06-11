@@ -58,7 +58,7 @@ const ActionSection = ({
           xmlns="http://www.w8.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="3"
+          stroke-width="2"
           stroke="currentColor"
           className="size-5"
         >
@@ -81,7 +81,7 @@ const ActionSection = ({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth="3"
+          strokeWidth="2"
           stroke="currentColor"
           className="size-5"
         >
@@ -104,7 +104,7 @@ const ActionSection = ({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
-          stroke-width="3"
+          stroke-width="2"
           stroke="currentColor"
           className="size-5"
         >
@@ -127,7 +127,7 @@ const ActionSection = ({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0.5 0 24 24"
-          stroke-width="3"
+          stroke-width="2"
           stroke="hsla(0, 100%, 55%)"
           className="size-5"
         >

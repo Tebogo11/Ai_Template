@@ -46,9 +46,12 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex w-full items-start justify-between px-0 py-4">
+      <div className="flex w-full items-start justify-between px-0 py-2">
         <div className="flex items-center">
-          <label htmlFor="my-drawer" className="drawer-button ml-[-5px] cursor-pointer">
+          <label
+            htmlFor="my-drawer"
+            className="drawer-button mr-[9px] ml-[-18px] cursor-pointer md:ml-[-5px]"
+          >
             <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
           </label>
           <h2 className="login-outfit text-base-content mt-[2px] ml-3.5 hidden text-[20px] md:block">
@@ -61,7 +64,7 @@ const Header = () => {
               type="search"
               placeholder="Untitled wardrobe"
               value={wardrobeId ? wardrobe?.title : ''}
-              className="max-w-33"
+              className="max-w-28 md:max-w-32"
               onChange={(e) =>
                 changeTitle({
                   title: e.target.value || 'Untitled wardrobe',
@@ -90,16 +93,16 @@ const Header = () => {
             onClick={() => setShowSubscriptionModal(true)}
           >
             <div className="mt-0.5 flex flex-col items-start">
-              <h2 className="text-base-content text-[8px] font-bold">
+              <h2 className="text-base-content text-[8px] font-bold md:text-[8px]">
                 Available Credits:
               </h2>
-              <h2 className="text-base-content text-[9px] font-normal md:text-xs">
+              <h2 className="text-base-content text-[9px] font-normal md:text-[10px]">
                 {user?.credits} Credits Left
               </h2>
             </div>
             <div className="text-primary-content p-0.5 hover:bg-gradient-to-br hover:from-[#db944d] hover:to-[hsl(182,65%,25%)] hover:text-[hsl(182,65%,25%)]">
               <div className="bg-base-content hover:bg-base-100 px-2.5 py-1 md:px-5">
-                <p className="text-xs font-semibold md:text-sm">
+                <p className="text-[10px] font-semibold md:text-[12px] lg:text-[14px]">
                   {user?.plan === 'free' ? 'Upgrade' : 'Manage'}
                 </p>
               </div>
