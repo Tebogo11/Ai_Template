@@ -35,6 +35,16 @@ export default defineSchema({
   outfit: defineTable({
     initial_prompt: v.string(),
     is_new_outfit: v.optional(v.boolean()),
+    title: v.optional(v.string()),
+    summary: v.optional(v.string()),
+    modal: v.optional(v.string()),
+    accessories: v.optional(v.array(v.string())),
+    fit: v.optional(v.string()),
+    event: v.optional(v.string()),
+    amount_of_change: v.optional(v.string()),
+    themes: v.optional(v.array(v.string())),
+    style_theme: v.optional(v.array(v.string())),
+    preview_images: v.optional(v.string()),
     status: v.optional(
       v.union(v.literal('error'), v.literal('generating'), v.literal('done')),
     ),
