@@ -2,6 +2,7 @@ import React from 'react';
 import { StateCard, StatusOrb, StatusGlyph, StateTitle, StateBody } from '../../style';
 import { StepsList, Step, StepNumber, StepText } from './style';
 import { previewSteps } from './const';
+import { motion } from 'framer-motion';
 
 type GuideSlideProps = {
   outfitStatus?: 'generating' | 'error' | 'done';
@@ -10,9 +11,21 @@ type GuideSlideProps = {
 const GuideSlide: React.FC<GuideSlideProps> = ({ outfitStatus, hasImage }) => {
   return !outfitStatus && !hasImage ? (
     <StateCard $variant="empty">
-      <StatusOrb $variant="empty">
-        <StatusGlyph>+</StatusGlyph>
-      </StatusOrb>
+      <motion.div
+        initial={{ y: 0 }}
+        animate={{ y: [0, -10, 0] }}
+        transition={{
+          type: 'spring',
+          duration: 1.4,
+          repeat: Infinity,
+          repeatType: 'loop',
+          ease: 'easeInOut',
+        }}
+      >
+        <StatusOrb $variant="empty">
+          <StatusGlyph>+</StatusGlyph>
+        </StatusOrb>
+      </motion.div>
       <StateTitle>Build your look</StateTitle>
       <StateBody>
         This panel will show the generated result once you submit the form. Use the steps
