@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router';
 import { posts } from './data';
 import Seo from '../components/Seo';
+import ReactMarkdown from 'react-markdown';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
@@ -46,11 +47,12 @@ export default function BlogPostPage() {
         <img
           src={post.image}
           alt={post.title}
-          className="mb-8 w-full rounded-lg shadow"
+          className="mb-8 h-[400px] w-full rounded-lg shadow"
         />
-        <p className="text-base-content/80 text-lg leading-8 whitespace-pre-line">
-          {post.content}
-        </p>
+        <article className="prose prose-lg max-w-none">
+          <ReactMarkdown>{post.content}</ReactMarkdown>
+        </article>
+
         <div className="mt-8 flex flex-wrap gap-2">
           {post.tags.map((t) => (
             <span key={t} className="badge badge-outline">

@@ -59,11 +59,11 @@ const About = () => {
               </div>
 
               <div className="stat bg-base-200 rounded-lg shadow-lg">
-                <div className="stat-figure text-secondary">
+                <div className="stat-figure text-accent">
                   <Smartphone className="h-8 w-8" />
                 </div>
                 <div className="stat-title">Digital Shoppers</div>
-                <div className="stat-value text-secondary">2.7B</div>
+                <div className="stat-value text-accent">2.7B</div>
                 <div className="stat-desc">Worldwide in 2024</div>
               </div>
             </div>
@@ -98,7 +98,7 @@ const About = () => {
 
             <div className="card bg-base-100 shadow-lg">
               <div className="card-body items-center text-center">
-                <TrendingUp className="text-secondary mb-4 h-12 w-12" />
+                <TrendingUp className="text-accent mb-4 h-12 w-12" />
                 <h3 className="card-title text-2xl">Instant Results</h3>
                 <p className="text-base-content/70">
                   No more waiting days for shipping or dealing with returns. See your

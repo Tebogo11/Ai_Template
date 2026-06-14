@@ -1,15 +1,14 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AuthPage } from './view/Auth/SignInForm';
 import { SignUpPage } from './view/Auth/SignUpForm';
-
 import LandingLayout from './view/Layout';
-import HomePage from './view/Home';
 import PricingPage from './view/Pricing';
 import AboutPage from './view/About';
 import Contact from './view/Contact';
 import BlogIndex from './view/Blog';
 import BlogPostPage from './view/Blog/PostView';
 import NotFound from './view/NotFound';
+import HomePage from './view/Home';
 
 const router = createBrowserRouter([
   {

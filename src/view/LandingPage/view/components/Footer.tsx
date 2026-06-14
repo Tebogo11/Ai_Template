@@ -36,9 +36,9 @@ const Footer = () => {
             <span>Outfit AI</span>
           </Link>
           <p className="text-base-content/70 text-sm">
-            Outfit AI lets you try outfits before you buy. Generate made-to-fit looks with
-            hyper-real visuals calibrated to your measurements, style goals, and seasonal
-            needs.
+            Not sure if an outfit will work? Outfit AI lets you mix, match, and visualize
+            clothing combinations in seconds, helping you discover new styles with
+            confidence.
           </p>
         </div>
         <div className="flex flex-1 flex-col gap-6 text-sm md:flex-row md:justify-end">

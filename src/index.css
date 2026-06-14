@@ -220,6 +220,8 @@
 @custom-variant dark (&:where([data-theme="outfit-dark"], [data-theme="outfit-dark"] * , .dark, .dark * ));
 
 /* ───────────────────────── LIGHT THEME ───────────────────────── */
+@plugin '@tailwindcss/typography';
+
 @plugin 'daisyui' {
   themes:
     outfit --default,
