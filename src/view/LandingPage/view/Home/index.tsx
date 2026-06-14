@@ -397,13 +397,13 @@ const HomePage = () => {
         </div>
         <div className="bg-base-100 mx-[2vw] mt-5 rounded-xl p-2">
           <img
-            src={`/assets/landingPage/demo/${theme === 'dark' ? 'largeScreenImage' : 'largeScreenImage-light'}.webp`}
+            src={`/assets/landingPage/demo/${theme === 'dark' ? 'largeScreenImage' : 'largeScreenImage-light'}.png`}
             alt="How it works"
             loading="eager"
             className="mx-auto hidden md:block"
           />
           <img
-            src={`/assets/landingPage/demo/${theme === 'dark' ? 'mobilescreen' : 'mobilescreen-light'}.webp`}
+            src={`/assets/landingPage/demo/${theme === 'dark' ? 'mobilescreen' : 'mobilescreen-light'}.png`}
             alt="How it works"
             loading="eager"
             className="mx-auto block md:hidden"
