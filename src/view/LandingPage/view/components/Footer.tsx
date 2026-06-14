@@ -38,8 +38,11 @@ const Footer = () => {
           <p className="text-base-content/70 text-sm">
             Not sure if an outfit will work? Outfit AI lets you mix, match, and visualize
             clothing combinations in seconds, helping you discover new styles with
-            confidence.
+            confidence. Try it free now.
           </p>
+          <Link to="/pricing" className="btn btn-primary btn-lg">
+            Get Started
+          </Link>
         </div>
         <div className="flex flex-1 flex-col gap-6 text-sm md:flex-row md:justify-end">
           <div className="space-y-3">
