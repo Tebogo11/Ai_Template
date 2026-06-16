@@ -6,12 +6,10 @@ import { useEffect, useRef } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import OutfitItems from './OutfitItems';
 import { Link, useNavigate } from 'react-router';
-import useWindowSize from '@/hook/useWindowSize';
 import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
 
 const SideBar = () => {
   const { theme } = useAppSetting();
-  const { width } = useWindowSize();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const isLoadingMoreRef = useRef(false);
 
