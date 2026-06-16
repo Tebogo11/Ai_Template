@@ -54,7 +54,7 @@ export const Textarea = styled.textarea`
   border-radius: 0.25rem;
   background-color: var(--color-base-200, #e5e7eb);
   color: var(--color-base-content, #1f2937);
-  padding: 0.5rem 5rem 0.5rem 1rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   max-height: 18dvh;
   word-break: break-word;
   white-space: pre-wrap;
@@ -76,7 +76,13 @@ export const Textarea = styled.textarea`
   }
 `;
 
-export const SubmitButton = styled.button<{ isDisabled: boolean; isGenerating: boolean }>`
+export const SubmitButton = styled.button<{
+  isInputFocused: boolean;
+  isDisabled: boolean;
+  isGenerating: boolean;
+}>`
+  display: ${({ isInputFocused }) => (!isInputFocused ? 'flex' : 'none')};
+  flex-direction: row;
   position: absolute;
   right: 5px;
   bottom: 12px;

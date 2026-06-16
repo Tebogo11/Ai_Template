@@ -6,7 +6,7 @@ import Seo from '../components/Seo';
 export const AuthPage = () => {
   const { theme } = useAppSetting(); // Ensure the auth context is initialized
   return (
-    <div className="bg-base-100 text-base-content relative h-dvh overflow-hidden">
+    <div className="bg-base-100 text-base-content relative h-svh min-h-[700px] overflow-y-auto">
       <Seo
         title="Login - Outfit AI"
         description="Sign in to your Outfit AI account."
@@ -17,21 +17,15 @@ export const AuthPage = () => {
       />
       <Header />
 
-      <div
-        className="flex w-full overflow-y-hidden"
-        style={{ height: '100dvh', overflow: 'hidden' }}
-      >
+      <div className="flex h-svh w-full min-w-3/5 flex-1">
         {/* Left side (hidden on mobile) */}
-        <div className="hidden h-full w-3/5 overflow-clip md:flex">
-          <div
-            className="relative h-full w-full"
-            style={{ overflow: 'hidden', paddingBottom: '56.25%' }}
-          >
+        <div className="relative hidden h-full min-w-3/5 flex-1 overflow-clip md:flex">
+          <div className="absolute top-0 bottom-0 left-0 min-h-full min-w-full">
             <video
               autoPlay
               muted
               loop
-              className="absolute top-0 left-0 h-full w-full rounded-lg p-3 pt-20"
+              className="h-full w-full rounded-lg p-3 pt-20"
               style={{ objectFit: 'cover', objectPosition: 'center' }}
             >
               {theme !== 'light' ? (
@@ -49,7 +43,7 @@ export const AuthPage = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex-center bg-background dark:bg-darkBackground mt-80 max-h-[40dvh] w-full flex-col px-6 lg:w-2/5">
+        <div className="bg-background dark:bg-darkBackground h-svh w-full flex-col px-6 lg:w-2/5">
           {/* Logo */}
           {/* <div className="flex flex-col items-start mb-6">
             <div className="text-pink-500 text-5xl font-bold">
@@ -67,7 +61,7 @@ export const AuthPage = () => {
           </div> */}
 
           {/* Clerk SignIn */}
-          <div className="flex-center w-full">
+          <div className="flex-center w-full pt-30">
             <SignIn
               appearance={{
                 elements: {

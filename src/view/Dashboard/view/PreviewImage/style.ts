@@ -91,6 +91,9 @@ export const StateCard = styled.div<StateCardProps>`
           var(--color-base-100, #f9fafb) 0%,
           var(--color-base-200, #eceff1) 100%
         );
+      @media (max-width: 768px) {
+        padding-left: 4rem;
+      }
     `}
 `;
 
