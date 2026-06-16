@@ -6,8 +6,10 @@ import { useEffect, useState } from 'react';
 import { Bars3BottomLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useAppSetting } from '@/store/useAppSetting';
 import { useNavigate, useParams } from 'react-router';
+import useWindowSize from '@/hook/useWindowSize';
 
 const Header = () => {
+  const { width } = useWindowSize();
   const { wardrobeId } = useParams();
   const navigate = useNavigate();
 
@@ -52,7 +54,7 @@ const Header = () => {
             htmlFor="my-drawer"
             className="drawer-button cursor-pointer md:ml-[-5px]"
           >
-            <Bars3BottomLeftIcon className="text-primary h-8 w-8" />
+            <Bars3BottomLeftIcon className="text-base-content h-8 w-8" />
           </label>
           <h2 className="login-outfit text-base-content mt-[2px] ml-3.5 hidden text-[20px] md:block">
             Outfit
@@ -93,10 +95,10 @@ const Header = () => {
             onClick={() => setShowSubscriptionModal(true)}
           >
             <div className="mt-0.5 flex flex-col items-start">
-              <h2 className="text-base-content text-[7px] font-bold md:text-[8px]">
-                Available Credits:
+              <h2 className="text-base-content text-[10px] font-bold md:text-[8px]">
+                {width > 768 ? 'Available' : null} Credits:
               </h2>
-              <h2 className="text-base-content text-[8px] font-normal md:text-[9px]">
+              <h2 className="text-base-content text-[9px] font-normal md:text-[9px]">
                 {user?.credits} Credit Left
               </h2>
             </div>

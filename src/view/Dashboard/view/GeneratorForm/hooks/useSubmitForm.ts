@@ -36,7 +36,7 @@ const useSubmitForm = () => {
         prompt: prompt || '',
         is_new_outfit,
         wardrobeId: wardrobeId as string | undefined,
-        title: title || 'Untitled Outfit',
+        title: title || 'Untitled Outfits',
       };
 
       console.log('Submitting with data:', data);

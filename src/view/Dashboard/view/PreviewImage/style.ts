@@ -85,12 +85,11 @@ export const StateCard = styled.div<StateCardProps>`
     css`
       color: '#fff';
       background:
-        radial-gradient(circle at top, rgb(255 255 255 / 0.4), transparent 35%),
-        linear-gradient(
-          180deg,
-          var(--color-base-100, #f9fafb) 0%,
-          var(--color-base-200, #eceff1) 100%
-        );
+        /* radial-gradient(circle at top, rgb(87 18 18 / 0.14), transparent 35%), */ linear-gradient(
+        180deg,
+        var(--color-base-100, #f9fafb) 0%,
+        var(--color-base-200, #eceff1) 100%
+      );
       @media (max-width: 768px) {
         padding-left: 4rem;
       }
@@ -125,9 +124,9 @@ export const StatusOrb = styled.div<StateCardProps>`
 	${({ $variant }) =>
     $variant === 'empty' &&
     css`
-      background: rgb(255 255 255 / 0.56);
-      box-shadow: 0 0 0 10px rgb(255 255 255 / 0.3);
-      border-color: rgb(17 24 39 / 0.08);
+      background: rgb(255 255 255 / 0.16);
+      box-shadow: 0 0 0 10px rgb(255 255 255 / 0.6);
+      border-color: rgb(17 24 39 / 0.18);
     `}
 `;
 

@@ -6,9 +6,12 @@ import { useEffect, useRef } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import OutfitItems from './OutfitItems';
 import { Link, useNavigate } from 'react-router';
+import useWindowSize from '@/hook/useWindowSize';
+import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
 
 const SideBar = () => {
   const { theme } = useAppSetting();
+  const { width } = useWindowSize();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const isLoadingMoreRef = useRef(false);
 
@@ -88,7 +91,7 @@ const SideBar = () => {
         <div
           ref={scrollContainerRef}
           onScroll={onScrollWardrobes}
-          className="max-h-[calc(100vh-150px)] overflow-y-auto"
+          className="max-h-[calc(100vh-150px)] overflow-y-auto pb-2"
         >
           {results.map((wardrobe) => (
             <label
@@ -99,6 +102,9 @@ const SideBar = () => {
               <OutfitItems key={wardrobe._id} {...wardrobe} />
             </label>
           ))}
+        </div>
+        <div className="flex flex-1 items-end justify-center md:hidden">
+          <DarkModeSwitch size="large" />
         </div>
       </ul>
     </div>

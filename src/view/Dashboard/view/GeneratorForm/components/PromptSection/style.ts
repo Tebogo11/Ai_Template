@@ -70,10 +70,6 @@ export const Textarea = styled.textarea`
     color: var(--color-base-content, #1f2937);
     opacity: 0.5;
   }
-
-  @media (max-width: 768px) {
-    min-height: 40px;
-  }
 `;
 
 export const SubmitButton = styled.button<{
