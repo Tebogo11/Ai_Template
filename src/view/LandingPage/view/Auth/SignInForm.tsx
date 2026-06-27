@@ -43,7 +43,7 @@ export const AuthPage = () => {
         </div>
 
         {/* Right side */}
-        <div className="bg-background dark:bg-darkBackground h-svh w-full flex-col px-6 lg:w-2/5">
+        <div className="bg-base-100 dark:bg-darkBackground h-svh w-full flex-col px-6 lg:w-2/5">
           {/* Logo */}
           {/* <div className="flex flex-col items-start mb-6">
             <div className="text-pink-500 text-5xl font-bold">
@@ -61,7 +61,7 @@ export const AuthPage = () => {
           </div> */}
 
           {/* Clerk SignIn */}
-          <div className="flex-center w-full pt-30">
+          <div className="flex-center w-full pt-20">
             <SignIn
               appearance={{
                 elements: {
