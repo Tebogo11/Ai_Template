@@ -1,23 +1,24 @@
 import { useGeneratorSetting } from '@/store/useGeneratorData';
 import React, { useEffect } from 'react';
 import { useMutation, useQuery } from 'convex/react';
-import { api } from '../../../../../convex/_generated/api';
+import { api } from '../../../convex/_generated/api';
 import { Container, Stage, StateBody, StateCard, StateTitle } from './style';
 import GuideSlide from './components/Guide';
 import PreviewImageDisplay from './components/previewImage/PreviewImage';
-import { Id } from '../../../../../convex/_generated/dataModel';
-import generatingIconData from '../../../../assets/lottie/generatingIcon.json';
-import errorIconData from '../../../../assets/lottie/errorIcon.json';
-import deletingOutft from '../../../../assets/lottie/deletingOutfit.json';
+import { Id } from '../../../convex/_generated/dataModel';
+import generatingIconData from '../../assets/lottie/generatingIcon.json';
+import errorIconData from '../../assets/lottie/errorIcon.json';
+import deletingOutft from '../../assets/lottie/deletingOutfit.json';
 import Lottie, { Options } from 'react-lottie';
 import { AnimatePresence, motion } from 'framer-motion';
-import useSubmitForm from '../GeneratorForm/hooks/useSubmitForm';
+import useSubmitForm from '../generator/hooks/useSubmitForm';
 import { useParams } from 'react-router';
 
 type PreviewImageProps = {
   setIsDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isDrawerOpen: boolean;
 };
+
 const PreviewImage = ({ setIsDrawerOpen }: PreviewImageProps) => {
   const { outfitId, wardrobeId } = useParams<{
     outfitId: Id<'outfit'>;

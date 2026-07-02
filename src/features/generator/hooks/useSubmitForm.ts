@@ -1,6 +1,6 @@
 import { useMutation } from 'convex/react';
 import { useGeneratorSetting } from '@/store/useGeneratorData';
-import { api } from '../../../../../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 import { saveImagesToStorage } from './utils';
 import { useWardrobeStore } from '@/store/useWardrobeStore';
 import { useNavigate, useParams } from 'react-router';

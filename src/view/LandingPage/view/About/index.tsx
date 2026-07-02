@@ -1,6 +1,6 @@
 import { ShoppingBag, Smartphone, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router';
-import Seo from '../components/Seo';
+import Seo from '../../components/Seo';
 
 const About = () => {
   return (

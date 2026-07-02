@@ -1,5 +1,5 @@
 import Flex from '@/components/Core/Flex';
-import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
+import DarkModeSwitch from '@/config/darkMode/DarkModeSwitch';
 import { useAppSetting } from '@/store/useAppSetting';
 import { SignUpButton } from '@clerk/clerk-react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
@@ -27,7 +27,7 @@ const Header = () => {
             decoding="async" // doesn’t block rendering
           />
 
-          <h1 className={`text-lg font-extrabold md:text-xl`}>Outfit AI</h1>
+          <span className="text-lg font-extrabold md:text-xl">Outfit AI</span>
         </Link>
       </Flex>
       <div className="pl-23.5">
@@ -44,7 +44,7 @@ const Header = () => {
                   } `
                 }
               >
-                <h2 className="text-center font-bold">{link.label}</h2>
+                <span className="text-center font-bold">{link.label}</span>
               </NavLink>
             </li>
           ))}

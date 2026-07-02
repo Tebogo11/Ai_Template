@@ -2,7 +2,7 @@ import { useAppSetting } from '@/store/useAppSetting';
 import { useMutation } from 'convex/react';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { api } from '../../../../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 
 const Footer = () => {
   const { theme } = useAppSetting();

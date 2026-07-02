@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Header from '../components/Header';
-import GeneratorForm from './GeneratorForm';
-import PreviewImage from './PreviewImage/PreviewImage';
-import WardrobeModalProvider from './WardrobeModalContext';
+import GeneratorForm from '@/features/generator';
+import PreviewImage from '@/features/preview/PreviewImage';
+import WardrobeModalProvider from '@/features/wardrobe';
 
 const MainContent = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

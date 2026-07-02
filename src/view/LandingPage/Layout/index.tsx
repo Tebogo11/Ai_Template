@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import Header from '../Auth/components/Header';
+import Header from '../view/Auth/components/Header';
 import Footer from '../components/Footer';
 
 const LandingLayout = () => {

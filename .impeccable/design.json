@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-01T06:56:30+01:00",
+  "title": "Design System: Outfit AI",
+  "extensions": {
+    "colorMeta": {
+      "burnt-amber-gold": { "role": "primary", "displayName": "Burnt Amber Gold", "canonical": "hsl(35, 90%, 35%)", "tonalRamp": ["#3a2303", "#744606", "#aa6709", "#da840b", "#f49d25", "#f6b355", "#f9cf94", "#fdeed8"] },
+      "deep-teal": { "role": "secondary", "displayName": "Deep Teal", "canonical": "hsl(182, 100%, 20%)", "tonalRamp": ["#003b3d", "#00767a", "#00adb3", "#00dee6", "#1af7ff", "#4df9ff", "#8ffbff", "#d6feff"] },
+      "marine-blue": { "role": "tertiary", "displayName": "Marine Blue", "canonical": "hsl(196, 100%, 27%)", "tonalRamp": ["#002d3d", "#005a7a", "#0083b3", "#00a8e6", "#1ac2ff", "#4dcfff", "#8fe1ff", "#d6f4ff"] },
+      "warm-paper-white": { "role": "neutral", "displayName": "Warm Paper White", "canonical": "hsl(308, 26%, 98%)", "tonalRamp": ["#271724", "#4d2d49", "#70426a", "#915589", "#aa6ea2", "#bd8fb7", "#d5b8d2", "#f0e5ee"] },
+      "blush-fog": { "role": "neutral", "displayName": "Blush Fog", "canonical": "hsl(308, 12%, 92%)" },
+      "dust-mauve": { "role": "neutral", "displayName": "Dust Mauve", "canonical": "hsl(308, 9%, 86%)" },
+      "ink-navy-black": { "role": "neutral", "displayName": "Ink Navy-Black", "canonical": "hsl(219, 44%, 4%)", "tonalRamp": ["#111b2c", "#223558", "#324d81", "#4064a5", "#5a7dbf", "#7e9acd", "#aebfe0", "#e2e8f4"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero single-word marks only (OUTFIT / Try / AI)." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles across the page." },
+      "title": { "displayName": "Title", "purpose": "Card and step titles." },
+      "body": { "displayName": "Body", "purpose": "Supporting paragraph copy, capped ~65-75ch." },
+      "label": { "displayName": "Label", "purpose": "Uppercase tracked micro-copy (hero subhead)." }
+    },
+    "shadows": [
+      { "name": "card-rest", "value": "0 1px 3px oklch(0 0 0 / 0.1), 0 4px 6px -1px oklch(0 0 0 / 0.1)", "purpose": "Default card elevation at rest." },
+      { "name": "card-hover", "value": "0 20px 25px -5px oklch(0 0 0 / 0.15), 0 8px 10px -6px oklch(0 0 0 / 0.15)", "purpose": "Card shadow.xl on hover, paired with a 6px lift." }
+    ],
+    "motion": [
+      { "name": "hover-lift", "value": "spring(stiffness: 300, damping: 18)", "purpose": "Physical hover/tap feedback on primary CTAs (y: -4, scale: 1.03)." },
+      { "name": "ease-reveal", "value": "cubic-bezier(0, 0, 0.2, 1)", "purpose": "Scroll-triggered section and card reveals (duration ~0.45-0.6s, staggered)." }
+    ],
+    "breakpoints": [
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main CTA. Square corners, solid amber-gold fill.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Get Started</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #AA6709; color: #FBF9FB; font-family: Outfit, sans-serif; font-weight: 600; font-size: 1.125rem; padding: 12px 32px; border-radius: 0; border: none; text-decoration: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); transition: transform 0.2s cubic-bezier(0,0,0.2,1), background 0.2s; } .ds-btn-primary:hover { transform: translateY(-4px) scale(1.03); } .ds-btn-primary:focus-visible { outline: 2px solid #00658A; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary CTA. Transparent fill, ink border.",
+      "html": "<a class=\"ds-btn-outline\" href=\"#\">Learn More</a>",
+      "css": ".ds-btn-outline { display: inline-block; background: transparent; color: #06090F; font-family: Outfit, sans-serif; font-weight: 600; font-size: 1.125rem; padding: 12px 32px; border-radius: 0; border: 1px solid #06090F; text-decoration: none; transition: background 0.2s; } .ds-btn-outline:hover { background: rgba(6,9,15,0.06); }"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Icon + title + body, square corners, lift on hover.",
+      "html": "<div class=\"ds-card\"><svg class=\"ds-card-icon\" width=\"48\" height=\"48\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#AA6709\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z\"/></svg><h3 class=\"ds-card-title\">AI-Powered</h3><p class=\"ds-card-body\">Advanced AI generates realistic outfit visualizations instantly</p></div>",
+      "css": ".ds-card { background: #EDE8EC; border-radius: 0; padding: 32px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 6px -1px rgba(0,0,0,0.1); transition: box-shadow 0.25s, transform 0.25s; } .ds-card:hover { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); transform: translateY(-6px); } .ds-card-icon { margin: 0 auto 16px; display: block; } .ds-card-title { font-family: Outfit, sans-serif; font-weight: 700; font-size: 1.5rem; color: #06090F; margin-bottom: 8px; } .ds-card-body { font-family: Outfit, sans-serif; color: rgba(6,9,15,0.7); font-size: 1rem; }"
+    },
+    {
+      "name": "Numbered Step Marker",
+      "kind": "custom",
+      "refersTo": "step-marker",
+      "description": "The one circular primitive in the system; used for the 3-step process.",
+      "html": "<div class=\"ds-step-marker\">1</div>",
+      "css": ".ds-step-marker { width: 80px; height: 80px; border-radius: 9999px; background: #AA6709; color: #FBF9FB; display: flex; align-items: center; justify-content: center; font-family: Outfit, sans-serif; font-weight: 900; font-size: 1.875rem; margin: 0 auto; }"
+    },
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Active/inactive header navigation link.",
+      "html": "<a class=\"ds-nav-link ds-nav-link--active\" href=\"#\">Home</a>",
+      "css": ".ds-nav-link { font-family: Outfit, sans-serif; font-weight: 700; font-size: 0.875rem; padding: 8px 12px; border-radius: 4px; color: rgba(6,9,15,0.8); text-decoration: none; transition: background 0.15s; } .ds-nav-link:hover { background: #EDE8EC; } .ds-nav-link--active { background: #AA6709; color: #FBF9FB; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Editorial Fitting Room",
+    "overview": "Outfit AI sells one promise: see the outfit on yourself before you pay for it. The visual system borrows from fashion-magazine layout — big confident type, square-cut edges, restrained color — rather than from SaaS-startup convention. Corners are square across every daisyUI primitive (buttons, cards, inputs); the only circles in the system are the three numbered step-markers in \"How It Works,\" making roundness a deliberate, rare signal rather than a default. Color is used the way a magazine uses a spot color: one warm amber-gold does the persuading (CTAs, active states, key headline words) while everything else sits in near-monochrome paper and ink.\n\nThis explicitly rejects the generic AI-SaaS template: no gradient-clipped hero text, no purple/indigo default palette, no identical icon-card grid repeated past the point of meaning, no tiny uppercase eyebrow line stamped above every section. Motion is quiet and physical — soft blurred color blobs drift in the background for atmosphere, cards lift a few pixels on hover, sections stagger in on scroll — never a flashy choreographed intro.",
+    "keyCharacteristics": [
+      "Square corners everywhere except the three numbered step-circles — roundness is earned, not default.",
+      "One accent color (burnt amber-gold) carries persuasion; teal and marine blue are supporting, low-frequency.",
+      "Single typeface (Outfit) for every role; hierarchy comes from weight and scale, never a font switch.",
+      "Ambient blurred color blobs for atmosphere, not gradients on text or buttons."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Burnt Amber Gold is the only color permitted to fill a large surface or a headline word. Teal and Marine Blue are reserved for small, specific touches — never a section background or a competing CTA.", "section": "colors" },
+      { "name": "The One Face Rule", "body": "Never introduce a second font family for contrast — Outfit already spans 100-900; reach for a heavier or lighter weight instead of a new typeface.", "section": "typography" },
+      { "name": "The Flat-at-Rest Rule", "body": "No component ships a shadow at rest beyond the card's minimal shadow-lg. Shadows deepen only in response to hover/interaction.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep every daisyUI primitive (button, card, input) at 0 border-radius — square corners are the system's signature.",
+      "Do let Burnt Amber Gold carry the persuasion and keep Teal/Marine Blue to single, small touches.",
+      "Do use Outfit at heavier weights (700-900) for hierarchy instead of introducing a second typeface.",
+      "Do use soft blurred color blobs for background atmosphere, kept well clear of body text."
+    ],
+    "donts": [
+      "Don't ship a generic AI-SaaS look: no gradient-clipped headline text, no purple/indigo default palette, no identical icon-card grid repeated without variation, no tiny uppercase eyebrow line stamped above every section.",
+      "Don't round a button or card corner \"for softness\" — that breaks the one signature the system has.",
+      "Don't add a second background color role beyond Warm Paper White / Blush Fog / Dust Mauve — new neutrals should be tints of the same 308° hue, not generic gray.",
+      "Don't use glassmorphism decoratively — the header's blur is the one functional exception, not a pattern to repeat."
+    ]
+  }
+}

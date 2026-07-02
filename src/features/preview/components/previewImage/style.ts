@@ -58,23 +58,23 @@ export const TabBarContainer = styled(motion.div)`
   display: flex;
   width: 100%;
   gap: 0.5rem;
-  max-height: 24px;
+  max-height: 26px;
   align-items: center;
   justify-content: space-between;
   background: var(--color-base-100, #fff);
   padding: 0.25rem 0.4rem;
-  border: 2px solid var(--color-base-content, #0000);
+  border: 1.5px solid var(--color-base-content, #0000);
   box-shadow: 0 4px 12px rgba(17, 17, 17, 0.08);
-  border-bottom-right-radius: 0.75rem;
-  border-top-left-radius: 0.75rem;
+  border-radius: 0.25rem;
+
   margin-top: -1.5rem;
 
-  @media (max-width: 992px) {
+  /* @media (max-width: 992px) {
     border-bottom-right-radius: 0 * rem;
     border-top-left-radius: 0 * rem;
     border-top-right-radius: 0.75rem;
     border-bottom-left-radius: 0.75rem;
-  }
+  } */
 `;
 
 export const PreviewCarouselTrack = styled.div`
@@ -141,7 +141,8 @@ export const ActionContainer = styled.div`
 
 export const ActionItem = styled(motion.button)`
   color: var(--color-base-content, #000);
-  border: 2px solid var(--color-base-content, #0000);
+  border: 1px solid var(--color-base-content, #0000);
+  border-image-outset: 10;
   background: var(--color-base-100, #fff);
   width: 2rem;
   height: 2rem;
@@ -150,5 +151,5 @@ export const ActionItem = styled(motion.button)`
   justify-content: center;
   border-radius: 235rem;
   cursor: pointer;
-  box-shadow: 1px 2px 4px rgba(17, 17, 17, 0.8);
+  box-shadow: 2px 2px 0px rgba(17, 17, 17, 1);
 `;

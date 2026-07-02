@@ -3,7 +3,7 @@ import React, { useMemo, useLayoutEffect } from 'react';
 import useSubmitForm from '../../hooks/useSubmitForm';
 import Loading from '@/components/Core/Loading';
 import { useQuery } from 'convex/react';
-import { api } from '../../../../../../../convex/_generated/api';
+import { api } from '../../../../../convex/_generated/api';
 import {
   Container,
   FormWrapper,

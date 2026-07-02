@@ -1,20 +1,18 @@
-import { useMutation } from "convex/react";
-import { useState } from "react";
-import { api } from "../../../../../convex/_generated/api";
-import Seo from "../components/Seo";
+import { useMutation } from 'convex/react';
+import { useState } from 'react';
+import { api } from '../../../../../convex/_generated/api';
+import Seo from '../../components/Seo';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
   });
   const [isLoading, setIsLoading] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const contactUsMessage = useMutation(
-    api.landingPageApi.contactUs.contactUsMessage,
-  );
+  const contactUsMessage = useMutation(api.landingPageApi.contactUs.contactUsMessage);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,21 +24,19 @@ const Contact = () => {
       await contactUsMessage(formData);
       setHasSubmitted(true);
       setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
       });
     } catch (error) {
-      console.error("Failed to send contact message", error);
+      console.error('Failed to send contact message', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -48,43 +44,41 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100">
+    <div className="bg-base-100 min-h-screen">
       <Seo
         title="Contact — Outfit AI"
         description="Get in touch with the Outfit AI team for questions about pricing, features, and support."
-        keywords={["contact", "support", "AI fashion"]}
+        keywords={['contact', 'support', 'AI fashion']}
         url="/contact"
         siteBase="https://o-ai.co.uk"
       />
       {/* Header */}
-      <section className="pt-24 pb-12 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+      <section className="from-primary/10 to-secondary/10 bg-gradient-to-br px-4 pt-24 pb-12">
         <div className="container mx-auto max-w-4xl text-center">
-          <h1 className="text-5xl md:text-7xl font-black mb-6 text-base-content">
+          <h1 className="text-base-content mb-6 text-5xl font-black md:text-7xl">
             Get in Touch
           </h1>
-          <p className="text-xl text-base-content/70 max-w-2xl mx-auto">
-            Have questions about Outfit AI? We're here to help you find the
-            perfect style solution.
+          <p className="text-base-content/70 mx-auto max-w-2xl text-xl">
+            Have questions about Outfit AI? We're here to help you find the perfect style
+            solution.
           </p>
         </div>
       </section>
 
       {/* Contact Form & Image */}
-      <section className="py-16 px-4">
+      <section className="px-4 py-16">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
             {/* Contact Form */}
             <div className="card bg-base-200 shadow-xl">
               <div className="card-body">
-                <h2 className="card-title text-3xl mb-6 text-base-content">
+                <h2 className="card-title text-base-content mb-6 text-3xl">
                   Send Us a Message
                 </h2>
 
                 {hasSubmitted && (
                   <div className="alert alert-success">
-                    <span>
-                      Thanks for reaching out. We will get back to you soon.
-                    </span>
+                    <span>Thanks for reaching out. We will get back to you soon.</span>
                   </div>
                 )}
 
@@ -154,10 +148,10 @@ const Contact = () => {
 
                   <button
                     type="submit"
-                    className={`btn btn-primary btn-block ${isLoading ? "loading" : ""}`}
+                    className={`btn btn-primary btn-block ${isLoading ? 'loading' : ''}`}
                     disabled={isLoading}
                   >
-                    {isLoading ? "Sending..." : "Send Message"}
+                    {isLoading ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>
@@ -169,7 +163,7 @@ const Contact = () => {
                 <img
                   src="/assets/landingPage/contact-fashion.jpg"
                   alt="Fashion styling showcase"
-                  className="rounded-lg shadow-2xl w-full h-auto object-cover"
+                  className="h-auto w-full rounded-lg object-cover shadow-2xl"
                 />
               </div>
             </div>
@@ -178,12 +172,12 @@ const Contact = () => {
       </section>
 
       {/* FAQ Reference */}
-      <section className="py-16 px-4 bg-base-200">
+      <section className="bg-base-200 px-4 py-16">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl md:text-5xl font-black mb-6 text-base-content">
+          <h2 className="text-base-content mb-6 text-4xl font-black md:text-5xl">
             Need Quick Answers?
           </h2>
-          <p className="text-xl text-base-content/70 mb-8">
+          <p className="text-base-content/70 mb-8 text-xl">
             Check out our pricing page for frequently asked questions
           </p>
           <a href="/pricing" className="btn btn-outline btn-lg">

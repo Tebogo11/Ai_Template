@@ -8,18 +8,11 @@ import { internalAction, internalMutation } from '../_generated/server';
 import { Id } from '../_generated/dataModel';
 import {
   dataURItoBlob,
-  fetchImageAsBase64Raw,
+  fetchImageAsBase64WithMime,
   handleGeneratedContent,
-  retry,
 } from '../utils';
 import { internal } from '../_generated/api';
-import {
-  GoogleGenAI,
-  ContentListUnion,
-  HarmCategory,
-  HarmBlockThreshold,
-  Part,
-} from '@google/genai';
+import { GoogleGenAI } from '@google/genai';
 import { OUTFIT_GENERATION_PROMPT, OUTFIT_IMPROVEMENT_PROMPT } from '../const';
 
 function getAI() {
@@ -31,6 +24,19 @@ function getAI() {
   }
   return new GoogleGenAI({ apiKey });
 }
+
+const DEFAULT_IMAGE_MODEL = 'gemini-3.1-flash-image';
+
+const resolveImageModel = () => process.env.GEMINI_IMAGE_MODEL || DEFAULT_IMAGE_MODEL;
+
+const resolveImageSize = (model: string) => {
+  // Flash Lite image models only support 1K output.
+  if (model.includes('flash-lite-image')) {
+    return '1K';
+  }
+
+  return '2K';
+};
 
 export const generateOutFitWithAI = internalAction({
   args: {
@@ -45,6 +51,7 @@ export const generateOutFitWithAI = internalAction({
   handler: async (ctx, args) => {
     try {
       const ai = getAI();
+      const imageModel = resolveImageModel();
 
       // 1. Fetch model image from storage
       const modelUrl = await ctx.storage.getUrl(args.modal as Id<'_storage'>);
@@ -52,121 +59,74 @@ export const generateOutFitWithAI = internalAction({
         throw new Error('Model image URL not found in storage');
       }
 
-      const base64ModelImage = await fetchImageAsBase64Raw(modelUrl);
+      const base64ModelImage = await fetchImageAsBase64WithMime(modelUrl);
 
       // 2. Fetch accessory images
       const accessoryBase64List = await Promise.all(
         args.accessories.map(async (acc) => {
           const url = await ctx.storage.getUrl(acc.storageId as Id<'_storage'>);
-          return url ? await fetchImageAsBase64Raw(url) : null;
+          return url ? await fetchImageAsBase64WithMime(url) : null;
         }),
       );
 
-      // 3. Build image parts for the API
-      const imageParts: Part[] = [
+      // 3. Build Interactions API multimodal input
+      const input = [
         {
-          inlineData: {
-            mimeType: 'image/png',
-            data: base64ModelImage,
-          },
+          type: 'text' as const,
+          text: args.is_new_outfit ? OUTFIT_GENERATION_PROMPT : OUTFIT_IMPROVEMENT_PROMPT,
+        },
+        {
+          type: 'text' as const,
+          text: `User prompt: ${args.prompt}`,
+        },
+        {
+          type: 'text' as const,
+          text: `Is new outfit: ${args.is_new_outfit}`,
+        },
+        {
+          type: 'text' as const,
+          text: 'Reference image 1 is the model photo. Remaining images are clothing/accessory references.',
+        },
+        {
+          type: 'image' as const,
+          mime_type: base64ModelImage.mimeType,
+          data: base64ModelImage.data,
         },
         ...accessoryBase64List
-          .filter((img): img is string => Boolean(img))
+          .filter((img): img is NonNullable<(typeof accessoryBase64List)[number]> =>
+            Boolean(img),
+          )
           .map((img) => ({
-            inlineData: {
-              mimeType: 'image/png',
-              data: img,
-            },
+            type: 'image' as const,
+            mime_type: img.mimeType,
+            data: img.data,
           })),
       ];
 
-      // 4. Build the generation prompt
-      const systemPrompt = args.is_new_outfit
-        ? OUTFIT_GENERATION_PROMPT
-        : OUTFIT_IMPROVEMENT_PROMPT;
-
-      const generationPrompt: ContentListUnion = [
-        { text: systemPrompt },
-        { text: `User prompt: ${args.prompt}` },
-        { text: `Is new outfit: ${args.is_new_outfit}` },
-        ...imageParts,
-      ];
-
-      // 5. Call Gemini with image generation
-      let response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash-image',
-        contents: generationPrompt,
-        config: {
-          safetySettings: [
-            {
-              category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-              threshold: HarmBlockThreshold.BLOCK_NONE,
-            },
-            {
-              category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-              threshold: HarmBlockThreshold.BLOCK_NONE,
-            },
-          ],
-          imageConfig: { aspectRatio: '4:3' },
-          responseModalities: ['TEXT', 'IMAGE'],
+      // 4. Create image interaction with Google docs-aligned response format.
+      const interaction = await ai.interactions.create({
+        model: imageModel,
+        input,
+        response_format: {
+          type: 'image',
+          mime_type: 'image/jpeg',
+          aspect_ratio: '3:4',
+          image_size: resolveImageSize(imageModel),
+        },
+        generation_config: {
+          thinking_level: 'high',
         },
       });
 
-      // 6. Extract image from response
-      let hasInlineData = false;
-      let imageURL = '';
-      // let summary = '';
-
-      try {
-        const handled = handleGeneratedContent(response);
-        hasInlineData = handled.hasInlineData;
-        imageURL = handled.imageURL;
-        // summary = handled.summary || '';
-      } catch {
-        // Retry with IMAGE-only modality
-        const retryResponse = await ai.models.generateContent({
-          model: 'gemini-2.5-flash-image',
-          contents: generationPrompt,
-          config: {
-            safetySettings: [
-              {
-                category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold: HarmBlockThreshold.BLOCK_NONE,
-              },
-              {
-                category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                threshold: HarmBlockThreshold.BLOCK_NONE,
-              },
-            ],
-            imageConfig: { aspectRatio: '4:3' },
-            responseModalities: ['IMAGE'],
-          },
-        });
-
-        const handledRetry = handleGeneratedContent(retryResponse);
-        hasInlineData = handledRetry.hasInlineData;
-        imageURL = handledRetry.imageURL;
-        // summary = handledRetry.summary || '';
-        response = retryResponse;
-      }
-
-      // 7. If no inline image, try a final retry with the text summary
-      let finalImageURL = imageURL;
-      if (!hasInlineData && response?.candidates?.[0]?.content?.parts) {
-        const textContent = response.candidates[0].content.parts
-          .filter((part) => part.text)
-          .map((part) => part.text)
-          .join(' ');
-        finalImageURL = await retry(ai, base64ModelImage, textContent);
-      }
-
-      if (!finalImageURL) {
+      // 5. Extract generated image from output_image or model_output steps.
+      const { hasInlineData, imageURL } = handleGeneratedContent(interaction);
+      if (!hasInlineData || !imageURL) {
         throw new Error('No image URL returned from model');
       }
 
-      // 8. Upload generated image to Convex storage
+      // 6. Upload generated image to Convex storage
       const postUrl = await ctx.storage.generateUploadUrl();
-      const blob = dataURItoBlob(finalImageURL);
+      const blob = dataURItoBlob(imageURL);
       const previewFile = new File([blob], `preview-${args.outfitId}`, {
         type: blob.type || 'application/octet-stream',
       });
@@ -185,7 +145,7 @@ export const generateOutFitWithAI = internalAction({
         outfitId: args.outfitId || '',
       });
 
-      return finalImageURL;
+      return imageURL;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error during outfit generation';

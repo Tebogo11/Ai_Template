@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import { api } from '../../../../../convex/_generated/api';
 import OutfitItems from './OutfitItems';
 import { Link, useNavigate } from 'react-router';
-import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
+import DarkModeSwitch from '@/config/darkMode/DarkModeSwitch';
 
 const SideBar = () => {
   const { theme } = useAppSetting();

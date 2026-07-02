@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { AuthPage } from './view/Auth/SignInForm';
 import { SignUpPage } from './view/Auth/SignUpForm';
-import LandingLayout from './view/Layout';
+import LandingLayout from './Layout';
 import PricingPage from './view/Pricing';
 import AboutPage from './view/About';
 import Contact from './view/Contact';

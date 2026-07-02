@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router';
 import { posts } from './data';
-import Seo from '../components/Seo';
+import Seo from '../../components/Seo';
 import ReactMarkdown from 'react-markdown';
 
 export default function BlogPostPage() {

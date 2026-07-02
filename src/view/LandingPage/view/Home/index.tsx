@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { Sparkles, Zap, Shield, TrendingUp } from 'lucide-react';
 import { useAppSetting } from '@/store/useAppSetting';
-import Seo from '../components/Seo';
+import Seo from '../../components/Seo';
 import { motion } from 'framer-motion';
 import {
   homeImageVariants,
@@ -10,8 +10,30 @@ import {
   sectionTitleVariants,
   featureGridVariants,
   featureCardVariants,
-  featureTextVariants,
 } from './animation-variants';
+
+const features = [
+  {
+    icon: Sparkles,
+    title: 'AI-Powered',
+    body: 'Advanced AI generates realistic outfit visualizations instantly',
+  },
+  {
+    icon: Zap,
+    title: 'Instant Results',
+    body: 'See your new outfit in seconds, not days',
+  },
+  {
+    icon: Shield,
+    title: 'Risk-Free',
+    body: "Eliminate buyer's remorse before purchasing",
+  },
+  {
+    icon: TrendingUp,
+    title: 'Style Evolution',
+    body: "Discover styles you never knew you'd love",
+  },
+];
 
 const HomePage = () => {
   const { theme } = useAppSetting();
@@ -52,113 +74,95 @@ const HomePage = () => {
         ]}
       />
       {/* Hero Section */}
-      <section className="bg-base-200 relative h-screen w-screen overflow-hidden">
-        <motion.div
-          aria-hidden
-          className="from-primary/22 pointer-events-none absolute top-[-18%] left-[-8%] z-10 h-[35vh] w-[35vh] rounded-full bg-gradient-to-br to-transparent blur-3xl"
-          animate={{ x: [0, 30, -10, 0], y: [0, 22, -12, 0], scale: [1, 1.08, 0.96, 1] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          aria-hidden
-          className="from-secondary/22 pointer-events-none absolute right-[-10%] bottom-[-16%] z-10 h-[36vh] w-[36vh] rounded-full bg-gradient-to-tl to-transparent blur-3xl"
-          animate={{ x: [0, -24, 6, 0], y: [0, -28, 8, 0], scale: [1, 0.95, 1.06, 1] }}
-          transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-2">
-          {/* Left Side - Woman */}
+      <section className="bg-base-100 relative h-screen w-screen overflow-hidden">
+        <div className="grid h-full w-full md:grid-cols-[1fr_1.15fr_1fr]">
+          {/* Her look */}
           <motion.div
             variants={homeImageVariants}
             initial={{ x: -30, opacity: 0 }}
             animate="visible"
-            className="bg-base-300 relative flex items-center justify-center"
+            className="relative h-full w-full overflow-hidden"
           >
-            <div className="from-primary/20 absolute inset-0 bg-gradient-to-br to-transparent"></div>
-            <div className="relative z-10 px-8 text-center">
-              <h2 className="text-primary/90 mb-4 text-6xl font-black md:text-8xl">
-                Try
-              </h2>
-              <p className="text-xl font-black text-white/100">Before You Buy</p>
-            </div>
-
             <motion.img
-              src="/assets/landingPage/hero/hero2.webp"
-              alt="men"
+              src="/assets/landingPage/hero/hero1.webp"
+              alt="Woman in a tailored trench coat crossing a city plaza"
               fetchPriority="high"
               loading="eager"
-              className="absolute inset-0 h-full w-full object-cover backdrop-brightness-55"
-              animate={{ scale: [1.02, 1.05, 1.02], y: [0, -10, 0] }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-0 h-full w-full object-cover"
+              animate={{ scale: [1.02, 1.06, 1.02] }}
+              transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
             />
+            <span className="bg-base-100/90 text-base-content absolute bottom-8 left-8 z-10 hidden rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide backdrop-blur-sm md:inline-block">
+              Her look
+            </span>
           </motion.div>
 
-          {/* Right Side - Man */}
+          {/* Copy gutter */}
+          <div className="md:bg-base-200 absolute inset-0 z-20 flex items-center justify-center bg-gradient-to-t from-black/75 via-black/20 to-transparent px-6 text-center md:static md:inset-auto md:z-auto md:bg-none md:px-12 md:text-left">
+            <motion.div
+              variants={heroOverlayVariants}
+              initial="hidden"
+              animate="visible"
+              className="max-w-sm"
+            >
+              <motion.h1
+                variants={heroItemVariants}
+                className="md:text-base-content text-5xl leading-[0.95] font-black text-balance text-white md:text-6xl"
+              >
+                Try it before you buy it.
+              </motion.h1>
+              <motion.p
+                variants={heroItemVariants}
+                className="md:text-base-content/70 mt-5 text-base font-medium text-white/85 md:text-lg"
+              >
+                Upload a photo, add the outfit, and preview exactly how it looks — before
+                you spend a cent.
+              </motion.p>
+              <motion.div
+                variants={heroItemVariants}
+                className="mt-8 flex justify-center md:justify-start"
+              >
+                <motion.div
+                  whileHover={{ y: -4, scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                >
+                  <Link
+                    to="/login"
+                    className="btn btn-primary btn-lg px-8 text-lg shadow-lg"
+                  >
+                    Get Started
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* His look */}
           <motion.div
             variants={homeImageVariants}
             initial={{ x: 30, opacity: 0 }}
             animate="visible"
-            className="bg-base-100 relative flex items-center justify-center"
+            className="relative hidden h-full w-full overflow-hidden md:block"
           >
-            <div className="from-secondary/20 absolute inset-0 bg-gradient-to-bl to-transparent"></div>
-            <div className="relative z-10 px-8 text-center">
-              <h2 className="text-primary/90 mb-4 text-6xl font-black md:text-8xl">AI</h2>
-              <p className="text-xl font-black text-white/100">Powered Styling</p>
-            </div>
             <motion.img
-              src="/assets/landingPage/hero/hero1.webp"
-              alt="Woman Hero Image"
+              src="/assets/landingPage/hero/hero2.webp"
+              alt="Man in a camel overcoat walking past a stone doorway"
               fetchPriority="high"
               loading="eager"
-              className="absolute inset-0 h-full w-full object-cover backdrop-brightness-55"
-              animate={{ scale: [1.03, 1.06, 1.03], y: [0, -12, 0] }}
-              transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-0 h-full w-full object-cover"
+              animate={{ scale: [1.03, 1.07, 1.03] }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
             />
-          </motion.div>
-        </div>
-
-        {/* Center Overlay */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <motion.div
-            className="pointer-events-auto text-center"
-            variants={heroOverlayVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.div variants={heroItemVariants}>
-              <h1 className="text-primary mb-48 cursor-pointer text-7xl font-black drop-shadow-2xl md:text-9xl">
-                OUTFIT
-              </h1>
-            </motion.div>
-
-            <motion.p
-              style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.9)' }}
-              variants={heroItemVariants}
-              className="text- mx-auto mt-[-10rem] mb-8 w-[46ch] max-w-xl px-4 text-sm font-semibold tracking-[0.16em] text-white uppercase sm:text-base"
-            >
-              Preview confidence before checkout with AI-powered styling
-            </motion.p>
-
-            <motion.div variants={heroItemVariants}>
-              <motion.div
-                whileHover={{ y: -4, scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-              >
-                <Link
-                  to="/login"
-                  className="btn btn-primary btn-lg px-8 text-lg shadow-lg"
-                >
-                  Get Started
-                </Link>
-              </motion.div>
-            </motion.div>
+            <span className="bg-base-100/90 text-base-content absolute bottom-8 left-8 z-10 inline-block rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide backdrop-blur-sm">
+              His look
+            </span>
           </motion.div>
         </div>
 
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute bottom-8 left-1/2 z-20 h-10 w-6 -translate-x-1/2 rounded-full border border-white/45"
+          className="md:border-base-content/30 pointer-events-none absolute bottom-8 left-1/2 z-30 h-10 w-6 -translate-x-1/2 rounded-full border border-white/60"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 1, 0.6] }}
           transition={{ delay: 1.4, duration: 2.2 }}
@@ -174,100 +178,52 @@ const HomePage = () => {
       {/* Features Section */}
       <section className="bg-base-100 px-4 py-24">
         <div className="container mx-auto max-w-6xl">
-          <motion.h2
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.45 }}
-            variants={sectionTitleVariants}
-            className="text-base-content mb-4 text-center text-5xl font-black md:text-6xl"
-          >
-            Why Outfit AI?
-          </motion.h2>
-          <motion.p
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.45 }}
-            variants={sectionTitleVariants}
-            className="text-base-content/70 mx-auto mb-16 max-w-2xl text-center text-xl"
-          >
-            Revolutionary AI technology meets fashion-forward thinking
-          </motion.p>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={featureGridVariants}
-            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
-          >
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-5 lg:gap-12">
             <motion.div
-              variants={featureCardVariants}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="card bg-base-200 shadow-lg transition-shadow hover:shadow-xl"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.45 }}
+              variants={sectionTitleVariants}
+              className="lg:col-span-2"
             >
-              <div className="card-body items-center text-center">
-                <Sparkles className="text-primary mb-4 h-12 w-12" />
-                <motion.h3 variants={featureTextVariants} className="card-title text-2xl">
-                  AI-Powered
-                </motion.h3>
-                <motion.p variants={featureTextVariants} className="text-base-content/70">
-                  Advanced AI generates realistic outfit visualizations instantly
-                </motion.p>
-              </div>
+              <h2 className="text-base-content mb-4 text-5xl font-black text-balance md:text-6xl">
+                Why Outfit AI?
+              </h2>
+              <p className="text-base-content/70 mb-10 max-w-md text-xl">
+                Revolutionary AI technology meets fashion-forward thinking
+              </p>
+              <p className="text-primary max-w-xs text-3xl leading-tight font-black text-balance">
+                No returns. No regret. Just certainty.
+              </p>
             </motion.div>
 
             <motion.div
-              variants={featureCardVariants}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="card bg-base-200 shadow-lg transition-shadow hover:shadow-xl"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={featureGridVariants}
+              className="border-base-300 divide-base-300 divide-y border-t lg:col-span-3"
             >
-              <div className="card-body items-center text-center">
-                <Zap className="text-accent mb-4 h-12 w-12" />
-                <motion.h3 variants={featureTextVariants} className="card-title text-2xl">
-                  Instant Results
-                </motion.h3>
-                <motion.p variants={featureTextVariants} className="text-base-content/70">
-                  See your new outfit in seconds, not days
-                </motion.p>
-              </div>
+              {features.map(({ icon: Icon, title, body }) => (
+                <motion.div
+                  key={title}
+                  variants={featureCardVariants}
+                  className="group flex items-start gap-5 py-8"
+                >
+                  <Icon
+                    aria-hidden
+                    className="text-primary mt-1 h-7 w-7 shrink-0 transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                  <div>
+                    <h3 className="text-base-content mb-1.5 text-xl font-bold">
+                      {title}
+                    </h3>
+                    <p className="text-base-content/70 max-w-md">{body}</p>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-
-            <motion.div
-              variants={featureCardVariants}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="card bg-base-200 shadow-lg transition-shadow hover:shadow-xl"
-            >
-              <div className="card-body items-center text-center">
-                <Shield className="text-accent mb-4 h-12 w-12" />
-                <motion.h3 variants={featureTextVariants} className="card-title text-2xl">
-                  Risk-Free
-                </motion.h3>
-                <motion.p variants={featureTextVariants} className="text-base-content/70">
-                  Eliminate buyer's remorse before purchasing
-                </motion.p>
-              </div>
-            </motion.div>
-
-            <motion.div
-              variants={featureCardVariants}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="card bg-base-200 shadow-lg transition-shadow hover:shadow-xl"
-            >
-              <div className="card-body items-center text-center">
-                <TrendingUp className="text-primary mb-4 h-12 w-12" />
-                <motion.h3 variants={featureTextVariants} className="card-title text-2xl">
-                  Style Evolution
-                </motion.h3>
-                <motion.p variants={featureTextVariants} className="text-base-content/70">
-                  Discover styles you never knew you'd love
-                </motion.p>
-              </div>
-            </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 

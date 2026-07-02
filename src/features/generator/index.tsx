@@ -5,7 +5,7 @@ import { FormContainer, ScrollableContent, PromptWrapper } from './styles';
 import AccessoriesImageListUpload from './components/ImageSection/AccessoriesImageListUpload';
 import { useEffect } from 'react';
 import useSetFormValues from './hooks/useSetFormValues';
-import useWindowSize from '@/hook/useWindowSize';
+import useWindowSize from '@/hooks/useWindowSize';
 import DrawerClosedPreview from './DrawerClosedPreview';
 import DrawerTrigger from './DrawerTrigger';
 

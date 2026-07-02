@@ -1,7 +1,7 @@
 import { SignUp } from '@clerk/clerk-react';
 import Header from './components/Header';
 import { useAppSetting } from '@/store/useAppSetting';
-import Seo from '../components/Seo';
+import Seo from '../../components/Seo';
 
 export const SignUpPage = () => {
   const { theme } = useAppSetting(); // Ensure the auth context is initialized

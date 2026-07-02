@@ -1,10 +1,20 @@
 'use node';
-import {
-  ContentListUnion,
-  GenerateContentResponse,
-  HarmBlockThreshold,
-  HarmCategory,
-} from '@google/genai';
+
+type InteractionLike = {
+  output_image?: {
+    data?: string;
+    mime_type?: string;
+  };
+  output_text?: string;
+  steps?: Array<{
+    type?: string;
+    content?: Array<{
+      type?: string;
+      data?: string;
+      mime_type?: string;
+    }>;
+  }>;
+};
 
 type ExtractedContent = {
   hasInlineData: boolean;
@@ -123,6 +133,23 @@ export const fetchImageAsBase64Raw = async (url: string) => {
   return btoa(binary);
 };
 
+export const fetchImageAsBase64WithMime = async (url: string) => {
+  const res = await fetch(url);
+  const contentType = res.headers.get('content-type') || 'image/png';
+  const buffer = await res.arrayBuffer();
+
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+
+  return {
+    data: btoa(binary),
+    mimeType: contentType,
+  };
+};
+
 export function dataURItoBlob(dataURI: string) {
   let base64: string;
   let mimeType: string;
@@ -157,72 +184,39 @@ export function dataURItoBlob(dataURI: string) {
   return new Blob([array], { type: mimeType });
 }
 
-export const handleGeneratedContent = (response: GenerateContentResponse) => {
-  const directParts = response?.candidates?.[0]?.content?.parts;
-  if (directParts) {
-    let imageURL = '';
-    let summary = '';
-    let hasInlineData = false;
+export const handleGeneratedContent = (interaction: InteractionLike) => {
+  if (interaction.output_image?.data) {
+    const mimeType = interaction.output_image.mime_type || 'image/png';
+    return {
+      hasInlineData: true,
+      imageURL: `data:${mimeType};base64,${interaction.output_image.data}`,
+      summary: interaction.output_text || '',
+    };
+  }
 
-    for (const part of directParts) {
-      if (part.inlineData?.data) {
-        const base64String = part.inlineData.data as string;
-        const mimeType = part.inlineData.mimeType || 'image/png';
-        imageURL = `data:${mimeType};base64,${base64String}`;
-        hasInlineData = true;
-      }
-
-      summary = directParts
-        .filter((contentPart) => contentPart.text && contentPart.text.includes('|'))
-        .map((contentPart) => contentPart.text)
-        .join(' ');
+  // Interleaved or multi-step responses can store images in steps instead of output_image.
+  const steps = interaction.steps || [];
+  for (const step of steps) {
+    if (step.type !== 'model_output' || !Array.isArray(step.content)) {
+      continue;
     }
 
-    if (hasInlineData || summary) {
-      return { hasInlineData, imageURL, summary };
+    for (const block of step.content) {
+      if (block.type === 'image' && block.data) {
+        const mimeType = block.mime_type || 'image/png';
+        return {
+          hasInlineData: true,
+          imageURL: `data:${mimeType};base64,${block.data}`,
+          summary: interaction.output_text || '',
+        };
+      }
     }
   }
 
-  const extracted = extractContentFromUnknown(response);
+  const extracted = extractContentFromUnknown(interaction);
   if (extracted.hasInlineData || extracted.summary) {
     return extracted;
   }
 
-  throw new Error(`No content parts found. Response: ${summarizeResponse(response)}`);
-};
-
-export const retry = async (ai: any, base64Image: string, aiSummary: string) => {
-  const rePrompt: ContentListUnion = [
-    {
-      text: `Generate only the outfit image based on the following styling summary and model image.
-        Do not include any extra text or description.
-        Styling Summary: ${aiSummary}`,
-    },
-    { text: `Model image: image 1` },
-    {
-      inlineData: {
-        mimeType: 'image/png',
-        data: base64Image,
-      },
-    },
-  ];
-
-  const retryResponse = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-image',
-    contents: rePrompt,
-    config: {
-      safetySettings: [
-        {
-          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-          threshold: HarmBlockThreshold.OFF,
-        },
-      ],
-    },
-  });
-
-  const { hasInlineData, imageURL } = handleGeneratedContent(retryResponse);
-  if (!hasInlineData) {
-    throw new Error('Failed to generate image. Please try again.');
-  }
-  return imageURL;
+  throw new Error(`No image content found. Response: ${summarizeResponse(interaction)}`);
 };

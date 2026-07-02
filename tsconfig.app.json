@@ -27,6 +27,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/view/*": ["./src/view/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/convex/*": ["./convex/*"],
       "@/assets/*": ["./public/assets/*"],
       "@/public/assets/*": ["./public/assets/*"]
     }

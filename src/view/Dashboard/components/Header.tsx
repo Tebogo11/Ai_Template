@@ -1,4 +1,4 @@
-import DarkModeSwitch from '@/confg/darkMode/DarkModeSwitch';
+import DarkModeSwitch from '@/config/darkMode/DarkModeSwitch';
 import { UserButton } from '@clerk/clerk-react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Bars3BottomLeftIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
 import { useAppSetting } from '@/store/useAppSetting';
 import { useNavigate, useParams } from 'react-router';
-import useWindowSize from '@/hook/useWindowSize';
+import useWindowSize from '@/hooks/useWindowSize';
 
 const Header = () => {
   const { width } = useWindowSize();

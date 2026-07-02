@@ -1,4 +1,4 @@
-import { AmountOfChangeOption } from '@/view/Dashboard/view/GeneratorForm/components/ToggleSelect/const';
+import { AmountOfChangeOption } from '@/features/generator/components/ToggleSelect/const';
 import { create } from 'zustand';
 import { Id } from '../../convex/_generated/dataModel';
 

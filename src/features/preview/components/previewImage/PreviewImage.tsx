@@ -10,8 +10,8 @@ import {
   TabBarContainer,
 } from './style';
 import { useMutation } from 'convex/react';
-import { api } from '../../../../../../../convex/_generated/api';
-import { Id } from '../../../../../../../convex/_generated/dataModel';
+import { api } from '../../../../../convex/_generated/api';
+import { Id } from '../../../../../convex/_generated/dataModel';
 import { useNavigate } from 'react-router';
 import ActionSection from './ActionSection';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
@@ -236,11 +236,41 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
           transition={{ delay: 0.3, duration: 0.6, ease: 'easeInOut' }}
         >
           <PreviewCarouselCounter>
-            <h3 className="text-base-content pt-[1px] text-xs font-semibold tracking-[0.08em] uppercase">
+            <h3 className="text-base-content text-xs font-bold tracking-[0.08em] uppercase">
               {totalSlides > 1 ? 'Outfits' : 'Outfit'}
             </h3>
             <div className="border-base-content mx-1 mb-0.25 h-[1px] w-full border-1 border-dashed" />
             <motion.div className="flex items-center gap-2">
+              {totalSlides > 1 && (
+                <motion.div
+                  className="bg-base-100 border-base-content flex w-10 items-center justify-around rounded-xs border-1 px-1 py-1"
+                  initial={{ x: -10 }}
+                  animate={{ x: 0 }}
+                  transition={{ delay: 1, duration: 0.5, ease: 'easeOut' }}
+                >
+                  <AnimatePresence>
+                    <motion.h3
+                      key={selectedIndex}
+                      className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase"
+                      initial={{ x: 2, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{
+                        type: 'spring',
+                        bounce: 0.6,
+                        duration: 0.5,
+                        ease: 'easeOut',
+                      }}
+                      exit={{ x: -2, opacity: 0 }}
+                    >
+                      {selectedIndex + 1}
+                    </motion.h3>
+                  </AnimatePresence>
+                  <div className="border-base-content/50 mx-1 h-5 w-[4px] border-2" />
+                  <h3 className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase">
+                    {totalSlides}
+                  </h3>
+                </motion.div>
+              )}
               <div className="flex items-center gap-1">
                 <motion.div
                   className="bg-base-content h-0.75 w-0.75 rounded-full"
@@ -273,36 +303,7 @@ const PreviewImageDisplay: React.FC<PreviewImageProps> = ({
                   transition={{ delay: 1.4, duration: 0.5, ease: 'easeOut' }}
                 />
               </div>
-              {totalSlides > 1 && (
-                <motion.div
-                  className="bg-base-100 border-base-content flex w-10 items-center justify-around rounded-md border-2 px-1 py-1"
-                  initial={{ x: -10 }}
-                  animate={{ x: 0 }}
-                  transition={{ delay: 1, duration: 0.5, ease: 'easeOut' }}
-                >
-                  <AnimatePresence>
-                    <motion.h3
-                      key={selectedIndex}
-                      className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase"
-                      initial={{ x: 2, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{
-                        type: 'spring',
-                        bounce: 0.6,
-                        duration: 0.5,
-                        ease: 'easeOut',
-                      }}
-                      exit={{ x: -2, opacity: 0 }}
-                    >
-                      {selectedIndex + 1}
-                    </motion.h3>
-                  </AnimatePresence>
-                  <div className="border-base-content/50 mx-1 h-5 w-[4px] border-2" />
-                  <h3 className="text-base-content text-[10px] font-bold tracking-[0.08em] uppercase">
-                    {totalSlides}
-                  </h3>
-                </motion.div>
-              )}
+
               <ActionSection
                 addModal={addModal}
                 downloadImage={downloadImage}

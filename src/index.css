@@ -358,21 +358,6 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  body {
-    color: var(--color-light);
-    background: var(--color-dark);
-    font-family: 'Poppins', sans-serif;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  body {
-    color: var(--color-dark);
-    background: var(--color-light);
-    font-family: 'Poppins', sans-serif;
-  }
-}
 
 /* custom veriables  */
 :root {

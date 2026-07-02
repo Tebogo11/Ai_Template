@@ -1,7 +1,7 @@
 import SideBar from './components/Sidebar/SideBar';
 import MainContent from './view';
 import { useAppSetting } from '@/store/useAppSetting';
-import useManageSubscription from './hook/useManageSubscribion';
+import useManageSubscription from './hooks/useManageSubscribion';
 import PriceTable from './components/Subscription/PriceTable';
 
 const Dashboard = () => {
