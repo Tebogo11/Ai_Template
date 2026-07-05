@@ -25,6 +25,7 @@ import type * as outfit from "../outfit.js";
 import type * as storage from "../storage.js";
 import type * as user_consts from "../user/consts.js";
 import type * as user_getters from "../user/getters.js";
+import type * as user_termsandconditions_actions from "../user/termsandconditions/actions.js";
 import type * as user_tokens from "../user/tokens.js";
 import type * as user_user from "../user/user.js";
 import type * as utils from "../utils.js";
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   storage: typeof storage;
   "user/consts": typeof user_consts;
   "user/getters": typeof user_getters;
+  "user/termsandconditions/actions": typeof user_termsandconditions_actions;
   "user/tokens": typeof user_tokens;
   "user/user": typeof user_user;
   utils: typeof utils;

@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { hasAcceptedTerms } from './user/termsandconditions/actions';
 
 // The schema is entirely optional.
 // You can delete this file (schema.ts) and the
@@ -63,4 +64,7 @@ export default defineSchema({
     outfitId: v.id('outfit'),
     imageUrl: v.string(),
   }).index('by_outfitId', ['outfitId']),
+  hasAcceptedTerms: defineTable({
+    id: v.id('user'),
+  }),
 });

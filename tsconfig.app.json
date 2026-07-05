@@ -29,6 +29,7 @@
       "@/view/*": ["./src/view/*"],
       "@/features/*": ["./src/features/*"],
       "@/convex/*": ["./convex/*"],
+      "@/convex/_generated/api": ["./convex/_generated/api"],
       "@/assets/*": ["./public/assets/*"],
       "@/public/assets/*": ["./public/assets/*"]
     }

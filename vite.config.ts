@@ -27,6 +27,7 @@ export default defineConfig({
       '@/view': path.resolve(__dirname, './src/view'),
       '@/features': path.resolve(__dirname, './src/features'),
       '@/convex': path.resolve(__dirname, './convex'),
+      '@/convex/_generated/api': path.resolve(__dirname, './convex/_generated/api'),
       '@/assets': path.resolve(__dirname, './public/assets'),
     },
   },
