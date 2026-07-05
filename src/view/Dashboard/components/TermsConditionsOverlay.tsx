@@ -21,7 +21,7 @@ function TermsConditionsOverlay({
           <h2 className="text-base-content text-2xl font-extrabold tracking-tight">
             Outfit AI - Terms and Conditions
           </h2>
-          <p className="text-base-content/70 mt-2 text-sm">Last updated: [DATE]</p>
+          <p className="text-base-content/70 mt-2 text-sm">Last updated: 05/07/2026</p>
         </div>
 
         <div className="text-base-content overflow-y-auto px-6 py-6 text-sm leading-7 md:text-base">
