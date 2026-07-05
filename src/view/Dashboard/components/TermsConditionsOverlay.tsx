@@ -1,8 +1,9 @@
 import { useClerk } from '@clerk/clerk-react';
+import { useState } from 'react';
 
 type TermsConditionsOverlayProps = {
   hasAccepted: boolean;
-  onAccepted: () => void;
+  onAccepted: () => Promise<unknown>;
 };
 
 function TermsConditionsOverlay({
@@ -10,6 +11,21 @@ function TermsConditionsOverlay({
   onAccepted,
 }: TermsConditionsOverlayProps) {
   const { signOut } = useClerk();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleAccept = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await onAccepted();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (hasAccepted) {
     return null;
   }
@@ -336,9 +352,10 @@ function TermsConditionsOverlay({
             <button
               type="button"
               className="btn btn-primary min-w-40"
-              onClick={() => onAccepted()}
+              onClick={handleAccept}
+              disabled={isSubmitting}
             >
-              Accept
+              {isSubmitting ? 'Saving...' : 'Accept'}
             </button>
           </div>
         </div>
